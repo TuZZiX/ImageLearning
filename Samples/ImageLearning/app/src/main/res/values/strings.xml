@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ImageLearning</string>
+    <string name="action_settings">Browse Folder</string>
+</resources>
