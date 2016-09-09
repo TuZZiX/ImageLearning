@@ -9,60 +9,60 @@
                 tools:context=".MainActivity">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/photo"/>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:id="@+id/button1"
-        android:layout_alignTop="@+id/button3"
-        android:layout_alignParentStart="true"
-        android:background="#ff787b"/>
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:id="@+id/btn1"
+            android:layout_alignTop="@+id/btn3"
+            android:layout_alignParentStart="true"
+            android:background="#ff787b"/>
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2"
-        android:id="@+id/button2"
-        android:layout_above="@+id/button"
-        android:layout_toEndOf="@+id/button"
-        android:background="#ffff47"/>
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:id="@+id/btn2"
+            android:layout_above="@+id/btn_before"
+            android:layout_toEndOf="@+id/btn_before"
+            android:background="#ffff47"/>
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3"
-        android:id="@+id/button3"
-        android:layout_above="@+id/button5"
-        android:layout_toStartOf="@+id/button5"
-        android:background="#53ff48"/>
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:id="@+id/btn3"
+            android:layout_above="@+id/btn_before"
+            android:layout_toStartOf="@+id/btn_next"
+            android:background="#53ff48"/>
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4"
-        android:id="@+id/button4"
-        android:layout_alignTop="@+id/button1"
-        android:layout_alignEnd="@+id/imageView"
-        android:background="#50d7ff"/>
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:id="@+id/btn4"
+            android:layout_alignTop="@+id/btn1"
+            android:layout_alignEnd="@+id/photo"
+            android:background="#50d7ff"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="&lt;&lt;"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&lt;&lt;"
+            android:id="@+id/btn_before"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="&gt;&gt;"
-        android:id="@+id/button5"
-        android:layout_alignTop="@+id/button"
-        android:layout_alignParentEnd="true"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&gt;&gt;"
+            android:id="@+id/btn_next"
+            android:layout_alignTop="@+id/btn_before"
+            android:layout_alignParentEnd="true"/>
 </RelativeLayout>
