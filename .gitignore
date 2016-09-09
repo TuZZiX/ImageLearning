@@ -1,3 +1,7 @@
+#Android garbage
+build
+*iml
+
 #OS
 .DS_Store
 */.DS_store
