@@ -16,6 +16,7 @@ import java.io.File;
 public class MainActivity extends Activity {
 
     private int smile_level;
+
     private ImageView photo;
     private Button btn1;
     private Button btn2;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity {
     private Button btn4;
     private Button btn_before;
     private Button btn_next;
+
     private final String imgDir = Environment.getExternalStorageDirectory().toString() + "/DCIM/sample1";
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
@@ -91,8 +93,10 @@ public class MainActivity extends Activity {
             switch (view.getId()) {
                 case R.id.btn_before:
                     //TODO
+                    break;
                 case R.id.btn_next:
                     //TODO
+                    break;
             }
         }
     };
