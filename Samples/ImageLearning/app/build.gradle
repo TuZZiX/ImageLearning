@@ -22,4 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.squareup.picasso:picasso:2.5.2'
+    // https://mvnrepository.com/artifact/net.sf.opencsv/opencsv
+    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
 }
