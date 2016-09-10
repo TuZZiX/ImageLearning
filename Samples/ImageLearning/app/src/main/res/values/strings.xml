@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">ImageLearning</string>
     <string name="action_settings">Browse Folder</string>
+    <string name="btnRate1_name">Browse Folder</string>
+    <string name="btnRate2_name">Browse Folder</string>
+    <string name="btnRate3_name">Browse Folder</string>
+    <string name="btnRate4_name">Browse Folder</string>
 </resources>

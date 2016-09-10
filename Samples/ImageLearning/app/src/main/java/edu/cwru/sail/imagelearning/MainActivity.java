@@ -32,9 +32,9 @@ public class MainActivity extends Activity {
     private Button btn_before;
     private Button btn_next;
 
-    private final String imgDir = Environment.getExternalStorageDirectory().toString() + "/DCIM/sample1";
+    private String imgDir = Environment.getExternalStorageDirectory().toString() + "/lab01/Data";
 
-    private final String csvDir = Environment.getExternalStorageDirectory().toString()+ File.separator + "result.csv";
+    private String csvDir = Environment.getExternalStorageDirectory().toString()+ File.separator + "lab01" + File.separator + "result.csv";
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 

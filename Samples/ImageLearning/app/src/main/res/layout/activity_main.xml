@@ -8,61 +8,125 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity">
 
-    <ImageView
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/frameLayout">
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photo"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/photo"/>
+            android:layout_marginTop="10dp">
 
-    <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:id="@+id/btn1"
-            android:layout_alignTop="@+id/btn3"
-            android:layout_alignParentStart="true"
-            android:background="#ff787b"/>
-    <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2"
-            android:id="@+id/btn2"
-            android:layout_above="@+id/btn_before"
-            android:layout_toEndOf="@+id/btn_before"
-            android:background="#ffff47"/>
-    <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3"
-            android:id="@+id/btn3"
-            android:layout_above="@+id/btn_before"
-            android:layout_toStartOf="@+id/btn_next"
-            android:background="#53ff48"/>
-    <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4"
-            android:id="@+id/btn4"
-            android:layout_alignTop="@+id/btn1"
-            android:layout_alignEnd="@+id/photo"
-            android:background="#50d7ff"/>
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Not Smile"
+                android:id="@+id/rate1"
+                android:layout_gravity="center_vertical"
+                android:background="@color/smile_1"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="&lt;&lt;"
-            android:id="@+id/btn_before"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"/>
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Slightly Smile"
+                android:id="@+id/rate2"
+                android:layout_gravity="center_vertical"
+                android:background="@color/smile_2"
+                android:clickable="true"
+                android:layout_weight="1"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp" />
 
-    <Button
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="&gt;&gt;"
-            android:id="@+id/btn_next"
-            android:layout_alignTop="@+id/btn_before"
-            android:layout_alignParentEnd="true"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Smile"
+                android:id="@+id/rate3"
+                android:layout_gravity="center_vertical"
+                android:background="@color/smile_3"
+                android:clickable="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Laughing"
+                android:id="@+id/rate4"
+                android:layout_gravity="center_vertical"
+                android:background="@color/smile_4"
+                android:clickable="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&lt;&lt; Previous"
+                android:id="@+id/btnPrv"
+                android:textColor="@android:color/holo_blue_dark"
+                style="@android:style/Widget.Material.Button.Borderless"
+                android:textSize="18dp"
+                android:layout_gravity="left|bottom"
+                android:layout_weight="1"
+                android:textAlignment="gravity"
+                android:gravity="left|center"
+                android:textStyle="bold"
+                android:textAllCaps="false" />
+
+            <Button
+                style="@android:style/Widget.Material.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skip>>"
+                android:id="@+id/btnNext"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="18sp"
+                android:layout_gravity="bottom|right"
+                android:clickable="false"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:textAlignment="gravity"
+                android:textStyle="bold"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>
