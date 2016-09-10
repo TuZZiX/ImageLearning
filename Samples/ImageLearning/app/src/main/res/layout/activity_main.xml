@@ -16,14 +16,13 @@
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:id="@+id/frameLayout">
+            android:id="@+id/frameLayout">
 
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/photo"/>
+                    android:id="@+id/photo"
+                android:contentDescription="Learning Image" />
         </FrameLayout>
 
         <LinearLayout
@@ -35,7 +34,7 @@
             <Button
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:text="Not Smile"
+                    android:text="@string/btnRate1_name"
                     android:id="@+id/btnRate1"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_1"
@@ -45,12 +44,13 @@
                     android:textAllCaps="false"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/smile1"
-                    android:paddingLeft="10dp"/>
+                    android:paddingLeft="10dp"
+                android:fadeScrollbars="false" />
 
             <Button
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:text="Slightly Smile"
+                    android:text="@string/btnRate2_name"
                     android:id="@+id/btnRate2"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_2"
@@ -75,7 +75,7 @@
             <Button
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:text="Smile"
+                    android:text="@string/btnRate3_name"
                     android:id="@+id/btnRate3"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_3"
@@ -91,7 +91,7 @@
             <Button
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:text="Laughing"
+                    android:text="@string/btnRate4_name"
                     android:id="@+id/btnRate4"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_4"
@@ -108,24 +108,21 @@
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Now Grading: "
+                android:text="@string/textNowGrad_default"
                 android:id="@+id/textNowGrad"
                 android:layout_gravity="bottom"
                 android:textAllCaps="false"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"/>
 
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:layout_gravity="bottom">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&lt;&lt; Previous"
+                    android:text="@string/btnPrv_name"
                     android:id="@+id/btnPrv"
                     android:textColor="@android:color/holo_blue_dark"
                     style="@android:style/Widget.Material.Button.Borderless"
@@ -133,24 +130,27 @@
                     android:layout_gravity="left|bottom"
                     android:textAlignment="gravity"
                     android:gravity="left|center"
-                    android:textAllCaps="false"/>
+                    android:textAllCaps="false"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true" />
 
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10/65"
+                    android:text="@string/textProgressInd_default"
                     android:id="@+id/textProgressInd"
-                    android:layout_marginLeft="55dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_gravity="center"
-                    android:gravity="start"
-                    android:layout_weight="1"/>
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp" />
 
             <Button
                     style="@android:style/Widget.Material.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Skip>>"
+                    android:text="@string/btnNext_name"
                     android:id="@+id/btnSkip"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textSize="18sp"
@@ -158,9 +158,10 @@
                     android:gravity="center|right"
                     android:textAlignment="gravity"
                     android:textAllCaps="false"
-                    android:layout_gravity="bottom|right"/>
-
-        </LinearLayout>
+                    android:layout_gravity="bottom|right"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
 
     </LinearLayout>
 

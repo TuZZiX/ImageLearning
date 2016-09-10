@@ -1,6 +1,7 @@
 package edu.cwru.sail.imagelearning;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -8,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -31,9 +34,10 @@ public class MainActivity extends Activity {
     private Button btn4;
     private Button btn_previous;
     private Button btn_skip;
+    private TextView textInd;
+    private TextView textCount;
 
     private String imgDir = Environment.getExternalStorageDirectory().toString() + "/lab01/Data";
-
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
@@ -53,6 +57,8 @@ public class MainActivity extends Activity {
         btn4 = (Button) findViewById(R.id.btnRate4);
         btn_previous = (Button) findViewById(R.id.btnPrv);
         btn_skip = (Button) findViewById(R.id.btnSkip);
+        textInd = (TextView) findViewById(R.id.textNowGrad);
+        textCount = (TextView) findViewById(R.id.textProgressInd);
         btn1.setOnClickListener(smileListener);
         btn2.setOnClickListener(smileListener);
         btn3.setOnClickListener(smileListener);
@@ -60,20 +66,20 @@ public class MainActivity extends Activity {
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
-        File img = new File(imgDir + File.separator + "smile1.jpg");
+        File img = new File(Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg");
 
         File csv = new File(csvDir);
-
-        if (img.exists()) {
+        textInd.setText(getText(R.string.textNowGrad_default) + Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg");
+        //if (img.exists()) {
             //Loading Image from URL
             Picasso.with(this)
-                    //.load("https://www.simplifiedcoding.net/wp-content/uploads/2015/10/advertise.png")
+                    //.load(Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg")
                     .load(img)
                     //.placeholder(R.drawable.placeholder)   // optional
                     //.error(R.drawable.error)      // optional
                     .resize(1000, 1000)                        // optional
                     .into(photo);
-        }
+        //}
 
 
     }
@@ -113,7 +119,6 @@ public class MainActivity extends Activity {
         }
     };
 
-    //TODO
     public void writeToCSV(final String img, int smile_level) {
         CSVWriter writer = null;
         try {
@@ -138,6 +143,7 @@ public class MainActivity extends Activity {
                     return Integer.parseInt(reading[1]);
                 }
             }
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -159,10 +165,20 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.setting_openImg) {
+            Intent intent=new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            try{
+                startActivity(intent);
+            }catch(Exception e){
+                Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
+            }
+            
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 }

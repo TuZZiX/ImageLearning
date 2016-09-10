@@ -1,8 +1,15 @@
 <resources>
-    <string name="app_name">ImageLearning</string>
-    <string name="action_settings">Browse Folder</string>
-    <string name="btnRate1_name">Browse Folder</string>
-    <string name="btnRate2_name">Browse Folder</string>
-    <string name="btnRate3_name">Browse Folder</string>
-    <string name="btnRate4_name">Browse Folder</string>
+    <string name="app_name">Image Learning</string>
+    <string name="setting_openImg">Browse Folder</string>
+    <string name="setting_changeLoc">Change Result Location</string>
+    <string name="setting_openResult">Open Result</string>
+    <string name="setting_exit">Exit</string>
+    <string name="btnRate1_name">Not Smile</string>
+    <string name="btnRate2_name">Slightly Smile</string>
+    <string name="btnRate3_name">Smile</string>
+    <string name="btnRate4_name">Laughing</string>
+    <string name="textNowGrad_default">Now Grading: </string>
+    <string name="textProgressInd_default">0/0</string>
+    <string name="btnPrv_name">&lt;&lt; Previous</string>
+    <string name="btnNext_name">Next &gt;&gt;</string>
 </resources>
