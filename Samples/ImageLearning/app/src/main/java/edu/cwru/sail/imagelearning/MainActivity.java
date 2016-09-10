@@ -2,6 +2,7 @@ package edu.cwru.sail.imagelearning;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -17,7 +18,6 @@ import com.opencsv.CSVWriter;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,6 +26,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     private int smile_level;
+    private int imgCounter;
 
     private ImageView photo;
     private Button btn1;
@@ -50,6 +51,8 @@ public class MainActivity extends Activity {
         /*  variable name should be like btn_rate1
             btnRate1 seems like function name
         */
+        smile_level = 0;
+        imgCounter = 0;
         photo = (ImageView) findViewById(R.id.photo);
         btn1 = (Button) findViewById(R.id.btnRate1);
         btn2 = (Button) findViewById(R.id.btnRate2);
@@ -66,22 +69,10 @@ public class MainActivity extends Activity {
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
-        File img = new File(Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg");
-
         File csv = new File(csvDir);
-        textInd.setText(getText(R.string.textNowGrad_default) + Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg");
-        //if (img.exists()) {
-            //Loading Image from URL
-            Picasso.with(this)
-                    //.load(Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg")
-                    .load(img)
-                    //.placeholder(R.drawable.placeholder)   // optional
-                    //.error(R.drawable.error)      // optional
-                    .resize(1000, 1000)                        // optional
-                    .into(photo);
-        //}
-
-
+        if (changeImg(imgDir, imgCounter)) {
+            Toast.makeText(this, "Failed to load image at:" + imgDir.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     View.OnClickListener smileListener = new View.OnClickListener() {
@@ -119,7 +110,36 @@ public class MainActivity extends Activity {
         }
     };
 
-    public void writeToCSV(final String img, int smile_level) {
+    public int getImgCntMax(String imgDir) {
+        File folder = new File(imgDir);
+        File pics[] = folder.listFiles();
+        return pics.length;
+    }
+    public boolean changeImg(String imgDir, int imgNum) {
+
+        File folder = new File(imgDir);
+        File imgs[] = folder.listFiles();
+        // 把这里修了
+        if (imgs.length <= imgNum) {
+            return false;
+        }
+        textInd.setText(getText(R.string.textNowGrad_default) + imgs[imgNum].toString());
+        textCount.setText(Integer.toString(imgNum+1) + "/" + Integer.toString(imgs.length));
+        if (imgs[imgNum].exists()) {
+            //Loading Image from URL
+            Picasso.with(this)
+                    //.load(Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg")
+                    .load(imgs[imgNum])
+                    //.placeholder(R.drawable.placeholder)   // optional
+                    //.error(R.drawable.error)      // optional
+                    .resize(1000, 1000)                        // optional
+                    .into(photo);
+        } else {
+            return false;
+        }
+        return true;
+    }
+    public void writeToCSV(String img, int smile_level) {
         CSVWriter writer = null;
         try {
             writer = new CSVWriter(new FileWriter(csvDir));
@@ -131,7 +151,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public int getSmileLevelCSV(final String img) {
+    public int getSmileLevelCSV(String img) {
         String[] reading;
         CSVReader reader = null;
         try {
@@ -162,23 +182,43 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.setting_openImg) {
-            Intent intent=new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            try{
-                startActivity(intent);
-            }catch(Exception e){
-                Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
-            }
-            
-            return true;
+        switch (item.getItemId()) {
+            case R.id.setting_openImg:
+                Intent intent=new Intent();
+                intent.setType("file/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                try{
+                    startActivity(intent);
+                }catch(Exception e){
+                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.setting_changeLoc:
+
+                return true;
+            case R.id.setting_openResult:
+
+                return true;
+            case R.id.setting_exit:
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            Uri uri = data.getData();
+            String fullfileName = uri.toString();
+            imgDir = fullfileName.substring(0,fullfileName.lastIndexOf(File.separator));
+            imgCounter = 0;
+        }
     }
 
 }
