@@ -9,16 +9,16 @@
                 tools:context=".MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/frameLayout">
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/frameLayout">
 
             <ImageView
                     android:layout_width="match_parent"
@@ -27,138 +27,138 @@
         </FrameLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
             <Button
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:text="Not Smile"
-                android:id="@+id/btnRate1"
-                android:layout_gravity="center_vertical"
-                android:background="@color/smile_1"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textAllCaps="false"
-                android:textSize="17sp"
-                android:drawableLeft="@drawable/smile1"
-                android:paddingLeft="10dp" />
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Not Smile"
+                    android:id="@+id/btnRate1"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/smile_1"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="17sp"
+                    android:drawableLeft="@drawable/smile1"
+                    android:paddingLeft="10dp"/>
 
             <Button
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:text="Slightly Smile"
-                android:id="@+id/btnRate2"
-                android:layout_gravity="center_vertical"
-                android:background="@color/smile_2"
-                android:clickable="true"
-                android:layout_weight="1"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:textAllCaps="false"
-                android:textSize="17sp"
-                android:drawableLeft="@drawable/smile2"
-                android:paddingLeft="10dp" />
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Slightly Smile"
+                    android:id="@+id/btnRate2"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/smile_2"
+                    android:clickable="true"
+                    android:layout_weight="1"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="17sp"
+                    android:drawableLeft="@drawable/smile2"
+                    android:paddingLeft="10dp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp">
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp">
 
             <Button
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:text="Smile"
-                android:id="@+id/btnRate3"
-                android:layout_gravity="center_vertical"
-                android:background="@color/smile_3"
-                android:clickable="true"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textAllCaps="false"
-                android:textSize="17sp"
-                android:drawableLeft="@drawable/smile3"
-                android:paddingLeft="10dp" />
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Smile"
+                    android:id="@+id/btnRate3"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/smile_3"
+                    android:clickable="true"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="17sp"
+                    android:drawableLeft="@drawable/smile3"
+                    android:paddingLeft="10dp"/>
 
             <Button
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:text="Laughing"
-                android:id="@+id/btnRate4"
-                android:layout_gravity="center_vertical"
-                android:background="@color/smile_4"
-                android:clickable="true"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textAllCaps="false"
-                android:textSize="17sp"
-                android:drawableLeft="@drawable/smile4"
-                android:paddingLeft="10dp" />
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Laughing"
+                    android:id="@+id/btnRate4"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/smile_4"
+                    android:clickable="true"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textAllCaps="false"
+                    android:textSize="17sp"
+                    android:drawableLeft="@drawable/smile4"
+                    android:paddingLeft="10dp"/>
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Now Grading: "
-            android:id="@+id/textNowGrad"
-            android:layout_gravity="bottom"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Now Grading: "
+                android:id="@+id/textNowGrad"
+                android:layout_gravity="bottom"
+                android:textAllCaps="false"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"/>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:layout_gravity="bottom">
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:layout_gravity="bottom">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&lt;&lt; Previous"
-                android:id="@+id/btnPrv"
-                android:textColor="@android:color/holo_blue_dark"
-                style="@android:style/Widget.Material.Button.Borderless"
-                android:textSize="18sp"
-                android:layout_gravity="left|bottom"
-                android:textAlignment="gravity"
-                android:gravity="left|center"
-                android:textAllCaps="false" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&lt;&lt; Previous"
+                    android:id="@+id/btnPrv"
+                    android:textColor="@android:color/holo_blue_dark"
+                    style="@android:style/Widget.Material.Button.Borderless"
+                    android:textSize="18sp"
+                    android:layout_gravity="left|bottom"
+                    android:textAlignment="gravity"
+                    android:gravity="left|center"
+                    android:textAllCaps="false"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10/65"
-                android:id="@+id/textProgressInd"
-                android:layout_marginLeft="55dp"
-                android:layout_marginRight="15dp"
-                android:layout_gravity="center"
-                android:gravity="start"
-                android:layout_weight="1" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10/65"
+                    android:id="@+id/textProgressInd"
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+                    android:layout_weight="1"/>
 
             <Button
-                style="@android:style/Widget.Material.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Skip>>"
-                android:id="@+id/btnNext"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textSize="18sp"
-                android:clickable="false"
-                android:gravity="center|right"
-                android:textAlignment="gravity"
-                android:textAllCaps="false"
-                android:layout_gravity="bottom|right" />
+                    style="@android:style/Widget.Material.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Skip>>"
+                    android:id="@+id/btnSkip"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:textSize="18sp"
+                    android:clickable="false"
+                    android:gravity="center|right"
+                    android:textAlignment="gravity"
+                    android:textAllCaps="false"
+                    android:layout_gravity="bottom|right"/>
 
         </LinearLayout>
 

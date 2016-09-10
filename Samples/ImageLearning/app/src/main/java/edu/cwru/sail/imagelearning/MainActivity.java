@@ -29,12 +29,12 @@ public class MainActivity extends Activity {
     private Button btn2;
     private Button btn3;
     private Button btn4;
-    private Button btn_before;
-    private Button btn_next;
+    private Button btn_previous;
+    private Button btn_skip;
 
     private String imgDir = Environment.getExternalStorageDirectory().toString() + "/lab01/Data";
 
-    private String csvDir = Environment.getExternalStorageDirectory().toString()+ File.separator + "lab01" + File.separator + "result.csv";
+    private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 
@@ -48,14 +48,14 @@ public class MainActivity extends Activity {
         btn2 = (Button) findViewById(R.id.btnRate2);
         btn3 = (Button) findViewById(R.id.btnRate3);
         btn4 = (Button) findViewById(R.id.btnRate4);
-        btn_before = (Button) findViewById(R.id.btnPrv);
-        btn_next = (Button) findViewById(R.id.btnNext);
+        btn_previous = (Button) findViewById(R.id.btnPrv);
+        btn_skip = (Button) findViewById(R.id.btnSkip);
         btn1.setOnClickListener(smileListener);
         btn2.setOnClickListener(smileListener);
         btn3.setOnClickListener(smileListener);
         btn4.setOnClickListener(smileListener);
-        btn_before.setOnClickListener(scrollListener);
-        btn_next.setOnClickListener(scrollListener);
+        btn_previous.setOnClickListener(scrollListener);
+        btn_skip.setOnClickListener(scrollListener);
 
         File img = new File(imgDir + File.separator + "smile1.jpg");
 
@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
                     smile_level = 4;
                     break;
             }
-            writeToCSV(imgDir,smile_level);
+            writeToCSV(imgDir, smile_level);
         }
     };
 
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
                 case R.id.btnPrv:
                     //TODO
                     break;
-                case R.id.btnNext:
+                case R.id.btnSkip:
                     //TODO
                     break;
             }
@@ -129,8 +129,8 @@ public class MainActivity extends Activity {
         try {
             reader = new CSVReader(new FileReader(csvDir));
             List csvRead = reader.readAll();
-            for (int it = csvRead.size(); it > 0; it --) {
-                reading =  ((String[])(csvRead.get(it)));
+            for (int it = csvRead.size(); it > 0; it--) {
+                reading = ((String[]) (csvRead.get(it)));
                 if (reading[0] == img) {
                     return Integer.parseInt(reading[1]);
                 }
