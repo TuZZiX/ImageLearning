@@ -36,24 +36,28 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:text="Not Smile"
-                android:id="@+id/rate1"
+                android:id="@+id/btnRate1"
                 android:layout_gravity="center_vertical"
                 android:background="@color/smile_1"
                 android:layout_weight="1"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
+                android:layout_marginRight="20dp"
+                android:textAllCaps="false"
+                android:textSize="17sp" />
 
             <Button
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:text="Slightly Smile"
-                android:id="@+id/rate2"
+                android:id="@+id/btnRate2"
                 android:layout_gravity="center_vertical"
                 android:background="@color/smile_2"
                 android:clickable="true"
                 android:layout_weight="1"
                 android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginLeft="20dp"
+                android:textAllCaps="false"
+                android:textSize="17sp" />
 
         </LinearLayout>
 
@@ -68,31 +72,47 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:text="Smile"
-                android:id="@+id/rate3"
+                android:id="@+id/btnRate3"
                 android:layout_gravity="center_vertical"
                 android:background="@color/smile_3"
                 android:clickable="true"
                 android:layout_weight="1"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
+                android:layout_marginRight="20dp"
+                android:textAllCaps="false"
+                android:textSize="17sp" />
 
             <Button
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:text="Laughing"
-                android:id="@+id/rate4"
+                android:id="@+id/btnRate4"
                 android:layout_gravity="center_vertical"
                 android:background="@color/smile_4"
                 android:clickable="true"
                 android:layout_weight="1"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
+                android:layout_marginRight="20dp"
+                android:textAllCaps="false"
+                android:textSize="17sp" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Now Grading: "
+            android:id="@+id/textNowGrad"
+            android:layout_gravity="bottom"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_gravity="bottom">
 
             <Button
                 android:layout_width="wrap_content"
@@ -101,13 +121,21 @@
                 android:id="@+id/btnPrv"
                 android:textColor="@android:color/holo_blue_dark"
                 style="@android:style/Widget.Material.Button.Borderless"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:layout_gravity="left|bottom"
-                android:layout_weight="1"
                 android:textAlignment="gravity"
                 android:gravity="left|center"
-                android:textStyle="bold"
                 android:textAllCaps="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1/1"
+                android:id="@+id/textProgressInd"
+                android:layout_marginLeft="65dp"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"
+                android:gravity="start" />
 
             <Button
                 style="@android:style/Widget.Material.Button.Borderless"
@@ -117,13 +145,12 @@
                 android:id="@+id/btnNext"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="18sp"
-                android:layout_gravity="bottom|right"
                 android:clickable="false"
-                android:layout_weight="1"
                 android:gravity="center|right"
                 android:textAlignment="gravity"
-                android:textStyle="bold"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:layout_gravity="bottom|right"
+                android:layout_weight="1" />
 
         </LinearLayout>
 

@@ -44,14 +44,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         photo = (ImageView) findViewById(R.id.photo);
-
-        btn1 = (Button) findViewById(R.id.btn1);
-        btn2 = (Button) findViewById(R.id.btn2);
-        btn3 = (Button) findViewById(R.id.btn3);
-        btn4 = (Button) findViewById(R.id.btn4);
-        btn_before = (Button) findViewById(R.id.btn_before);
-        btn_next = (Button) findViewById(R.id.btn_next);
-
+        btn1 = (Button) findViewById(R.id.btnRate1);
+        btn2 = (Button) findViewById(R.id.btnRate2);
+        btn3 = (Button) findViewById(R.id.btnRate3);
+        btn4 = (Button) findViewById(R.id.btnRate4);
+        btn_before = (Button) findViewById(R.id.btnPrv);
+        btn_next = (Button) findViewById(R.id.btnNext);
         btn1.setOnClickListener(smileListener);
         btn2.setOnClickListener(smileListener);
         btn3.setOnClickListener(smileListener);
@@ -81,16 +79,16 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.btn1:
+                case R.id.btnRate1:
                     smile_level = 1;
                     break;
-                case R.id.btn2:
+                case R.id.btnRate2:
                     smile_level = 2;
                     break;
-                case R.id.btn3:
+                case R.id.btnRate3:
                     smile_level = 3;
                     break;
-                case R.id.btn4:
+                case R.id.btnRate4:
                     smile_level = 4;
                     break;
             }
@@ -102,10 +100,10 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.btn_before:
+                case R.id.btnPrv:
                     //TODO
                     break;
-                case R.id.btn_next:
+                case R.id.btnNext:
                     //TODO
                     break;
             }
