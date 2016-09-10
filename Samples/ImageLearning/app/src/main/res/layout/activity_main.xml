@@ -22,7 +22,7 @@
 
             <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/photo"/>
         </FrameLayout>
 
@@ -43,7 +43,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textAllCaps="false"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:drawableLeft="@drawable/smile1"
+                android:paddingLeft="10dp" />
 
             <Button
                 android:layout_width="110dp"
@@ -57,7 +59,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:textAllCaps="false"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:drawableLeft="@drawable/smile2"
+                android:paddingLeft="10dp" />
 
         </LinearLayout>
 
@@ -80,7 +84,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textAllCaps="false"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:drawableLeft="@drawable/smile3"
+                android:paddingLeft="10dp" />
 
             <Button
                 android:layout_width="110dp"
@@ -94,7 +100,9 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:textAllCaps="false"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:drawableLeft="@drawable/smile4"
+                android:paddingLeft="10dp" />
         </LinearLayout>
 
         <TextView
@@ -130,12 +138,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1/1"
+                android:text="10/65"
                 android:id="@+id/textProgressInd"
-                android:layout_marginLeft="65dp"
+                android:layout_marginLeft="55dp"
                 android:layout_marginRight="15dp"
                 android:layout_gravity="center"
-                android:gravity="start" />
+                android:gravity="start"
+                android:layout_weight="1" />
 
             <Button
                 style="@android:style/Widget.Material.Button.Borderless"
@@ -149,8 +158,7 @@
                 android:gravity="center|right"
                 android:textAlignment="gravity"
                 android:textAllCaps="false"
-                android:layout_gravity="bottom|right"
-                android:layout_weight="1" />
+                android:layout_gravity="bottom|right" />
 
         </LinearLayout>
 
