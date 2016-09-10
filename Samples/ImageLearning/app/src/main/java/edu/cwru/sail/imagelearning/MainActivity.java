@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,9 +70,16 @@ public class MainActivity extends Activity {
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
+        Log.i("csv", csvDir);
+        Log.i("img", imgDir);
+
         File csv = new File(csvDir);
-        if (changeImg(imgDir, imgCounter)) {
-            Toast.makeText(this, "Failed to load image at:" + imgDir.toString(), Toast.LENGTH_SHORT).show();
+        if (csv.exists()) {
+            if (changeImg(imgDir, imgCounter)) {
+                Toast.makeText(this, "Failed to load image at:" + imgDir.toString(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "jksahdfjkhlkhasdf", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -115,6 +123,7 @@ public class MainActivity extends Activity {
         File pics[] = folder.listFiles();
         return pics.length;
     }
+
     public boolean changeImg(String imgDir, int imgNum) {
 
         File folder = new File(imgDir);
@@ -124,7 +133,7 @@ public class MainActivity extends Activity {
             return false;
         }
         textInd.setText(getText(R.string.textNowGrad_default) + imgs[imgNum].toString());
-        textCount.setText(Integer.toString(imgNum+1) + "/" + Integer.toString(imgs.length));
+        textCount.setText(Integer.toString(imgNum + 1) + "/" + Integer.toString(imgs.length));
         if (imgs[imgNum].exists()) {
             //Loading Image from URL
             Picasso.with(this)
@@ -139,6 +148,7 @@ public class MainActivity extends Activity {
         }
         return true;
     }
+
     public void writeToCSV(String img, int smile_level) {
         CSVWriter writer = null;
         try {
@@ -185,12 +195,12 @@ public class MainActivity extends Activity {
 
         switch (item.getItemId()) {
             case R.id.setting_openImg:
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 intent.setType("file/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                try{
+                try {
                     startActivity(intent);
-                }catch(Exception e){
+                } catch (Exception e) {
                     Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
                 }
                 return true;
@@ -211,12 +221,11 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
-        if (resultCode == Activity.RESULT_OK)
-        {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             String fullfileName = uri.toString();
-            imgDir = fullfileName.substring(0,fullfileName.lastIndexOf(File.separator));
+            imgDir = fullfileName.substring(0, fullfileName.lastIndexOf(File.separator));
             imgCounter = 0;
         }
     }
