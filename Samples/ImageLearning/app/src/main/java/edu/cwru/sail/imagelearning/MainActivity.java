@@ -9,9 +9,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -26,6 +33,8 @@ public class MainActivity extends Activity {
     private Button btn_next;
 
     private final String imgDir = Environment.getExternalStorageDirectory().toString() + "/DCIM/sample1";
+
+    private final String csvDir = Environment.getExternalStorageDirectory().toString()+ File.separator + "result.csv";
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 
@@ -51,6 +60,8 @@ public class MainActivity extends Activity {
         btn_next.setOnClickListener(scrollListener);
 
         File img = new File(imgDir + File.separator + "smile1.jpg");
+
+        File csv = new File(csvDir);
 
         if (img.exists()) {
             //Loading Image from URL
@@ -83,7 +94,7 @@ public class MainActivity extends Activity {
                     smile_level = 4;
                     break;
             }
-            writeToCSV(smile_level);
+            writeToCSV(imgDir,smile_level);
         }
     };
 
@@ -102,8 +113,34 @@ public class MainActivity extends Activity {
     };
 
     //TODO
-    public void writeToCSV(int smile_level) {
+    public void writeToCSV(final String img, int smile_level) {
+        CSVWriter writer = null;
+        try {
+            writer = new CSVWriter(new FileWriter(csvDir));
+            String[] nextLine = (img + "," + smile_level).split(",");
+            writer.writeNext(nextLine);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public int getSmileLevelCSV(final String img) {
+        String[] reading;
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(csvDir));
+            List csvRead = reader.readAll();
+            for (int it = csvRead.size(); it > 0; it --) {
+                reading =  ((String[])(csvRead.get(it)));
+                if (reading[0] == img) {
+                    return Integer.parseInt(reading[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
