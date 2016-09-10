@@ -43,6 +43,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*  variable name should be like btn_rate1
+            btnRate1 seems like function name
+        */
         photo = (ImageView) findViewById(R.id.photo);
         btn1 = (Button) findViewById(R.id.btnRate1);
         btn2 = (Button) findViewById(R.id.btnRate2);
