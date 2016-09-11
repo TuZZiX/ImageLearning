@@ -210,7 +210,7 @@ public class ImageActivity extends Activity {
 //                    // Potentially direct the user to the Market with a Dialog
 //                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
 //                }
-                File mPath = new File(Environment.getExternalStorageDirectory() + "//DIR//");
+                File mPath = new File(Environment.getExternalStorageDirectory() + "//DCIM//");
                 fileDialog = new FileDialog(this, mPath, ".jpg");
                 fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
                     @Override
@@ -223,6 +223,7 @@ public class ImageActivity extends Activity {
 //                        Log.d(getClass().getName(), "selected file " + file.toString());
 //                    }
 //                });
+                fileDialog.showDialog();
                 return true;
             case R.id.setting_changeLoc:
 
