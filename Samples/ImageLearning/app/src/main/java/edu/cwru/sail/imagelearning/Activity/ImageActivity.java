@@ -215,7 +215,7 @@ public class ImageActivity extends Activity {
                 fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
                     @Override
                     public void directorySelected(File directory) {
-                        Log.d(getClass().getName(), "selected file " + file.toString());
+                        Log.d(getClass().getName(), "selected file " + directory.toString());
                     }
                 });
 //                fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
