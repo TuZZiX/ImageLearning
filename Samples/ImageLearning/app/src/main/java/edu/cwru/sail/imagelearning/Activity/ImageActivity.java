@@ -1,4 +1,4 @@
-package edu.cwru.sail.imagelearning;
+package edu.cwru.sail.imagelearning.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.squareup.picasso.Picasso;
+import edu.cwru.sail.imagelearning.Util.FileDialog;
 
 import java.io.File;
 import java.io.FileReader;
@@ -24,10 +25,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class ImageActivity extends Activity {
 
     private int smile_level;
     private int imgCounter;
+
+    private static final int FILE_SELECT_CODE = 0;
 
     private ImageView photo;
     private Button btn1;
@@ -41,6 +44,8 @@ public class MainActivity extends Activity {
 
     private String imgDir = Environment.getExternalStorageDirectory().toString() + "/lab01/Data";
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
+
+    FileDialog fileDialog;
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 
@@ -73,6 +78,7 @@ public class MainActivity extends Activity {
         Log.i("csv", csvDir);
         Log.i("img", imgDir);
 
+        //TODO
         File csv = new File(csvDir);
         if (csv.exists()) {
             if (changeImg(imgDir, imgCounter)) {
@@ -195,14 +201,28 @@ public class MainActivity extends Activity {
 
         switch (item.getItemId()) {
             case R.id.setting_openImg:
-                Intent intent = new Intent();
-                intent.setType("file/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                try {
-                    startActivity(intent);
-                } catch (Exception e) {
-                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
-                }
+//                Intent intent = new Intent();
+//                intent.setType("file/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                try {
+//                    startActivityForResult(intent, FILE_SELECT_CODE);
+//                } catch (android.content.ActivityNotFoundException ex) {
+//                    // Potentially direct the user to the Market with a Dialog
+//                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
+//                }
+                File mPath = new File(Environment.getExternalStorageDirectory() + "//DIR//");
+                fileDialog = new FileDialog(this, mPath, ".jpg");
+                fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
+                    @Override
+                    public void directorySelected(File directory) {
+                        Log.d(getClass().getName(), "selected file " + file.toString());
+                    }
+                });
+//                fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+//                    public void fileSelected(File file) {
+//                        Log.d(getClass().getName(), "selected file " + file.toString());
+//                    }
+//                });
                 return true;
             case R.id.setting_changeLoc:
 
@@ -222,12 +242,17 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            Uri uri = data.getData();
-            String fullfileName = uri.toString();
-            imgDir = fullfileName.substring(0, fullfileName.lastIndexOf(File.separator));
-            imgCounter = 0;
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                Uri uri = data.getData();
+                String fullfileName = uri.toString();
+                Log.i("fullfileName", fullfileName);
+                imgDir = fullfileName.substring(0, fullfileName.lastIndexOf(File.separator));
+                imgCounter = 0;
+                changeImg(imgDir, imgCounter);
+                break;
         }
+
     }
 
 }
