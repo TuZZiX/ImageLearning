@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -27,7 +28,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import edu.cwru.sail.imagelearning.Util.FileDialog;
 
@@ -50,7 +55,10 @@ public class ImageActivity extends Activity {
 
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
 
-    private ArrayList<String> goalPath;
+    private ArrayList<String> image_list;
+
+    HashMap<String, Integer> smile_storage;
+
     FileDialog fileDialog;
 
     // Make sure that this part is dynamically defined by the Browse Folder and
@@ -60,6 +68,7 @@ public class ImageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        smile_storage = new HashMap<String, Integer>();
 
         photo = (ImageView) findViewById(R.id.photo);
         btn1 = (Button) findViewById(R.id.btnRate1);
@@ -79,31 +88,15 @@ public class ImageActivity extends Activity {
         btn_skip.setOnClickListener(scrollListener);
 
         browserFolder();
-
-        File csv = new File(csvDir);
-        if (!csv.exists()) {
-            Toast.makeText(getApplicationContext(), "CSV File not exist, create new", Toast.LENGTH_SHORT).show();
-        }
-        try {
-            writer = new CSVWriter(new FileWriter(csvDir));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        super.onStop();
     }
 
     View.OnClickListener smileListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (image_list == null || image_list.size() == 0) {
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_LONG).show();
+                return;
+            }
             switch (view.getId()) {
                 case R.id.btnRate1:
                     smile_level = 1;
@@ -118,14 +111,19 @@ public class ImageActivity extends Activity {
                     smile_level = 4;
                     break;
             }
-            writeToCSV();
+            smile_storage.put(image_list.get(img_counter), smile_level);
             gradeNext();
+            writeToCSV();
         }
     };
 
     View.OnClickListener scrollListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (image_list == null || image_list.size() == 0) {
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_LONG).show();
+                return;
+            }
             switch (view.getId()) {
                 case R.id.btnPrv:
                     gradePrv();
@@ -140,31 +138,37 @@ public class ImageActivity extends Activity {
     private void gradeNext() {
         img_counter++;
         if (changeImg()) {
-            getSmileLevel();
+            int last_grade = getSmileLevel(image_list.get(img_counter));
+            if (last_grade != -1) {
+                smile_level = last_grade;   // The second element is the graded smile level
+            } else {
+                smile_level = 0;
+            }
         } else {
             img_counter--;  // If failed, roll back to previous
-            Toast.makeText(getApplicationContext(), "No next image", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_LONG).show();
         }
+        updateButtonSelect();
     }
     private void gradePrv() {
         img_counter--;
         if (changeImg()) {
-            getSmileLevel();
+            int last_grade = getSmileLevel(image_list.get(img_counter));
+            if (last_grade != -1) {
+                smile_level = last_grade;   // The second element is the graded smile level
+                String text = getText(R.string.textLastGrad_suffix) + String.valueOf(smile_level);
+                textLast.setText(text);
+            } else {
+                smile_level = 0;
+            }
         } else {
             img_counter++;  // If failed, roll back to previous
-            Toast.makeText(getApplicationContext(), "No previous image", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_LONG).show();
         }
+        updateButtonSelect();
     }
-    public int getSmileLevel() {
-        int index = -1;                     // -1 means not found
-        ArrayList<Integer> history = getSmileLevelCSV(goalPath.get(img_counter));
-        if (history.size() == 2) {
-            index = history.get(0);         // The first element is the index of this picture in CSV
-            smile_level = history.get(1);   // The second element is the graded smile level
 
-        } else {
-            smile_level = 0;
-        }
+    public void updateButtonSelect() {
         // restore all button to default color
         btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
         btn2.setBackgroundColor(getResources().getColor(R.color.smile_2));
@@ -183,16 +187,21 @@ public class ImageActivity extends Activity {
                 break;
             case 4:
                 btn4.setBackgroundColor(getResources().getColor(R.color.smile_4_sel));
-                break;
         }
-        return index;
+        String text;
+        if (1 <= smile_level && smile_level <= 4) {
+            text= getText(R.string.textLastGrad_suffix) + String.valueOf(smile_level);
+        } else {
+            text = getText(R.string.textLastGrad_default).toString();
+        }
+        textLast.setText(text);
     }
     public boolean changeImg() {
-        if (goalPath.size() <= img_counter || img_counter < 0) {
+        if (image_list.size() <= img_counter || img_counter < 0) {
             //Toast.makeText(getApplicationContext(), "Out of index", Toast.LENGTH_SHORT).show();
             return false;
         }
-        File img = new File(goalPath.get(img_counter));
+        File img = new File(image_list.get(img_counter));
         //Toast.makeText(getApplicationContext(), goalPath.get(img_counter), Toast.LENGTH_SHORT).show();
         if (img.exists()) {
             //Loading Image from URL
@@ -202,33 +211,105 @@ public class ImageActivity extends Activity {
                     .error(R.drawable.smile_fail)
                     .resize(1000, 1000)                        // optional
                     .into(photo);
-
-            textInd.setText(getText(R.string.textNowGrad_default) + " " + truncateFileName(goalPath.get(img_counter)));
-            textCount.setText(String.valueOf(img_counter + 1) + "/" + String.valueOf(goalPath.size()));
+            String text1 = getText(R.string.textNowGrad_default) + " " + truncateFileName(image_list.get(img_counter));
+            textInd.setText(text1);
+            String text2 = String.valueOf(img_counter + 1) + "/" + String.valueOf(image_list.size());
+            textCount.setText(text2);
         } else {
-            Toast.makeText(getApplicationContext(), "Image not exist: " + goalPath.get(img_counter), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_imgNotExist_default) + image_list.get(img_counter), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    private String truncateFileName(String full_path) {
+    public String truncateFileName(String full_path) {
         String[] temp = full_path.split("/");
         return temp[temp.length - 1];
     }
 
-    private void writeToCSV() {
-        String[] nextLine = (truncateFileName(goalPath.get(img_counter)) + "," + smile_level).split(",");
-        writer.writeNext(nextLine);
+    public boolean writeToCSV() {
+        if (smile_storage.isEmpty()) {
+            return false;
+        }
+//        File csv = new File(csvDir);
+//        if (csv.exists()) {
+//            //Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+//            csv.delete();
+//        }
+        List<String[]> formatted = new ArrayList<>();
+        String[] nextLine;
+        for (String key : smile_storage.keySet()) {
+            nextLine = (truncateFileName(key) + "," + smile_storage.get(key)).split(",");
+            formatted.add(nextLine);
+        }
+
+        try {
+            writer = new CSVWriter(new FileWriter(csvDir));
+            writer.writeAll(formatted);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public boolean readCSV () {
+        CSVReader reader;
+        String[] reading;
+        File csv = new File(csvDir);
+        if (csv.exists()) {
+            try {
+                reader = new CSVReader(new FileReader(csvDir));
+                List<String[]> csvRead = reader.readAll();
+                for (int it = csvRead.size() - 1; it >= 0; it--) {
+                    reading = csvRead.get(it);
+                    smile_storage.put(reading[0], Integer.parseInt(reading[1]));
+                }
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
-    private ArrayList<Integer> getSmileLevelCSV(String img) {
+    public int getSmileLevel(String img) {
+        if (smile_storage.containsKey(img)) {
+            return smile_storage.get(img);
+        } else {
+            return -1;
+        }
+    }
+
+    private int getSmileLevelCSV(String img) {
+        String[] reading;
+        CSVReader reader;
+        try {
+            reader = new CSVReader(new FileReader(csvDir));
+            List csvRead = reader.readAll();
+            for (int it = csvRead.size() - 1; it >= 0; it--) {
+                reading = ((String[]) (csvRead.get(it)));
+                if (reading[0].equals(img)) {
+                    return (Integer.parseInt(reading[1]));
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;     // Return -1 if not found
+    }
+
+    private ArrayList<Integer> getSmileLevelwIndexCSV(String img) {
         ArrayList<Integer> index_smile = new ArrayList<>();
         String[] reading;
         CSVReader reader;
         try {
             reader = new CSVReader(new FileReader(csvDir));
-            // Here is a bug, reader could not get anything until writer close the file
             List csvRead = reader.readAll();
             for (int it = csvRead.size() - 1; it >= 0; it--) {
                 reading = ((String[]) (csvRead.get(it)));
@@ -313,8 +394,8 @@ public class ImageActivity extends Activity {
             }
         });
         fileDialog.setSelectDirectoryOption(true);
-        goalPath = new ArrayList<>();
-        fileDialog.showDialog(goalPath);
+        image_list = new ArrayList<>();
+        fileDialog.showDialog(image_list);
     }
 
     public String getCsvDir() {

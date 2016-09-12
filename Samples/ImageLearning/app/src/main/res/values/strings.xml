@@ -8,8 +8,16 @@
     <string name="btnRate3_name">Smile</string>
     <string name="btnRate4_name">Laughing</string>
     <string name="textLastGrad_default"> </string>
+    <string name="textLastGrad_suffix">Last Grade: </string>
     <string name="textNowGrad_default">Now Grading: </string>
     <string name="textProgressInd_default">0/0</string>
     <string name="btnPrv_name">&lt;&lt; Previous</string>
     <string name="btnNext_name">Next &gt;&gt;</string>
+    <string name="errMsg_noCSV">CSV File not exist, create new</string>
+    <string name="errMsg_noImage">No image to grade</string>
+    <string name="errMsg_noPrv">No previous image</string>
+    <string name="errMsg_noNext">No next image</string>
+    <string name="errMsg_imgNotExist_default">Image not exist:</string>
+    <string name="title_folderSelect_default">Set Learning Image Directory:</string>
+
 </resources>

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import edu.cwru.sail.imagelearning.Activity.ImageActivity;
+import edu.cwru.sail.imagelearning.Activity.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class FileDialog {
         Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
-        builder.setTitle(currentPath.getPath());
+        builder.setTitle(activity.getText(R.string.title_folderSelect_default) + "\n" + currentPath.getPath());
         if (selectDirectoryOption) {
             builder.setPositiveButton("Select directory", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
@@ -69,6 +70,8 @@ public class FileDialog {
                     for (File file : currentPath.listFiles()) {
                         goalPath.add(currentPath.getAbsoluteFile() + "/" + file.getName());
                     }
+                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
+                    ((ImageActivity) activity).readCSV();
                     ((ImageActivity) activity).changeImg();
                 }
             });
