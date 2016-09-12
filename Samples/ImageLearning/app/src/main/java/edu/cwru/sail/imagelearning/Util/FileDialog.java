@@ -70,9 +70,11 @@ public class FileDialog {
                     for (File file : currentPath.listFiles()) {
                         goalPath.add(currentPath.getAbsoluteFile() + "/" + file.getName());
                     }
-                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
+                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
                     ((ImageActivity) activity).readCSV();
                     ((ImageActivity) activity).changeImg();
+                    ((ImageActivity) activity).updateSmileLevel();
+                    ((ImageActivity) activity).updateButtonSelect();
                 }
             });
         }

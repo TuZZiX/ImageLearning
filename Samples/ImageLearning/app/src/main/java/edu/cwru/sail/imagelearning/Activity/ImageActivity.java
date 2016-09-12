@@ -138,12 +138,7 @@ public class ImageActivity extends Activity {
     private void gradeNext() {
         img_counter++;
         if (changeImg()) {
-            int last_grade = getSmileLevel(image_list.get(img_counter));
-            if (last_grade != -1) {
-                smile_level = last_grade;   // The second element is the graded smile level
-            } else {
-                smile_level = 0;
-            }
+            updateSmileLevel();
         } else {
             img_counter--;  // If failed, roll back to previous
             Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_LONG).show();
@@ -154,14 +149,7 @@ public class ImageActivity extends Activity {
     private void gradePrv() {
         img_counter--;
         if (changeImg()) {
-            int last_grade = getSmileLevel(image_list.get(img_counter));
-            if (last_grade != -1) {
-                smile_level = last_grade;   // The second element is the graded smile level
-                String text = getText(R.string.textLastGrad_suffix) + String.valueOf(smile_level);
-                textLast.setText(text);
-            } else {
-                smile_level = 0;
-            }
+            updateSmileLevel();
         } else {
             img_counter++;  // If failed, roll back to previous
             Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_LONG).show();
@@ -169,6 +157,14 @@ public class ImageActivity extends Activity {
         updateButtonSelect();
     }
 
+    public void updateSmileLevel() {
+        int last_grade = getSmileLevel(image_list.get(img_counter));
+        if (last_grade != -1) {
+            smile_level = last_grade;   // The second element is the graded smile level
+        } else {
+            smile_level = 0;
+        }
+    }
     public void updateButtonSelect() {
         // restore all button to default color
         btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
@@ -262,11 +258,13 @@ public class ImageActivity extends Activity {
         File csv = new File(csvDir);
         if (csv.exists()) {
             try {
+                smile_storage.clear();
+                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));
                 reader = new CSVReader(new FileReader(csvDir));
                 List<String[]> csvRead = reader.readAll();
                 for (int it = csvRead.size() - 1; it >= 0; it--) {
                     reading = csvRead.get(it);
-                    smile_storage.put(reading[0], Integer.parseInt(reading[1]));
+                    smile_storage.put(suffix + "/" + reading[0], Integer.parseInt(reading[1]));
                 }
                 reader.close();
             } catch (IOException e) {
@@ -410,10 +408,11 @@ public class ImageActivity extends Activity {
     }
 }
 
-/*TODO
-* to be implemented:
-* 1. read grade result from CSV and display if already graded
-* 2. write back result to the same column if already graded
-* 3. change actionbar color
+/*
+* Done: to be implemented:
+* Done: 1. read grade result from CSV and display if already graded
+* Done: 2. write back result to the same column if already graded
+* Done: 3. change actionbar color
+* TODO
 * 4. make result CSV file's location changeable (and check exist)
 * 5. make code looks better*/
