@@ -219,6 +219,9 @@ public class ImageActivity extends Activity {
 //                    // Potentially direct the user to the Market with a Dialog
 //                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
 //                }
+                /**
+                 * Requesting Permissions at Run Time
+                 */
                 int permissionCheck = ContextCompat.checkSelfPermission(this,
                         Manifest.permission.READ_EXTERNAL_STORAGE);
                 if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
