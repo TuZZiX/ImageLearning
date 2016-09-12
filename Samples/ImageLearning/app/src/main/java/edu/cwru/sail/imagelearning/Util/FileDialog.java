@@ -3,13 +3,15 @@ package edu.cwru.sail.imagelearning.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ public class FileDialog {
     private final String TAG = getClass().getName();
     private String[] fileList;
     private File currentPath;
+    private Context context;
 
     public interface FileSelectedListener {
         void fileSelected(File file);
@@ -63,6 +66,8 @@ public class FileDialog {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
+                    Toast.makeText(activity.getApplicationContext(), currentPath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+
                 }
             });
         }
@@ -153,6 +158,7 @@ public class FileDialog {
 
         }
         fileList = (String[]) r.toArray(new String[]{});
+        Arrays.sort(fileList);
     }
 
     private File getChosenFile(String fileChosen) {

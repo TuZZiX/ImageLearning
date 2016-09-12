@@ -82,10 +82,10 @@ public class ImageActivity extends Activity {
         File csv = new File(csvDir);
         if (csv.exists()) {
             if (changeImg(imgDir, imgCounter)) {
-                Toast.makeText(this, "Failed to load image at:" + imgDir.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Failed to load image at:" + imgDir.toString(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "jksahdfjkhlkhasdf", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "jksahdfjkhlkhasdf", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -138,8 +138,8 @@ public class ImageActivity extends Activity {
         if (imgs.length <= imgNum) {
             return false;
         }
-        textInd.setText(getText(R.string.textNowGrad_default) + imgs[imgNum].toString());
-        textCount.setText(Integer.toString(imgNum + 1) + "/" + Integer.toString(imgs.length));
+//        textInd.setText(getText(R.string.textNowGrad_default) + imgs[imgNum].toString());
+//        textCount.setText(Integer.toString(imgNum + 1) + "/" + Integer.toString(imgs.length));
         if (imgs[imgNum].exists()) {
             //Loading Image from URL
             Picasso.with(this)
@@ -210,7 +210,8 @@ public class ImageActivity extends Activity {
 //                    // Potentially direct the user to the Market with a Dialog
 //                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
 //                }
-                File mPath = new File(Environment.getExternalStorageDirectory() + "//DCIM//");
+                File mPath = new File(String.valueOf(Environment.getDownloadCacheDirectory()));
+//                File mPath = new File(System.getenv("SECONDARY_STORAGE"));
                 fileDialog = new FileDialog(this, mPath, ".jpg");
                 fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
                     @Override
@@ -218,11 +219,12 @@ public class ImageActivity extends Activity {
                         Log.d(getClass().getName(), "selected file " + directory.toString());
                     }
                 });
-//                fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
-//                    public void fileSelected(File file) {
-//                        Log.d(getClass().getName(), "selected file " + file.toString());
-//                    }
-//                });
+                fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+                    public void fileSelected(File file) {
+                        Log.d(getClass().getName(), "selected file " + file.toString());
+                    }
+                });
+                fileDialog.setSelectDirectoryOption(true);
                 fileDialog.showDialog();
                 return true;
             case R.id.setting_changeLoc:
