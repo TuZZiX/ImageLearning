@@ -150,6 +150,7 @@ public class ImageActivity extends Activity {
         }
         updateButtonSelect();
     }
+
     private void gradePrv() {
         img_counter--;
         if (changeImg()) {
@@ -190,12 +191,13 @@ public class ImageActivity extends Activity {
         }
         String text;
         if (1 <= smile_level && smile_level <= 4) {
-            text= getText(R.string.textLastGrad_suffix) + String.valueOf(smile_level);
+            text = getText(R.string.textLastGrad_suffix) + String.valueOf(smile_level);
         } else {
             text = getText(R.string.textLastGrad_default).toString();
         }
         textLast.setText(text);
     }
+
     public boolean changeImg() {
         if (image_list.size() <= img_counter || img_counter < 0) {
             //Toast.makeText(getApplicationContext(), "Out of index", Toast.LENGTH_SHORT).show();
@@ -253,7 +255,8 @@ public class ImageActivity extends Activity {
         }
         return true;
     }
-    public boolean readCSV () {
+
+    public boolean readCSV() {
         CSVReader reader;
         String[] reading;
         File csv = new File(csvDir);

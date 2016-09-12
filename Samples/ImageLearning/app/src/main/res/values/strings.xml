@@ -7,9 +7,9 @@
     <string name="btnRate2_name">Slightly Smile</string>
     <string name="btnRate3_name">Smile</string>
     <string name="btnRate4_name">Laughing</string>
-    <string name="textLastGrad_default"> </string>
-    <string name="textLastGrad_suffix">Last Grade: </string>
-    <string name="textNowGrad_default">Now Grading: </string>
+    <string name="textLastGrad_default"></string>
+    <string name="textLastGrad_suffix">Last Grade:</string>
+    <string name="textNowGrad_default">Now Grading:</string>
     <string name="textProgressInd_default">0/0</string>
     <string name="btnPrv_name">&lt;&lt; Previous</string>
     <string name="btnNext_name">Next &gt;&gt;</string>
