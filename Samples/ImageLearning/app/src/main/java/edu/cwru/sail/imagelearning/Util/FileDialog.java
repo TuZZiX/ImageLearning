@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
+
 import edu.cwru.sail.imagelearning.Activity.ImageActivity;
 
 import java.io.File;
@@ -14,9 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by majunqi0102 on 9/10/16.
- */
 public class FileDialog {
     private static final String PARENT_DIR = "..";
     private final String TAG = getClass().getName();
