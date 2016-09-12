@@ -6,14 +6,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import edu.cwru.sail.imagelearning.Activity.ImageActivity;
 
 /**
  * Created by majunqi0102 on 9/10/16.
@@ -59,7 +61,7 @@ public class FileDialog {
      * @return file dialog
      */
     public Dialog createFileDialog(final ArrayList<String> goalPath) {
-        Dialog dialog = null;
+        Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(currentPath.getPath());
@@ -159,9 +161,8 @@ public class FileDialog {
                 for (int i = 0; i < fileList1.length; i++) {
                     r.add(fileList1[i].getName());
                 }
-
         }
-        fileList = (String[]) r.toArray(new String[]{});
+        fileList = r.toArray(new String[]{});
         Arrays.sort(fileList);
     }
 
@@ -174,6 +175,13 @@ public class FileDialog {
         this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : fileEndsWith;
     }
 
+    public File getCurrentPath() {
+        return currentPath;
+    }
+
+    public void setCurrentPath(File currentPath) {
+        this.currentPath = currentPath;
+    }
 }
 
 class ListenerList<L> {

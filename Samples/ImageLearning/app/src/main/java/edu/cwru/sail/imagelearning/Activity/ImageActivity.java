@@ -22,6 +22,9 @@ import android.widget.Toast;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.squareup.picasso.Picasso;
+
+import org.apache.commons.lang3.ObjectUtils;
+
 import edu.cwru.sail.imagelearning.Util.FileDialog;
 
 import java.io.File;
@@ -82,19 +85,26 @@ public class ImageActivity extends Activity {
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
-        Log.i("csv", csvDir);
-        Log.i("img", imgDir);
+        //Log.i("csv", csvDir);
+        //Log.i("img", imgDir);
 
-        //TODO
-        File csv = new File(csvDir);
-        if (csv.exists()) {
-            if (changeImg(imgDir, imgCounter)) {
-                Toast.makeText(getApplicationContext(), "Failed to load image at:" + imgDir.toString(), Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "jksahdfjkhlkhasdf", Toast.LENGTH_SHORT).show();
+        browserFolder();
+
+        if (changeImg(goalPath, imgCounter)) {
+            Toast.makeText(getApplicationContext(), "Failed to load image at:" + imgDir, Toast.LENGTH_SHORT).show();
         }
 
+        File csv = new File(csvDir);
+        if (!csv.exists()) {
+            Toast.makeText(getApplicationContext(), "CSV File not exit, create new", Toast.LENGTH_SHORT).show();
+            CSVWriter writer = null;
+            try {
+                writer = new CSVWriter(new FileWriter(csvDir));
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     View.OnClickListener smileListener = new View.OnClickListener() {
@@ -133,31 +143,24 @@ public class ImageActivity extends Activity {
         }
     };
 
-    public int getImgCntMax(String imgDir) {
-        File folder = new File(imgDir);
-        File pics[] = folder.listFiles();
-        return pics.length;
-    }
-
-    public boolean changeImg(String imgDir, int imgNum) {
-
-        File folder = new File(imgDir);
-        File imgs[] = folder.listFiles();
-        // 把这里修了
-        if (imgs.length <= imgNum) {
+    public boolean changeImg(ArrayList<String> goalPath, int imgCnt) {
+        if (goalPath.size() <= imgCnt) {
             return false;
         }
-//        textInd.setText(getText(R.string.textNowGrad_default) + imgs[imgNum].toString());
-//        textCount.setText(Integer.toString(imgNum + 1) + "/" + Integer.toString(imgs.length));
-        if (imgs[imgNum].exists()) {
+
+        File img = new File(goalPath.get(imgCnt));
+        if (img.exists()) {
             //Loading Image from URL
             Picasso.with(this)
                     //.load(Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + "IMG_20160910_154021.jpg")
-                    .load(imgs[imgNum])
+                    .load(img)
                     //.placeholder(R.drawable.placeholder)   // optional
                     //.error(R.drawable.error)      // optional
                     .resize(1000, 1000)                        // optional
                     .into(photo);
+
+            textInd.setText(getText(R.string.textNowGrad_default) + goalPath.get(imgCnt));
+            textCount.setText(String.valueOf(imgCnt + 1) + "/" + String.valueOf(goalPath.size()));
         } else {
             return false;
         }
@@ -184,7 +187,7 @@ public class ImageActivity extends Activity {
             List csvRead = reader.readAll();
             for (int it = csvRead.size(); it > 0; it--) {
                 reading = ((String[]) (csvRead.get(it)));
-                if (reading[0] == img) {
+                if (reading[0].equals(img)) {
                     return Integer.parseInt(reading[1]);
                 }
             }
@@ -193,6 +196,17 @@ public class ImageActivity extends Activity {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean updateFileList(String Directory, ArrayList<String> goalPath) {
+        File currentPath = new File(Directory);
+        if (currentPath != null) {
+            for (File file : currentPath.listFiles()) {
+                goalPath.add(currentPath.getAbsoluteFile() + "/" + file.getName());
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -219,32 +233,7 @@ public class ImageActivity extends Activity {
 //                    // Potentially direct the user to the Market with a Dialog
 //                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
 //                }
-                /**
-                 * Requesting Permissions at Run Time
-                 */
-                int permissionCheck = ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                }
-
-                File mPath = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-//                File mPath = new File(System.getenv("SECONDARY_STORAGE"));
-                fileDialog = new FileDialog(this, mPath, ".jpg");
-                fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
-                    @Override
-                    public void directorySelected(File directory) {
-                        Log.d(getClass().getName(), "selected file " + directory.toString());
-                    }
-                });
-                fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
-                    public void fileSelected(File file) {
-                        Log.d(getClass().getName(), "selected file " + file.toString());
-                    }
-                });
-                fileDialog.setSelectDirectoryOption(true);
-                goalPath = new ArrayList<>();
-                fileDialog.showDialog(goalPath);
+                browserFolder();
                 return true;
             case R.id.setting_changeLoc:
 
@@ -262,19 +251,32 @@ public class ImageActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                Uri uri = data.getData();
-                String fullfileName = uri.toString();
-                Log.i("fullfileName", fullfileName);
-                imgDir = fullfileName.substring(0, fullfileName.lastIndexOf(File.separator));
-                imgCounter = 0;
-                changeImg(imgDir, imgCounter);
-                break;
+    public void browserFolder () {
+        /**
+         * Requesting Permissions at Run Time
+         */
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
 
+        File mPath = new File(String.valueOf(Environment.getExternalStorageDirectory()));
+//                File mPath = new File(System.getenv("SECONDARY_STORAGE"));
+        fileDialog = new FileDialog(this, mPath, ".jpg");
+        fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
+            @Override
+            public void directorySelected(File directory) {
+                Log.d(getClass().getName(), "selected file " + directory.toString());
+            }
+        });
+        fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+            public void fileSelected(File file) {
+                Log.d(getClass().getName(), "selected file " + file.toString());
+            }
+        });
+        fileDialog.setSelectDirectoryOption(true);
+        goalPath = new ArrayList<>();
+        fileDialog.showDialog(goalPath);
     }
-
 }
