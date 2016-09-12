@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#ffc107</color>
+    <color name="colorPrimaryDark">#eb9500</color>
+    <color name="colorAccent">#9800ff</color>
     <color name="smile_3">#ffbe32</color>
     <color name="smile_2">#ff9633</color>
     <color name="smile_1">#ff7832</color>
     <color name="smile_4">#ffe628</color>
-    <color name="smile_select">#54ff32</color>
     <color name="smile_1_sel">#b35324</color>
     <color name="smile_2_sel">#b36924</color>
     <color name="smile_3_sel">#b38524</color>

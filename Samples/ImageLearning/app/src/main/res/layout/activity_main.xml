@@ -15,14 +15,14 @@
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="360dp"
+                android:layout_height="350dp"
             android:id="@+id/frameLayout">
 
             <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/photo"
-                android:contentDescription="Learning Image" />
+                android:contentDescription="@string/app_name" />
 
         </FrameLayout>
 
@@ -45,7 +45,8 @@
                     android:textAllCaps="false"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/smile1"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                style="@style/Base.Widget.AppCompat.Button" />
 
             <Button
                     android:layout_width="110dp"
@@ -60,7 +61,8 @@
                     android:textAllCaps="false"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/smile2"
-                    android:paddingLeft="10dp"/>
+                    android:paddingLeft="10dp"
+                style="@style/Base.Widget.AppCompat.Button" />
 
         </LinearLayout>
 
@@ -102,19 +104,37 @@
                     android:paddingLeft="10dp"/>
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/textNowGrad_default"
-                android:id="@+id/textNowGrad"
-                android:layout_gravity="bottom"
-                android:textAllCaps="false"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_height="match_parent"
+                android:text="@string/textLastGrad_default"
+                android:id="@+id/textLastGrad"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/textNowGrad_default"
+                    android:id="@+id/textNowGrad"
+                android:textAllCaps="false" />
+        </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <Button
                     android:layout_width="wrap_content"
@@ -125,23 +145,20 @@
                     style="@android:style/Widget.Material.Button.Borderless"
                     android:textSize="18sp"
                     android:layout_gravity="left|bottom"
-                    android:textAlignment="gravity"
-                    android:gravity="left|center"
+                android:gravity="left|bottom"
                     android:textAllCaps="false"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true" />
 
             <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/textProgressInd_default"
                     android:id="@+id/textProgressInd"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
+                android:gravity="bottom|center"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp" />
+                android:paddingBottom="12dp" />
 
             <Button
                     style="@android:style/Widget.Material.Button.Borderless"
@@ -152,9 +169,8 @@
                     android:textColor="@android:color/holo_blue_dark"
                     android:textSize="18sp"
                     android:clickable="false"
-                    android:gravity="center|right"
-                    android:textAlignment="gravity"
-                    android:textAllCaps="false"
+                    android:gravity="bottom|right"
+                android:textAllCaps="false"
                     android:layout_gravity="bottom|right"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true" />

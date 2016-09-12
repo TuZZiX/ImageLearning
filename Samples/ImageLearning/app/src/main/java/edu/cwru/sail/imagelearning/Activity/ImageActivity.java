@@ -46,6 +46,7 @@ public class ImageActivity extends Activity {
     private Button btn_skip;
     private TextView textInd;
     private TextView textCount;
+    private TextView textLast;
 
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
 
@@ -69,6 +70,7 @@ public class ImageActivity extends Activity {
         btn_skip = (Button) findViewById(R.id.btnSkip);
         textInd = (TextView) findViewById(R.id.textNowGrad);
         textCount = (TextView) findViewById(R.id.textProgressInd);
+        textLast = (TextView) findViewById(R.id.textLastGrad);
         btn1.setOnClickListener(smileListener);
         btn2.setOnClickListener(smileListener);
         btn3.setOnClickListener(smileListener);
@@ -228,7 +230,7 @@ public class ImageActivity extends Activity {
             reader = new CSVReader(new FileReader(csvDir));
             // Here is a bug, reader could not get anything until writer close the file
             List csvRead = reader.readAll();
-            for (int it = csvRead.size(); it > 0; it--) {
+            for (int it = csvRead.size() - 1; it >= 0; it--) {
                 reading = ((String[]) (csvRead.get(it)));
                 if (reading[0].equals(img)) {
                     index_smile.add(it);
@@ -313,6 +315,14 @@ public class ImageActivity extends Activity {
         fileDialog.setSelectDirectoryOption(true);
         goalPath = new ArrayList<>();
         fileDialog.showDialog(goalPath);
+    }
+
+    public String getCsvDir() {
+        return csvDir;
+    }
+
+    public void setCsvDir(String csvDir) {
+        this.csvDir = csvDir;
     }
 }
 
