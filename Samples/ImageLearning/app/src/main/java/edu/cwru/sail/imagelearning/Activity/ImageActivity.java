@@ -2,7 +2,6 @@ package edu.cwru.sail.imagelearning.Activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -201,9 +200,7 @@ public class ImageActivity extends Activity {
                     .resize(1000, 1000)                        // optional
                     .into(photo);
 
-            String temp = goalPath.get(img_counter);
-            String[] temp1 = temp.split("/");
-            textInd.setText(getText(R.string.textNowGrad_default) + temp1[temp1.length - 1]);
+            textInd.setText(getText(R.string.textNowGrad_default) + " " + truncateFileName(goalPath.get(img_counter)));
             textCount.setText(String.valueOf(img_counter + 1) + "/" + String.valueOf(goalPath.size()));
         } else {
             Toast.makeText(getApplicationContext(), "Image not exist: " + goalPath.get(img_counter), Toast.LENGTH_SHORT).show();
@@ -212,8 +209,13 @@ public class ImageActivity extends Activity {
         return true;
     }
 
+    private String truncateFileName(String full_path) {
+        String[] temp = full_path.split("/");
+        return temp[temp.length - 1];
+    }
+
     private void writeToCSV() {
-        String[] nextLine = (goalPath.get(img_counter) + "," + smile_level).split(",");
+        String[] nextLine = (truncateFileName(goalPath.get(img_counter)) + "," + smile_level).split(",");
         writer.writeNext(nextLine);
     }
 
@@ -268,15 +270,10 @@ public class ImageActivity extends Activity {
             case R.id.setting_openResult:
                 File file = new File(csvDir);
                 Uri path = Uri.fromFile(file);
-                Intent csvOpenintent = new Intent(Intent.ACTION_VIEW);
-                csvOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                csvOpenintent.setDataAndType(path, "text/csv");
-                try {
-                    startActivity(csvOpenintent);
-                }
-                catch (ActivityNotFoundException e) {
-
-                }
+                Intent csvOpenIntent = new Intent(Intent.ACTION_VIEW);
+                csvOpenIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                csvOpenIntent.setDataAndType(path, "text/csv");
+                startActivity(csvOpenIntent);
                 return true;
             case R.id.setting_exit:
                 moveTaskToBack(true);
