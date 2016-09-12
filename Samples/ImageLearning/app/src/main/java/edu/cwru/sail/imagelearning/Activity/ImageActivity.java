@@ -36,8 +36,8 @@ import java.util.List;
 
 public class ImageActivity extends Activity {
 
-    private int smile_level;
-    private int imgCounter;
+    private int smile_level = 0;
+    private int imgCounter = 0;
 
     private static final int FILE_SELECT_CODE = 0;
 
@@ -67,8 +67,6 @@ public class ImageActivity extends Activity {
         /*  variable name should be like btn_rate1
             btnRate1 seems like function name
         */
-        smile_level = 0;
-        imgCounter = 0;
         photo = (ImageView) findViewById(R.id.photo);
         btn1 = (Button) findViewById(R.id.btnRate1);
         btn2 = (Button) findViewById(R.id.btnRate2);
@@ -90,9 +88,9 @@ public class ImageActivity extends Activity {
 
         browserFolder();
 
-        if (changeImg(goalPath, imgCounter)) {
-            Toast.makeText(getApplicationContext(), "Failed to load image at:" + imgDir, Toast.LENGTH_SHORT).show();
-        }
+//        if (changeImg()) {
+//            Toast.makeText(getApplicationContext(), "Failed to load image at:" + imgDir, Toast.LENGTH_SHORT).show();
+//        }
 
         File csv = new File(csvDir);
         if (!csv.exists()) {
@@ -143,12 +141,10 @@ public class ImageActivity extends Activity {
         }
     };
 
-    public boolean changeImg(ArrayList<String> goalPath, int imgCnt) {
-        if (goalPath.size() <= imgCnt) {
-            return false;
-        }
+    public boolean changeImg() {
 
-        File img = new File(goalPath.get(imgCnt));
+        File img = new File(goalPath.get(imgCounter));
+        Toast.makeText(getApplicationContext(), goalPath.get(imgCounter), Toast.LENGTH_SHORT).show();
         if (img.exists()) {
             //Loading Image from URL
             Picasso.with(this)
@@ -159,8 +155,10 @@ public class ImageActivity extends Activity {
                     .resize(1000, 1000)                        // optional
                     .into(photo);
 
-            textInd.setText(getText(R.string.textNowGrad_default) + goalPath.get(imgCnt));
-            textCount.setText(String.valueOf(imgCnt + 1) + "/" + String.valueOf(goalPath.size()));
+            String temp = goalPath.get(imgCounter);
+            String[] temp1 = temp.split("/");
+            textInd.setText(getText(R.string.textNowGrad_default) + temp1[temp1.length - 1]);
+            textCount.setText(String.valueOf(imgCounter + 1) + "/" + String.valueOf(goalPath.size()));
         } else {
             return false;
         }
@@ -251,7 +249,7 @@ public class ImageActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void browserFolder () {
+    public void browserFolder() {
         /**
          * Requesting Permissions at Run Time
          */

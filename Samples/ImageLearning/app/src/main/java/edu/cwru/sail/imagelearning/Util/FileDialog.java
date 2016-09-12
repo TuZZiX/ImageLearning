@@ -7,15 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import edu.cwru.sail.imagelearning.Activity.ImageActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import edu.cwru.sail.imagelearning.Activity.ImageActivity;
 
 /**
  * Created by majunqi0102 on 9/10/16.
@@ -70,10 +67,10 @@ public class FileDialog {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
-                    Toast.makeText(activity.getApplicationContext(), currentPath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     for (File file : currentPath.listFiles()) {
                         goalPath.add(currentPath.getAbsoluteFile() + "/" + file.getName());
                     }
+                    ((ImageActivity) activity).changeImg();
                 }
             });
         }
