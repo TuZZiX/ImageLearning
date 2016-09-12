@@ -23,6 +23,7 @@
                     android:layout_height="match_parent"
                     android:id="@+id/photo"
                 android:contentDescription="Learning Image" />
+
         </FrameLayout>
 
         <LinearLayout
@@ -44,8 +45,7 @@
                     android:textAllCaps="false"
                     android:textSize="17sp"
                     android:drawableLeft="@drawable/smile1"
-                    android:paddingLeft="10dp"
-                android:fadeScrollbars="false" />
+                    android:paddingLeft="10dp" />
 
             <Button
                     android:layout_width="110dp"
@@ -54,7 +54,6 @@
                     android:id="@+id/btnRate2"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_2"
-                    android:clickable="true"
                     android:layout_weight="1"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
@@ -79,7 +78,6 @@
                     android:id="@+id/btnRate3"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_3"
-                    android:clickable="true"
                     android:layout_weight="1"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
@@ -95,7 +93,6 @@
                     android:id="@+id/btnRate4"
                     android:layout_gravity="center_vertical"
                     android:background="@color/smile_4"
-                    android:clickable="true"
                     android:layout_weight="1"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"

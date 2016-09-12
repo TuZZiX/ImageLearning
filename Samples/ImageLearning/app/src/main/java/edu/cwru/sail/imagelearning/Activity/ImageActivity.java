@@ -51,7 +51,8 @@ public class ImageActivity extends Activity {
 
     private ArrayList<String> goalPath;
     FileDialog fileDialog;
-    //Make sure that this part is dynamically defined by the Browse Folder and
+
+    // Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 
     @Override
@@ -297,7 +298,6 @@ public class ImageActivity extends Activity {
         }
 
         File mPath = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-//                File mPath = new File(System.getenv("SECONDARY_STORAGE"));
         fileDialog = new FileDialog(this, mPath, ".jpg");
         fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
             @Override
