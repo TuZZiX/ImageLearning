@@ -1,10 +1,15 @@
 package edu.cwru.sail.imagelearning.Activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageActivity extends Activity {
@@ -45,6 +51,7 @@ public class ImageActivity extends Activity {
     private String imgDir = Environment.getExternalStorageDirectory().toString() + "/lab01/Data";
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
 
+    private ArrayList<String> goalPath;
     FileDialog fileDialog;
     //Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
@@ -87,6 +94,7 @@ public class ImageActivity extends Activity {
         } else {
             Toast.makeText(getApplicationContext(), "jksahdfjkhlkhasdf", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     View.OnClickListener smileListener = new View.OnClickListener() {
@@ -95,6 +103,7 @@ public class ImageActivity extends Activity {
             switch (view.getId()) {
                 case R.id.btnRate1:
                     smile_level = 1;
+                    Toast.makeText(getApplicationContext(), String.valueOf(goalPath.size()), Toast.LENGTH_LONG).show();
                     break;
                 case R.id.btnRate2:
                     smile_level = 2;
@@ -210,7 +219,13 @@ public class ImageActivity extends Activity {
 //                    // Potentially direct the user to the Market with a Dialog
 //                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
 //                }
-                File mPath = new File(String.valueOf(Environment.getDownloadCacheDirectory()));
+                int permissionCheck = ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                }
+
+                File mPath = new File(String.valueOf(Environment.getExternalStorageDirectory()));
 //                File mPath = new File(System.getenv("SECONDARY_STORAGE"));
                 fileDialog = new FileDialog(this, mPath, ".jpg");
                 fileDialog.addDirectoryListener(new FileDialog.DirectorySelectedListener() {
@@ -225,7 +240,8 @@ public class ImageActivity extends Activity {
                     }
                 });
                 fileDialog.setSelectDirectoryOption(true);
-                fileDialog.showDialog();
+                goalPath = new ArrayList<>();
+                fileDialog.showDialog(goalPath);
                 return true;
             case R.id.setting_changeLoc:
 

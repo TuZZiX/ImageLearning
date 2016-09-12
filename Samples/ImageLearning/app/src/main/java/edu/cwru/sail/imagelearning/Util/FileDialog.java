@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class FileDialog {
     private String[] fileList;
     private File currentPath;
     private Context context;
+
 
     public interface FileSelectedListener {
         void fileSelected(File file);
@@ -56,7 +58,7 @@ public class FileDialog {
     /**
      * @return file dialog
      */
-    public Dialog createFileDialog() {
+    public Dialog createFileDialog(final ArrayList<String> goalPath) {
         Dialog dialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
@@ -67,7 +69,9 @@ public class FileDialog {
                     Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
                     Toast.makeText(activity.getApplicationContext(), currentPath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
+                    for (File file : currentPath.listFiles()) {
+                        goalPath.add(currentPath.getAbsoluteFile() + "/" + file.getName());
+                    }
                 }
             });
         }
@@ -80,7 +84,7 @@ public class FileDialog {
                     loadFileList(chosenFile);
                     dialog.cancel();
                     dialog.dismiss();
-                    showDialog();
+                    showDialog(goalPath);
                 } else fireFileSelectedEvent(chosenFile);
             }
         });
@@ -113,8 +117,8 @@ public class FileDialog {
     /**
      * Show file dialog
      */
-    public void showDialog() {
-        createFileDialog().show();
+    public void showDialog(ArrayList<String> goalPath) {
+        createFileDialog(goalPath).show();
     }
 
     private void fireFileSelectedEvent(final File file) {
@@ -169,6 +173,7 @@ public class FileDialog {
     private void setFileEndsWith(String fileEndsWith) {
         this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : fileEndsWith;
     }
+
 }
 
 class ListenerList<L> {
