@@ -138,31 +138,7 @@ public class ImageActivity extends Activity {
     private void gradeNext() {
         img_counter++;
         if (changeImg()) {
-            ArrayList<Integer> history = getSmileLevelCSV(goalPath.get(img_counter));
-            if (history.size() == 2) {
-                smile_level = history.get(1);
-
-            } else {
-                smile_level = 0;
-            }
-            btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
-            btn2.setBackgroundColor(getResources().getColor(R.color.smile_2));
-            btn3.setBackgroundColor(getResources().getColor(R.color.smile_3));
-            btn4.setBackgroundColor(getResources().getColor(R.color.smile_4));
-            switch (smile_level) {
-                case 1:
-                    btn1.setBackgroundColor(getResources().getColor(R.color.smile_1_sel));
-                    break;
-                case 2:
-                    btn2.setBackgroundColor(getResources().getColor(R.color.smile_2_sel));
-                    break;
-                case 3:
-                    btn3.setBackgroundColor(getResources().getColor(R.color.smile_3_sel));
-                    break;
-                case 4:
-                    btn4.setBackgroundColor(getResources().getColor(R.color.smile_4_sel));
-                    break;
-            }
+            getSmileLevel();
         } else {
             img_counter--;  // If failed, roll back to previous
             Toast.makeText(getApplicationContext(), "No next image", Toast.LENGTH_LONG).show();
@@ -171,35 +147,43 @@ public class ImageActivity extends Activity {
     private void gradePrv() {
         img_counter--;
         if (changeImg()) {
-            ArrayList<Integer> history = getSmileLevelCSV(goalPath.get(img_counter));
-            if (history.size() == 2) {
-                smile_level = history.get(1);
-
-            } else {
-                smile_level = 0;
-            }
-            btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
-            btn2.setBackgroundColor(getResources().getColor(R.color.smile_2));
-            btn3.setBackgroundColor(getResources().getColor(R.color.smile_3));
-            btn4.setBackgroundColor(getResources().getColor(R.color.smile_4));
-            switch (smile_level) {
-                case 1:
-                    btn1.setBackgroundColor(getResources().getColor(R.color.smile_1_sel));
-                    break;
-                case 2:
-                    btn2.setBackgroundColor(getResources().getColor(R.color.smile_2_sel));
-                    break;
-                case 3:
-                    btn3.setBackgroundColor(getResources().getColor(R.color.smile_3_sel));
-                    break;
-                case 4:
-                    btn4.setBackgroundColor(getResources().getColor(R.color.smile_4_sel));
-                    break;
-            }
+            getSmileLevel();
         } else {
             img_counter++;  // If failed, roll back to previous
             Toast.makeText(getApplicationContext(), "No previous image", Toast.LENGTH_LONG).show();
         }
+    }
+    public int getSmileLevel() {
+        int index = -1;                     // -1 means not found
+        ArrayList<Integer> history = getSmileLevelCSV(goalPath.get(img_counter));
+        if (history.size() == 2) {
+            index = history.get(0);         // The first element is the index of this picture in CSV
+            smile_level = history.get(1);   // The second element is the graded smile level
+
+        } else {
+            smile_level = 0;
+        }
+        // restore all button to default color
+        btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
+        btn2.setBackgroundColor(getResources().getColor(R.color.smile_2));
+        btn3.setBackgroundColor(getResources().getColor(R.color.smile_3));
+        btn4.setBackgroundColor(getResources().getColor(R.color.smile_4));
+        // recolor the graded button
+        switch (smile_level) {
+            case 1:
+                btn1.setBackgroundColor(getResources().getColor(R.color.smile_1_sel));
+                break;
+            case 2:
+                btn2.setBackgroundColor(getResources().getColor(R.color.smile_2_sel));
+                break;
+            case 3:
+                btn3.setBackgroundColor(getResources().getColor(R.color.smile_3_sel));
+                break;
+            case 4:
+                btn4.setBackgroundColor(getResources().getColor(R.color.smile_4_sel));
+                break;
+        }
+        return index;
     }
     public boolean changeImg() {
         if (goalPath.size() <= img_counter || img_counter < 0) {
@@ -239,6 +223,7 @@ public class ImageActivity extends Activity {
         CSVReader reader;
         try {
             reader = new CSVReader(new FileReader(csvDir));
+            // Here is a bug, reader could not get anything until writer close the file
             List csvRead = reader.readAll();
             for (int it = csvRead.size(); it > 0; it--) {
                 reading = ((String[]) (csvRead.get(it)));
@@ -251,7 +236,7 @@ public class ImageActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return index_smile;
+        return index_smile;     // Return empty if not found
     }
 
     @Override
@@ -333,3 +318,11 @@ public class ImageActivity extends Activity {
         fileDialog.showDialog(goalPath);
     }
 }
+
+/*TODO
+* to be implemented:
+* 1. read grade result from CSV and display if already graded
+* 2. write back result to the same column if already graded
+* 3. change actionbar color
+* 4. make result CSV file's location changeable (and check exist)
+* 5. make code looks better*/
