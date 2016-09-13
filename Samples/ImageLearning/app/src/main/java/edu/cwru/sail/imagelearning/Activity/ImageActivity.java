@@ -160,7 +160,7 @@ public class ImageActivity extends Activity {
             updateSmileLevel();
         } else {
             img_counter++;  // If failed, roll back to previous
-            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noPrv), Toast.LENGTH_SHORT).show();
         }
         updateButtonSelect();
     }
@@ -206,7 +206,7 @@ public class ImageActivity extends Activity {
     }
 
     public boolean changeImg() {
-        if (image_list.size() == 0 || image_list.size() < img_counter || img_counter < 0) {
+        if (image_list.size() == 0 || image_list.size() - 1 < img_counter || img_counter < 0) {
             //Toast.makeText(getApplicationContext(), "Out of index", Toast.LENGTH_SHORT).show();
             return false;
         }
