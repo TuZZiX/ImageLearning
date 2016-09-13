@@ -60,7 +60,7 @@ public class FileDialog {
      */
     public Dialog createFileDialog(final ArrayList<String> image_list) {
         Dialog dialog;
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getText(R.string.title_folderSelect_default) + "\n" + currentPath.getPath());
         if (selectDirectoryOption) {
             builder.setPositiveButton("Select directory", new DialogInterface.OnClickListener() {
@@ -92,7 +92,9 @@ public class FileDialog {
                     dialog.cancel();
                     dialog.dismiss();
                     showDialog(image_list);
-                } else {}//fireFileSelectedEvent(chosenFile);
+                } else {
+                    builder.show();
+                }//fireFileSelectedEvent(chosenFile);
             }
         });
 
