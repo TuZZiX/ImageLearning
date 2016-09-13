@@ -36,7 +36,6 @@ public class ImageActivity extends Activity {
 
     private int smile_level = 0;
     private int img_counter = 0;
-    private CSVWriter writer;
 
     private ImageView photoView;
     private Button btn1;
@@ -64,7 +63,7 @@ public class ImageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        smile_storage = new HashMap<String, Integer>();
+        smile_storage = new HashMap<>();
         image_list = new ArrayList<>();
 
         photoView = (ImageView) findViewById(R.id.photoView);
@@ -109,7 +108,7 @@ public class ImageActivity extends Activity {
                     smile_level = 4;
                     break;
             }
-            smile_storage.put(image_list.get(img_counter), smile_level);
+            smile_storage.put(image_list.get(img_counter), smile_level);        // Data override behavior is inherit from hash map
             gradeNext();
             writeToCSV();
         }
@@ -190,7 +189,7 @@ public class ImageActivity extends Activity {
         }
         String text;
         if (1 <= smile_level && smile_level <= 4) {
-            text = getText(R.string.textLastGrad_suffix) + String.valueOf(smile_level);
+            text = getText(R.string.textLastGrad_suffix) + " " + String.valueOf(smile_level);
         } else {
             text = getText(R.string.textLastGrad_default).toString();
         }
@@ -203,7 +202,7 @@ public class ImageActivity extends Activity {
         }
         File img = new File(image_list.get(img_counter));
         if (img.exists()) {
-            //Loading Image from URL
+            //Loading Image from list
             showImages(img, 1000, 1000);
             String text1 = getText(R.string.textNowGrad_default) + " " + truncateFileName(image_list.get(img_counter));
             textInd.setText(text1);
@@ -221,7 +220,7 @@ public class ImageActivity extends Activity {
                 .load(img)
                 //.placeholder(R.drawable.placeholder)   // optional
                 .error(R.drawable.smile_fail)
-                .resize(width, height)                        // optional
+                .resize(width, height)
                 .into(photoView);
     }
 
@@ -230,7 +229,7 @@ public class ImageActivity extends Activity {
                 .load(img)
                 //.placeholder(R.drawable.placeholder)   // optional
                 .error(R.drawable.smile_fail)
-                .resize(width, height)                        // optional
+                .resize(width, height)
                 .into(photoView);
     }
 
@@ -251,7 +250,7 @@ public class ImageActivity extends Activity {
         }
 
         try {
-            writer = new CSVWriter(new FileWriter(csvDir));
+            CSVWriter writer = new CSVWriter(new FileWriter(csvDir));
             writer.writeAll(formatted);
             writer.close();
         } catch (IOException e) {
@@ -261,7 +260,7 @@ public class ImageActivity extends Activity {
         return true;
     }
 
-    //why all public?
+    //why all public?       Because when new image folder opened, history data need to restore from CSV by calling this function
     public boolean readCSV() {
         CSVReader reader;
         String[] reading;
@@ -269,12 +268,12 @@ public class ImageActivity extends Activity {
         if (csv.exists()) {
             try {
                 smile_storage.clear();
-                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));
+                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contain this csv file
                 reader = new CSVReader(new FileReader(csvDir));
                 List<String[]> csvRead = reader.readAll();
                 for (int it = csvRead.size() - 1; it >= 0; it--) {
                     reading = csvRead.get(it);
-                    smile_storage.put(suffix + "/" + reading[0], Integer.parseInt(reading[1]));
+                    smile_storage.put(suffix + "/" + reading[0], Integer.parseInt(reading[1]));     // Restore image file list and smile levels
                 }
                 reader.close();
             } catch (IOException e) {

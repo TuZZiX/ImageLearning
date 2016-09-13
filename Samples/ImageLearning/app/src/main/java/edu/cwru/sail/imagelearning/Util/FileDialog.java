@@ -3,13 +3,9 @@ package edu.cwru.sail.imagelearning.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
-
-import edu.cwru.sail.imagelearning.Activity.ImageActivity;
-import edu.cwru.sail.imagelearning.Activity.R;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.cwru.sail.imagelearning.Activity.ImageActivity;
+import edu.cwru.sail.imagelearning.Activity.R;
+
 public class FileDialog {
     private static final String PARENT_DIR = "..";
     private final String TAG = getClass().getName();
     private String[] fileList;
     private File currentPath;
-    private Context context;
 
 
     public interface FileSelectedListener {
@@ -185,13 +183,6 @@ public class FileDialog {
         this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : fileEndsWith;
     }
 
-    public File getCurrentPath() {
-        return currentPath;
-    }
-
-    public void setCurrentPath(File currentPath) {
-        this.currentPath = currentPath;
-    }
 }
 
 class ListenerList<L> {
