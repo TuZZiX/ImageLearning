@@ -287,7 +287,7 @@ public class ImageActivity extends Activity {
         return true;
     }
 
-    public int getSmileLevel(String img) {
+    private int getSmileLevel(String img) {
         if (smile_storage.containsKey(img)) {
             return smile_storage.get(img);
         } else {
