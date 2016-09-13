@@ -189,7 +189,23 @@ public class ImageActivity extends Activity {
         }
         String text;
         if (1 <= smile_level && smile_level <= 4) {
-            text = getText(R.string.textLastGrad_suffix) + " " + String.valueOf(smile_level);
+            switch (smile_level) {
+                case 1:
+                    text = getText(R.string.textLastGrad_suffix) + " " + getText(R.string.btnRate1_name);
+                    break;
+                case 2:
+                    text = getText(R.string.textLastGrad_suffix) + " " + getText(R.string.btnRate2_name);
+                    break;
+                case 3:
+                    text = getText(R.string.textLastGrad_suffix) + " " + getText(R.string.btnRate3_name);
+                    break;
+                case 4:
+                    text = getText(R.string.textLastGrad_suffix) + " " + getText(R.string.btnRate4_name);
+                    break;
+                default:
+                    text = getText(R.string.textLastGrad_suffix) + " " + String.valueOf(smile_level);
+                    break;
+            }
         } else {
             text = getText(R.string.textLastGrad_default).toString();
         }

@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Light">
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar"> Take a try of this theme-->
         <!-- Customize your theme here. -->
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
