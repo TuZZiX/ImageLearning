@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import edu.cwru.sail.imagelearning.Activity.ImageActivity;
 import edu.cwru.sail.imagelearning.Activity.R;
@@ -69,7 +68,6 @@ public class FileDialog {
                     Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
                     for (int i = 0; i < fileList.length; i++) {
-//                    for (File file : currentPath.listFiles()) {
                         if (!fileList[i].contains(".."))
                             image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
@@ -94,7 +92,8 @@ public class FileDialog {
                     showDialog(image_list);
                 } else {
                     builder.show();
-                }//fireFileSelectedEvent(chosenFile);
+                    //fireFileSelectedEvent(chosenFile);
+                }
             }
         });
 

@@ -2,12 +2,12 @@ package edu.cwru.sail.imagelearning.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -28,11 +28,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import edu.cwru.sail.imagelearning.Util.FileDialog;
 
@@ -42,7 +39,7 @@ public class ImageActivity extends Activity {
     private int img_counter = 0;
     private CSVWriter writer;
 
-    private ImageView photo;
+    private ImageView photoView;
     private Button btn1;
     private Button btn2;
     private Button btn3;
@@ -71,7 +68,7 @@ public class ImageActivity extends Activity {
         smile_storage = new HashMap<String, Integer>();
         image_list = new ArrayList<>();
 
-        photo = (ImageView) findViewById(R.id.photo);
+        photoView = (ImageView) findViewById(R.id.photoView);
         btn1 = (Button) findViewById(R.id.btnRate1);
         btn2 = (Button) findViewById(R.id.btnRate2);
         btn3 = (Button) findViewById(R.id.btnRate3);
@@ -96,13 +93,7 @@ public class ImageActivity extends Activity {
         @Override
         public void onClick(View view) {
             if (image_list == null || image_list.size() == 0) {
-                Picasso.with(getApplicationContext())
-                        .load("/")
-                        //.placeholder(R.drawable.placeholder)   // optional
-                        .error(R.drawable.smile_fail)
-                        .resize(1000, 1000)                        // optional
-                        .into(photo);
-//                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_SHORT).show();
+                showImages("/", 1000, 1000);
                 return;
             }
             switch (view.getId()) {
@@ -185,16 +176,18 @@ public class ImageActivity extends Activity {
         // recolor the graded button
         switch (smile_level) {
             case 1:
-                btn1.setBackgroundColor(getResources().getColor(R.color.smile_1_sel));
+                btn1.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_1_sel));
                 break;
             case 2:
-                btn2.setBackgroundColor(getResources().getColor(R.color.smile_2_sel));
+                btn2.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_2_sel));
                 break;
             case 3:
-                btn3.setBackgroundColor(getResources().getColor(R.color.smile_3_sel));
+                btn3.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_3_sel));
                 break;
             case 4:
-                btn4.setBackgroundColor(getResources().getColor(R.color.smile_4_sel));
+                btn4.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_4_sel));
+                // needs break?
+                break;
         }
         String text;
         if (1 <= smile_level && smile_level <= 4) {
@@ -207,19 +200,12 @@ public class ImageActivity extends Activity {
 
     public boolean changeImg() {
         if (image_list.size() == 0 || image_list.size() - 1 < img_counter || img_counter < 0) {
-            //Toast.makeText(getApplicationContext(), "Out of index", Toast.LENGTH_SHORT).show();
             return false;
         }
         File img = new File(image_list.get(img_counter));
-        //Toast.makeText(getApplicationContext(), goalPath.get(img_counter), Toast.LENGTH_SHORT).show();
         if (img.exists()) {
             //Loading Image from URL
-            Picasso.with(getApplicationContext())
-                    .load(img)
-                    //.placeholder(R.drawable.placeholder)   // optional
-                    .error(R.drawable.smile_fail)
-                    .resize(1000, 1000)                        // optional
-                    .into(photo);
+            showImages(img, 1000, 1000);
             String text1 = getText(R.string.textNowGrad_default) + " " + truncateFileName(image_list.get(img_counter));
             textInd.setText(text1);
             String text2 = String.valueOf(img_counter + 1) + "/" + String.valueOf(image_list.size());
@@ -231,6 +217,24 @@ public class ImageActivity extends Activity {
         return true;
     }
 
+    private void showImages(File img, int width, int height) {
+        Picasso.with(getApplicationContext())
+                .load(img)
+                //.placeholder(R.drawable.placeholder)   // optional
+                .error(R.drawable.smile_fail)
+                .resize(width, height)                        // optional
+                .into(photoView);
+    }
+
+    private void showImages(String img, int width, int height) {
+        Picasso.with(getApplicationContext())
+                .load(img)
+                //.placeholder(R.drawable.placeholder)   // optional
+                .error(R.drawable.smile_fail)
+                .resize(width, height)                        // optional
+                .into(photoView);
+    }
+
     public String truncateFileName(String full_path) {
         String[] temp = full_path.split("/");
         return temp[temp.length - 1];
@@ -240,11 +244,6 @@ public class ImageActivity extends Activity {
         if (smile_storage.isEmpty()) {
             return false;
         }
-//        File csv = new File(csvDir);
-//        if (csv.exists()) {
-//            //Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-//            csv.delete();
-//        }
         List<String[]> formatted = new ArrayList<>();
         String[] nextLine;
         for (String key : smile_storage.keySet()) {
@@ -263,6 +262,7 @@ public class ImageActivity extends Activity {
         return true;
     }
 
+    //why all public?
     public boolean readCSV() {
         CSVReader reader;
         String[] reading;
@@ -352,15 +352,6 @@ public class ImageActivity extends Activity {
 
         switch (item.getItemId()) {
             case R.id.setting_openImg:
-//                Intent intent = new Intent();
-//                intent.setType("file/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                try {
-//                    startActivityForResult(intent, FILE_SELECT_CODE);
-//                } catch (android.content.ActivityNotFoundException ex) {
-//                    // Potentially direct the user to the Market with a Dialog
-//                    Toast.makeText(this, "Failed to open file browser", Toast.LENGTH_SHORT).show();
-//                }
                 browserFolder();
                 return true;
             case R.id.setting_openResult:
@@ -425,12 +416,3 @@ public class ImageActivity extends Activity {
     }
 
 }
-
-/*
-* Done: to be implemented:
-* Done: 1. read grade result from CSV and display if already graded
-* Done: 2. write back result to the same column if already graded
-* Done: 3. change actionbar color
-* TODO
-* 4. make result CSV file's location changeable (and check exist)
-* 5. make code looks better*/
