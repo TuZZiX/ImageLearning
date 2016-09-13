@@ -70,7 +70,7 @@ public class FileDialog {
                     fireDirectorySelectedEvent(currentPath);
                     for (int i = 0; i < fileList.length; i++) {
 //                    for (File file : currentPath.listFiles()) {
-                        if (fileList[i].contains(".jpg"))
+                        if (!fileList[i].contains(".."))
                             goalPath.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
