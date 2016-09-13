@@ -92,7 +92,7 @@ public class FileDialog {
                     dialog.cancel();
                     dialog.dismiss();
                     showDialog(goalPath);
-                } else fireFileSelectedEvent(chosenFile);
+                } else {}//fireFileSelectedEvent(chosenFile);
             }
         });
 

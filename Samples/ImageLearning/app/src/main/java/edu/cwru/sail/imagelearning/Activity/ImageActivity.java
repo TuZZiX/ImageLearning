@@ -399,11 +399,11 @@ public class ImageActivity extends Activity {
                 Log.d(getClass().getName(), "selected file " + directory.toString());
             }
         });
-        fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
-            public void fileSelected(File file) {
-                Log.d(getClass().getName(), "selected file " + file.toString());
-            }
-        });
+//        fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+//            public void fileSelected(File file) {
+//                Log.d(getClass().getName(), "selected file " + file.toString());
+//            }
+//        });
 //        fileDialog.setSelectDirectoryOption(true);
         fileDialog.showDialog(image_list);
     }
