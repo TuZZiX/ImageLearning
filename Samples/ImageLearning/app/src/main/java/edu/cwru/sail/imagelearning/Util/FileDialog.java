@@ -58,20 +58,20 @@ public class FileDialog {
     /**
      * @return file dialog
      */
-    public Dialog createFileDialog(final ArrayList<String> goalPath) {
+    public Dialog createFileDialog(final ArrayList<String> image_list) {
         Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getText(R.string.title_folderSelect_default) + "\n" + currentPath.getPath());
         if (selectDirectoryOption) {
             builder.setPositiveButton("Select directory", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    goalPath.clear();
+                    image_list.clear();
                     Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
                     for (int i = 0; i < fileList.length; i++) {
 //                    for (File file : currentPath.listFiles()) {
                         if (!fileList[i].contains(".."))
-                            goalPath.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
+                            image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
                     ((ImageActivity) activity).readCSV();
@@ -91,7 +91,7 @@ public class FileDialog {
                     loadFileList(chosenFile);
                     dialog.cancel();
                     dialog.dismiss();
-                    showDialog(goalPath);
+                    showDialog(image_list);
                 } else {}//fireFileSelectedEvent(chosenFile);
             }
         });
@@ -124,8 +124,8 @@ public class FileDialog {
     /**
      * Show file dialog
      */
-    public void showDialog(ArrayList<String> goalPath) {
-        createFileDialog(goalPath).show();
+    public void showDialog(ArrayList<String> image_list) {
+        createFileDialog(image_list).show();
     }
 
     private void fireFileSelectedEvent(final File file) {
