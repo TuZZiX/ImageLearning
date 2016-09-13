@@ -69,6 +69,7 @@ public class ImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         smile_storage = new HashMap<String, Integer>();
+        image_list = new ArrayList<>();
 
         photo = (ImageView) findViewById(R.id.photo);
         btn1 = (Button) findViewById(R.id.btnRate1);
@@ -87,6 +88,7 @@ public class ImageActivity extends Activity {
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
+        setFinishOnTouchOutside(false);
         browserFolder();
     }
 
@@ -94,7 +96,13 @@ public class ImageActivity extends Activity {
         @Override
         public void onClick(View view) {
             if (image_list == null || image_list.size() == 0) {
-                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_LONG).show();
+                Picasso.with(getApplicationContext())
+                        .load("/")
+                        //.placeholder(R.drawable.placeholder)   // optional
+                        .error(R.drawable.smile_fail)
+                        .resize(1000, 1000)                        // optional
+                        .into(photo);
+//                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_SHORT).show();
                 return;
             }
             switch (view.getId()) {
@@ -121,7 +129,7 @@ public class ImageActivity extends Activity {
         @Override
         public void onClick(View view) {
             if (image_list == null || image_list.size() == 0) {
-                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_SHORT).show();
                 return;
             }
             switch (view.getId()) {
@@ -141,7 +149,7 @@ public class ImageActivity extends Activity {
             updateSmileLevel();
         } else {
             img_counter--;  // If failed, roll back to previous
-            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_SHORT).show();
         }
         updateButtonSelect();
     }
@@ -152,19 +160,22 @@ public class ImageActivity extends Activity {
             updateSmileLevel();
         } else {
             img_counter++;  // If failed, roll back to previous
-            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noNext), Toast.LENGTH_SHORT).show();
         }
         updateButtonSelect();
     }
 
     public void updateSmileLevel() {
-        int last_grade = getSmileLevel(image_list.get(img_counter));
-        if (last_grade != -1) {
-            smile_level = last_grade;   // The second element is the graded smile level
-        } else {
-            smile_level = 0;
+        if (image_list.size() != 0) {
+            int last_grade = getSmileLevel(image_list.get(img_counter));
+            if (last_grade != -1) {
+                smile_level = last_grade;   // The second element is the graded smile level
+            } else {
+                smile_level = 0;
+            }
         }
     }
+
     public void updateButtonSelect() {
         // restore all button to default color
         btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
@@ -195,7 +206,7 @@ public class ImageActivity extends Activity {
     }
 
     public boolean changeImg() {
-        if (image_list.size() <= img_counter || img_counter < 0) {
+        if (image_list.size() == 0 || image_list.size() < img_counter || img_counter < 0) {
             //Toast.makeText(getApplicationContext(), "Out of index", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -371,7 +382,6 @@ public class ImageActivity extends Activity {
     }
 
     public void browserFolder() {
-        img_counter = 0;
         /**
          * Requesting Permissions at Run Time
          */
@@ -394,8 +404,7 @@ public class ImageActivity extends Activity {
                 Log.d(getClass().getName(), "selected file " + file.toString());
             }
         });
-        fileDialog.setSelectDirectoryOption(true);
-        image_list = new ArrayList<>();
+//        fileDialog.setSelectDirectoryOption(true);
         fileDialog.showDialog(image_list);
     }
 
@@ -406,6 +415,15 @@ public class ImageActivity extends Activity {
     public void setCsvDir(String csvDir) {
         this.csvDir = csvDir;
     }
+
+    public void setImg_counter(int img_counter) {
+        this.img_counter = img_counter;
+    }
+
+    public int getImg_counter() {
+        return img_counter;
+    }
+
 }
 
 /*

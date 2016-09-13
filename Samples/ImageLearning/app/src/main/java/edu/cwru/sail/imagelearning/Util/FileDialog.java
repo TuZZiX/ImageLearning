@@ -13,6 +13,7 @@ import edu.cwru.sail.imagelearning.Activity.ImageActivity;
 import edu.cwru.sail.imagelearning.Activity.R;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,7 @@ public class FileDialog {
     private ListenerList<FileSelectedListener> fileListenerList = new ListenerList<FileDialog.FileSelectedListener>();
     private ListenerList<DirectorySelectedListener> dirListenerList = new ListenerList<FileDialog.DirectorySelectedListener>();
     private final Activity activity;
-    private boolean selectDirectoryOption;
+    private boolean selectDirectoryOption = true;
     private String fileEndsWith;
 
     /**
@@ -60,18 +61,21 @@ public class FileDialog {
     public Dialog createFileDialog(final ArrayList<String> goalPath) {
         Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
         builder.setTitle(activity.getText(R.string.title_folderSelect_default) + "\n" + currentPath.getPath());
         if (selectDirectoryOption) {
             builder.setPositiveButton("Select directory", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    goalPath.clear();
                     Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
-                    for (File file : currentPath.listFiles()) {
-                        goalPath.add(currentPath.getAbsoluteFile() + "/" + file.getName());
+                    for (int i = 0; i < fileList.length; i++) {
+//                    for (File file : currentPath.listFiles()) {
+                        if (fileList[i].contains(".jpg"))
+                            goalPath.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
                     ((ImageActivity) activity).readCSV();
+                    ((ImageActivity) activity).setImg_counter(0);
                     ((ImageActivity) activity).changeImg();
                     ((ImageActivity) activity).updateSmileLevel();
                     ((ImageActivity) activity).updateButtonSelect();
@@ -145,25 +149,29 @@ public class FileDialog {
         List<String> r = new ArrayList<String>();
         if (path.exists()) {
             if (path.getParentFile() != null) r.add(PARENT_DIR);
-//            FilenameFilter filter = new FilenameFilter() {
-//                public boolean accept(File dir, String filename) {
-//                    File sel = new File(dir, filename);
-//                    if (!sel.canRead()) return false;
+            FilenameFilter filter = new FilenameFilter() {
+                public boolean accept(File dir, String filename) {
+                    File sel = new File(dir, filename);
+                    if (!sel.canRead()) return false;
 //                    if (selectDirectoryOption) return sel.isDirectory();
-//                    else {
-//                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase().endsWith(fileEndsWith) : true;
-//                        return endsWith || sel.isDirectory();
-//                    }
-//                }
-//            };
-//            String[] fileList1 = path.list(filter);
-            File[] fileList1 = path.listFiles();
+                    else {
+                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase().endsWith(fileEndsWith) : true;
+                        return endsWith || sel.isDirectory();
+                    }
+                }
+            };
+            File[] fileList1 = path.listFiles(filter);
+//            File[] fileList1 = path.listFiles();
             if (fileList1 != null)
                 for (int i = 0; i < fileList1.length; i++) {
                     r.add(fileList1[i].getName());
                 }
         }
-        fileList = r.toArray(new String[]{});
+        String[] temp = r.toArray(new String[]{});
+        fileList = new String[temp.length];
+        for (int i = 0; i < fileList.length; i++) {
+            fileList[i] = temp[i];
+        }
         Arrays.sort(fileList);
     }
 
