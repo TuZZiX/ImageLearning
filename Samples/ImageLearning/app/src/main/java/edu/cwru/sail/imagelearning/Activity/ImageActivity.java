@@ -2,7 +2,6 @@ package edu.cwru.sail.imagelearning.Activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -169,10 +168,10 @@ public class ImageActivity extends Activity {
 
     public void updateButtonSelect() {
         // restore all button to default color
-        btn1.setBackgroundColor(getResources().getColor(R.color.smile_1));
-        btn2.setBackgroundColor(getResources().getColor(R.color.smile_2));
-        btn3.setBackgroundColor(getResources().getColor(R.color.smile_3));
-        btn4.setBackgroundColor(getResources().getColor(R.color.smile_4));
+        btn1.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_1));
+        btn2.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_2));
+        btn3.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_3));
+        btn4.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_4));
         // recolor the graded button
         switch (smile_level) {
             case 1:
