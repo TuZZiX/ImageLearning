@@ -27,8 +27,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import edu.cwru.sail.imagelearning.Util.FileDialog;
 
@@ -52,8 +53,7 @@ public class ImageActivity extends Activity {
 
     private ArrayList<String> image_list;
 
-    HashMap<String, Integer> smile_storage;
-
+    Map<String, Integer> smile_storage;
     FileDialog fileDialog;
 
     // Make sure that this part is dynamically defined by the Browse Folder and
@@ -63,7 +63,7 @@ public class ImageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        smile_storage = new HashMap<>();
+        smile_storage = new TreeMap<>();
         image_list = new ArrayList<>();
 
         photoView = (ImageView) findViewById(R.id.photoView);
@@ -267,7 +267,7 @@ public class ImageActivity extends Activity {
 
         try {
             CSVWriter writer = new CSVWriter(new FileWriter(csvDir));
-            writer.writeAll(formatted);
+            writer.writeAll(formatted, false);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
