@@ -19,19 +19,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
 import com.squareup.picasso.Picasso;
+import edu.cwru.sail.imagelearning.DAO.GradingDao;
+import edu.cwru.sail.imagelearning.Entity.CSVEntity;
+import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import edu.cwru.sail.imagelearning.Util.FileDialog;
 
 public class ImageActivity extends Activity {
 
@@ -53,7 +52,10 @@ public class ImageActivity extends Activity {
 
     private ArrayList<String> image_list;
 
-    Map<String, Integer> smile_storage;
+    protected GradingDao gradingDao = new GradingDao();
+
+    private Map<String, Integer> smile_storage;
+    protected CSVEntity csvEntity;
     FileDialog fileDialog;
 
     // Make sure that this part is dynamically defined by the Browse Folder and
@@ -63,6 +65,8 @@ public class ImageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        csvEntity = new CSVEntity();
         smile_storage = new TreeMap<>();
         image_list = new ArrayList<>();
 
@@ -110,7 +114,8 @@ public class ImageActivity extends Activity {
             }
             smile_storage.put(image_list.get(img_counter), smile_level);        // Data override behavior is inherit from hash map
             gradeNext();
-            writeToCSV();
+            csvEntity.setSmile_storage(smile_storage);
+            gradingDao.writeToCSV(csvEntity, csvDir);
         }
     };
 
@@ -220,7 +225,7 @@ public class ImageActivity extends Activity {
         if (img.exists()) {
             //Loading Image from list
             showImages(img, 1000, 1000);
-            String text1 = getText(R.string.textNowGrad_default) + " " + truncateFileName(image_list.get(img_counter));
+            String text1 = getText(R.string.textNowGrad_default) + " " + Util.truncateFileName(image_list.get(img_counter));
             textInd.setText(text1);
             String text2 = String.valueOf(img_counter + 1) + "/" + String.valueOf(image_list.size());
             textCount.setText(text2);
@@ -247,60 +252,6 @@ public class ImageActivity extends Activity {
                 .error(R.drawable.smile_fail)
                 .resize(width, height)
                 .into(photoView);
-    }
-
-    public String truncateFileName(String full_path) {
-        String[] temp = full_path.split("/");
-        return temp[temp.length - 1];
-    }
-
-    public boolean writeToCSV() {
-        if (smile_storage.isEmpty()) {
-            return false;
-        }
-        List<String[]> formatted = new ArrayList<>();
-        String[] nextLine;
-        for (String key : smile_storage.keySet()) {
-            nextLine = (truncateFileName(key) + "," + smile_storage.get(key)).split(",");
-            formatted.add(nextLine);
-        }
-
-        try {
-            CSVWriter writer = new CSVWriter(new FileWriter(csvDir));
-            writer.writeAll(formatted, false);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    //why all public?       Because when new image folder opened, history data need to restore from CSV by calling this function
-    public boolean readCSV() {
-        CSVReader reader;
-        String[] reading;
-        File csv = new File(csvDir);
-        if (csv.exists()) {
-            try {
-                smile_storage.clear();
-                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contain this csv file
-                reader = new CSVReader(new FileReader(csvDir));
-                List<String[]> csvRead = reader.readAll();
-                for (int it = csvRead.size() - 1; it >= 0; it--) {
-                    reading = csvRead.get(it);
-                    smile_storage.put(suffix + "/" + reading[0], Integer.parseInt(reading[1]));     // Restore image file list and smile levels
-                }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
     private int getSmileLevel(String img) {

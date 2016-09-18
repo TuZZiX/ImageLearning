@@ -1,4 +1,4 @@
-package edu.cwru.sail.imagelearning.Util;
+package edu.cwru.sail.imagelearning.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,15 +6,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
+import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import edu.cwru.sail.imagelearning.Activity.ImageActivity;
-import edu.cwru.sail.imagelearning.Activity.R;
 
 public class FileDialog {
     private static final String PARENT_DIR = "..";
@@ -31,8 +30,8 @@ public class FileDialog {
         void directorySelected(File directory);
     }
 
-    private ListenerList<FileSelectedListener> fileListenerList = new ListenerList<FileDialog.FileSelectedListener>();
-    private ListenerList<DirectorySelectedListener> dirListenerList = new ListenerList<FileDialog.DirectorySelectedListener>();
+    private ListenerList<FileSelectedListener> fileListenerList = new ListenerList<FileSelectedListener>();
+    private ListenerList<DirectorySelectedListener> dirListenerList = new ListenerList<DirectorySelectedListener>();
     private final Activity activity;
     private boolean selectDirectoryOption = true;
     private String fileEndsWith;
@@ -69,8 +68,10 @@ public class FileDialog {
                         if (!fileList[i].contains(".."))
                             image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
-                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + ((ImageActivity) activity).truncateFileName(currentPath.getAbsolutePath()) + ".csv");
-                    ((ImageActivity) activity).readCSV();
+                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
+                    boolean flag = ((ImageActivity) activity).gradingDao.readCSV(((ImageActivity) activity).csvEntity.getSmile_storage(), ((ImageActivity) activity).getCsvDir());
+                    if (flag == false)
+                        Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
                     ((ImageActivity) activity).setImg_counter(0);
                     ((ImageActivity) activity).changeImg();
                     ((ImageActivity) activity).updateSmileLevel();
@@ -128,7 +129,8 @@ public class FileDialog {
     }
 
     private void fireFileSelectedEvent(final File file) {
-        fileListenerList.fireEvent(new ListenerList.FireHandler<FileSelectedListener>() {
+
+        fileListenerList.fireEvent(new edu.cwru.sail.imagelearning.Activity.ListenerList.FireHandler<FileSelectedListener>() {
             public void fireEvent(FileSelectedListener listener) {
                 listener.fileSelected(file);
             }
@@ -136,7 +138,7 @@ public class FileDialog {
     }
 
     private void fireDirectorySelectedEvent(final File directory) {
-        dirListenerList.fireEvent(new ListenerList.FireHandler<DirectorySelectedListener>() {
+        dirListenerList.fireEvent(new edu.cwru.sail.imagelearning.Activity.ListenerList.FireHandler<DirectorySelectedListener>() {
             public void fireEvent(DirectorySelectedListener listener) {
                 listener.directorySelected(directory);
             }
