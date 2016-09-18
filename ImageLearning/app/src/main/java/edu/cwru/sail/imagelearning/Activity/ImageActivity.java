@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.opencsv.CSVReader;
 import com.squareup.picasso.Picasso;
 import edu.cwru.sail.imagelearning.DAO.GradingDao;
-import edu.cwru.sail.imagelearning.Entity.CSVEntity;
+import edu.cwru.sail.imagelearning.Entity.Grading;
 import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
@@ -29,8 +29,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class ImageActivity extends Activity {
 
@@ -54,8 +52,9 @@ public class ImageActivity extends Activity {
 
     protected GradingDao gradingDao = new GradingDao();
 
-    private Map<String, Integer> smile_storage;
-    protected CSVEntity csvEntity;
+    private ArrayList<Grading> gradingList;
+
+    protected Grading grading;
     FileDialog fileDialog;
 
     // Make sure that this part is dynamically defined by the Browse Folder and
@@ -66,8 +65,7 @@ public class ImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        csvEntity = new CSVEntity();
-        smile_storage = new TreeMap<>();
+//        smile_storage = new TreeMap<>();
         image_list = new ArrayList<>();
 
         photoView = (ImageView) findViewById(R.id.photoView);
@@ -114,8 +112,8 @@ public class ImageActivity extends Activity {
             }
             smile_storage.put(image_list.get(img_counter), smile_level);        // Data override behavior is inherit from hash map
             gradeNext();
-            csvEntity.setSmile_storage(smile_storage);
-            gradingDao.writeToCSV(csvEntity, csvDir);
+            grading.setSmile_storage(smile_storage);
+            gradingDao.writeToCSV(grading, csvDir);
         }
     };
 

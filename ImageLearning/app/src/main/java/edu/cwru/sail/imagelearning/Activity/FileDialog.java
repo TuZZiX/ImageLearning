@@ -69,7 +69,7 @@ public class FileDialog {
                             image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
-                    boolean flag = ((ImageActivity) activity).gradingDao.readCSV(((ImageActivity) activity).csvEntity.getSmile_storage(), ((ImageActivity) activity).getCsvDir());
+                    boolean flag = ((ImageActivity) activity).gradingDao.readCSV(((ImageActivity) activity).grading.getSmile_storage(), ((ImageActivity) activity).getCsvDir());
                     if (flag == false)
                         Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
                     ((ImageActivity) activity).setImg_counter(0);

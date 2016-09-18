@@ -2,7 +2,7 @@ package edu.cwru.sail.imagelearning.DAO;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import edu.cwru.sail.imagelearning.Entity.CSVEntity;
+import edu.cwru.sail.imagelearning.Entity.Grading;
 import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
@@ -17,8 +17,9 @@ import java.util.Map;
  * Created by majunqi0102 on 9/15/16.
  */
 public class GradingDao {
-    public boolean writeToCSV(CSVEntity csvEntity, String csvDir) {
-        Map<String, Integer> smile_storage = csvEntity.getSmile_storage();
+    //TODO
+    public boolean writeToCSV(Map<String, Grading> smile_storage, String csvDir) {
+
         if (smile_storage.isEmpty()) {
             return false;
         }

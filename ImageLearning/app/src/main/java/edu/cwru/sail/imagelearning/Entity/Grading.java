@@ -5,7 +5,10 @@ import java.util.Map;
 /**
  * Created by majunqi0102 on 9/15/16.
  */
-public class CSVEntity {
+public class Grading {
+
+    private String DIR;
+
     private double TimeStamp;
     private double TYPE_ACCELEROMETER_X;
     private double TYPE_ACCELEROMETER_Y;
@@ -25,8 +28,15 @@ public class CSVEntity {
     private double TYPE_GRAVITY_X;
     private double TYPE_GRAVITY_Y;
     private double TYPE_GRAVITY_Z;
+    private int SMILE_LEVEL;
 
-    private Map<String, Integer> smile_storage;
+    public void setDIR(String DIR) {
+        this.DIR = DIR;
+    }
+
+    public String getDIR() {
+        return DIR;
+    }
 
     public double getTimeStamp() {
         return TimeStamp;
@@ -180,11 +190,11 @@ public class CSVEntity {
         this.TYPE_GRAVITY_Z = TYPE_GRAVITY_Z;
     }
 
-    public Map<String, Integer> getSmile_storage() {
-        return smile_storage;
+    public void setSMILE_LEVEL(int SMILE_LEVEL) {
+        this.SMILE_LEVEL = SMILE_LEVEL;
     }
 
-    public void setSmile_storage(Map<String, Integer> smile_storage) {
-        this.smile_storage = smile_storage;
+    public int getSMILE_LEVEL() {
+        return SMILE_LEVEL;
     }
 }
