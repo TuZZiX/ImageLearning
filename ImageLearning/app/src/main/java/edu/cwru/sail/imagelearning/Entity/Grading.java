@@ -1,14 +1,10 @@
 package edu.cwru.sail.imagelearning.Entity;
 
-import java.util.Date;
-
-/**
- * Created by majunqi0102 on 9/15/16.
- */
 public class Grading {
 
     private String DIRECTORY;
     private String TimeStamp;
+    private int SMILE_LEVEL;
     private double TYPE_ACCELEROMETER_X;
     private double TYPE_ACCELEROMETER_Y;
     private double TYPE_ACCELEROMETER_Z;
@@ -27,7 +23,6 @@ public class Grading {
     private double TYPE_GRAVITY_X;
     private double TYPE_GRAVITY_Y;
     private double TYPE_GRAVITY_Z;
-    private int SMILE_LEVEL;
 
     public void setDIRECTORY(String DIRECTORY) {
         this.DIRECTORY = DIRECTORY;

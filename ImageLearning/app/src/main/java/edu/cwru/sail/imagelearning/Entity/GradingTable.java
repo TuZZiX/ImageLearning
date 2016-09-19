@@ -105,7 +105,7 @@ public class GradingTable {
     public void replaceAdd(Grading singleRecord) {
         String dir = singleRecord.getDIRECTORY();
         int index = find(dir);
-        if (index >= 0 && index < size()) {
+        if (index >= 0 && index < gradings.size()) {
             replaceAdd(index, singleRecord);
         } else {
             add(singleRecord);
@@ -116,6 +116,7 @@ public class GradingTable {
         gradings.set(index, singleRecord);
     }
 
+    // only find last index
     public int find(String DIRECTORY) {
         return find(DIRECTORY, 0, gradings.size() - 1);
     }
