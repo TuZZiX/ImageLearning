@@ -14,8 +14,8 @@ import edu.cwru.sail.imagelearning.Entity.Grading;
 import edu.cwru.sail.imagelearning.Entity.GradingTable;
 import edu.cwru.sail.imagelearning.Util.Util;
 
-public class CSVDao {
-    //TODO
+public class GradingDao {
+
     public boolean writeToCSV(GradingTable gradings, String csvDir) {
 
         if (gradings.isEmpty()) {
@@ -47,8 +47,6 @@ public class CSVDao {
         return true;
     }
 
-    //TODO should return CSVEntiry
-    //why all public?       Because when new image folder opened, history data need to restore from CSV by calling this function
     public boolean readCSV(GradingTable gradings, String csvDir) {
         CSVReader reader;
         String[] reading;

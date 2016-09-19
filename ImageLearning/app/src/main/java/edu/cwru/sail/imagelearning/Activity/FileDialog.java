@@ -77,7 +77,7 @@ public class FileDialog {
                     ((ImageActivity) activity).updateSmileLevel();
                     ((ImageActivity) activity).updateButtonSelect();
                 }
-            })
+            });
         }
 
         builder.setItems(fileList, new DialogInterface.OnClickListener() {

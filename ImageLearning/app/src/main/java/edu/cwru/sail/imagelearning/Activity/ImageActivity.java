@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.opencsv.CSVReader;
 import com.squareup.picasso.Picasso;
-import edu.cwru.sail.imagelearning.DAO.CSVDao;
+import edu.cwru.sail.imagelearning.DAO.GradingDao;
 import edu.cwru.sail.imagelearning.Entity.GradingTable;
 import edu.cwru.sail.imagelearning.Util.Util;
 
@@ -75,7 +75,7 @@ public class ImageActivity extends Activity implements SensorEventListener{
 
     private ArrayList<String> image_list = new ArrayList<>();
 
-    protected CSVDao CSV = new CSVDao();
+    protected GradingDao CSV = new GradingDao();
     protected GradingTable gradings = new GradingTable();
 
     FileDialog fileDialog;
@@ -128,7 +128,7 @@ public class ImageActivity extends Activity implements SensorEventListener{
         @Override
         public void onClick(View view) {
             if (image_list == null || image_list.size() == 0) {
-                showImages("/", 1000, 1000);
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noImage), Toast.LENGTH_SHORT).show();
                 return;
             }
             switch (view.getId()) {
