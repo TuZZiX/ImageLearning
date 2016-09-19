@@ -69,15 +69,15 @@ public class FileDialog {
                             image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
-                    boolean flag = ((ImageActivity) activity).gradingDao.readCSV(((ImageActivity) activity).grading.getSmile_storage(), ((ImageActivity) activity).getCsvDir());
-                    if (flag == false)
+                    boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradings, ((ImageActivity) activity).getCsvDir());
+                    if (!flag)
                         Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
                     ((ImageActivity) activity).setImg_counter(0);
                     ((ImageActivity) activity).changeImg();
                     ((ImageActivity) activity).updateSmileLevel();
                     ((ImageActivity) activity).updateButtonSelect();
                 }
-            });
+            })
         }
 
         builder.setItems(fileList, new DialogInterface.OnClickListener() {

@@ -25,20 +25,40 @@ import android.widget.Toast;
 
 import com.opencsv.CSVReader;
 import com.squareup.picasso.Picasso;
-import edu.cwru.sail.imagelearning.DAO.GradingDao;
-import edu.cwru.sail.imagelearning.Entity.Grading;
+import edu.cwru.sail.imagelearning.DAO.CSVDao;
+import edu.cwru.sail.imagelearning.Entity.GradingTable;
 import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ImageActivity extends Activity implements SensorEventListener{
 
     private int smile_level = 0;
     private int img_counter = 0;
+
+    private double CURRENT_ACCELEROMETER_X;
+    private double CURRENT_ACCELEROMETER_Y;
+    private double CURRENT_ACCELEROMETER_Z;
+    private double CURRENT_MAGNETIC_FIELD_X;
+    private double CURRENT_MAGNETIC_FIELD_Y;
+    private double CURRENT_MAGNETIC_FIELD_Z;
+    private double CURRENT_GYROSCOPE_X;
+    private double CURRENT_GYROSCOPE_Y;
+    private double CURRENT_GYROSCOPE_Z;
+    private double CURRENT_ROTATION_VECTOR_X;
+    private double CURRENT_ROTATION_VECTOR_Y;
+    private double CURRENT_ROTATION_VECTOR_Z;
+    private double CURRENT_LINEAR_ACCELERATION_X;
+    private double CURRENT_LINEAR_ACCELERATION_Y;
+    private double CURRENT_LINEAR_ACCELERATION_Z;
+    private double CURRENT_GRAVITY_X;
+    private double CURRENT_GRAVITY_Y;
+    private double CURRENT_GRAVITY_Z;
 
     private ImageView photoView;
     private Button btn1;
@@ -53,13 +73,11 @@ public class ImageActivity extends Activity implements SensorEventListener{
 
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
 
-    private ArrayList<String> image_list;
+    private ArrayList<String> image_list = new ArrayList<>();
 
-    protected GradingDao gradingDao = new GradingDao();
+    protected CSVDao CSV = new CSVDao();
+    protected GradingTable gradings = new GradingTable();
 
-    private ArrayList<Grading> gradingList;
-
-    protected Grading grading;
     FileDialog fileDialog;
 
     SensorManager mSensorManager;
@@ -76,9 +94,6 @@ public class ImageActivity extends Activity implements SensorEventListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        smile_storage = new TreeMap<>();
-        image_list = new ArrayList<>();
 
         photoView = (ImageView) findViewById(R.id.photoView);
         btn1 = (Button) findViewById(R.id.btnRate1);
@@ -130,10 +145,10 @@ public class ImageActivity extends Activity implements SensorEventListener{
                     smile_level = 4;
                     break;
             }
-            smile_storage.put(image_list.get(img_counter), smile_level);        // Data override behavior is inherit from hash map
+            gradings.override(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z);        // Data override behavior is inherit from hash map
             gradeNext();
-            grading.setSmile_storage(smile_storage);
-            gradingDao.writeToCSV(grading, csvDir);
+            // gradings.mergeAndSortByDir();
+            CSV.writeToCSV(gradings, csvDir);
         }
     };
 
@@ -273,8 +288,9 @@ public class ImageActivity extends Activity implements SensorEventListener{
     }
 
     private int getSmileLevel(String img) {
-        if (smile_storage.containsKey(img)) {
-            return smile_storage.get(img);
+        int result = gradings.find(img);
+        if (result >= 0 && result < gradings.size()) {
+            return (gradings.get(result)).getSMILE_LEVEL();
         } else {
             return -1;
         }
