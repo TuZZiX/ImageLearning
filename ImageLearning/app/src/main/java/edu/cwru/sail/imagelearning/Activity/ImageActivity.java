@@ -2,8 +2,13 @@ package edu.cwru.sail.imagelearning.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,7 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageActivity extends Activity {
+public class ImageActivity extends Activity implements SensorEventListener{
 
     private int smile_level = 0;
     private int img_counter = 0;
@@ -57,6 +62,13 @@ public class ImageActivity extends Activity {
     protected Grading grading;
     FileDialog fileDialog;
 
+    SensorManager mSensorManager;
+    Sensor mAccelerometer;
+    Sensor mMagnetometer;
+    Sensor mGyroscope;
+    Sensor mRotation;
+    Sensor mLinearAcc;
+    Sensor mGravity;
     // Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 
@@ -84,6 +96,14 @@ public class ImageActivity extends Activity {
         btn4.setOnClickListener(smileListener);
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        mLinearAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         setFinishOnTouchOutside(false);
         browserFolder();
@@ -378,4 +398,32 @@ public class ImageActivity extends Activity {
         return img_counter;
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        //TODO get sensor data
+
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        //leave blank
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mMagnetometer,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mGyroscope,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mRotation,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mLinearAcc,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mGravity,SensorManager.SENSOR_DELAY_NORMAL);
+    }
 }
