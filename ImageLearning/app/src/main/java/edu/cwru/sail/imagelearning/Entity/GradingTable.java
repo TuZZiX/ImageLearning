@@ -11,30 +11,31 @@ import java.util.TreeMap;
 public class GradingTable {
     private ArrayList<Grading> gradings= new ArrayList<>();
 
-    public void override(String DIRECTORY,
-                         Date TimeStamp,
-                         int SMILE_LEVEL,
-                         double TYPE_ACCELEROMETER_X,
-                         double TYPE_ACCELEROMETER_Y,
-                         double TYPE_ACCELEROMETER_Z,
-                         double TYPE_MAGNETIC_FIELD_X,
-                         double TYPE_MAGNETIC_FIELD_Y,
-                         double TYPE_MAGNETIC_FIELD_Z,
-                         double TYPE_GYROSCOPE_X,
-                         double TYPE_GYROSCOPE_Y,
-                         double TYPE_GYROSCOPE_Z,
-                         double TYPE_ROTATION_VECTOR_X,
-                         double TYPE_ROTATION_VECTOR_Y,
-                         double TYPE_ROTATION_VECTOR_Z,
-                         double TYPE_LINEAR_ACCELERATION_X,
-                         double TYPE_LINEAR_ACCELERATION_Y,
-                         double TYPE_LINEAR_ACCELERATION_Z,
-                         double TYPE_GRAVITY_X,
-                         double TYPE_GRAVITY_Y,
-                         double TYPE_GRAVITY_Z) {
+    // add new record and replaceAdd exist record (if exist)
+    public void replaceAdd(String DIRECTORY,
+                           Date TimeStamp,
+                           int SMILE_LEVEL,
+                           double TYPE_ACCELEROMETER_X,
+                           double TYPE_ACCELEROMETER_Y,
+                           double TYPE_ACCELEROMETER_Z,
+                           double TYPE_MAGNETIC_FIELD_X,
+                           double TYPE_MAGNETIC_FIELD_Y,
+                           double TYPE_MAGNETIC_FIELD_Z,
+                           double TYPE_GYROSCOPE_X,
+                           double TYPE_GYROSCOPE_Y,
+                           double TYPE_GYROSCOPE_Z,
+                           double TYPE_ROTATION_VECTOR_X,
+                           double TYPE_ROTATION_VECTOR_Y,
+                           double TYPE_ROTATION_VECTOR_Z,
+                           double TYPE_LINEAR_ACCELERATION_X,
+                           double TYPE_LINEAR_ACCELERATION_Y,
+                           double TYPE_LINEAR_ACCELERATION_Z,
+                           double TYPE_GRAVITY_X,
+                           double TYPE_GRAVITY_Y,
+                           double TYPE_GRAVITY_Z) {
         DateFormat df =  new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
         String date = df.format(TimeStamp);
-        override(DIRECTORY, date, SMILE_LEVEL,
+        replaceAdd(DIRECTORY, date, SMILE_LEVEL,
                 TYPE_ACCELEROMETER_X,
                 TYPE_ACCELEROMETER_Y,
                 TYPE_ACCELEROMETER_Z,
@@ -55,27 +56,27 @@ public class GradingTable {
                 TYPE_GRAVITY_Z);
     }
 
-    public void override(String DIRECTORY,
-                         String TimeStamp,
-                         int SMILE_LEVEL,
-                         double TYPE_ACCELEROMETER_X,
-                         double TYPE_ACCELEROMETER_Y,
-                         double TYPE_ACCELEROMETER_Z,
-                         double TYPE_MAGNETIC_FIELD_X,
-                         double TYPE_MAGNETIC_FIELD_Y,
-                         double TYPE_MAGNETIC_FIELD_Z,
-                         double TYPE_GYROSCOPE_X,
-                         double TYPE_GYROSCOPE_Y,
-                         double TYPE_GYROSCOPE_Z,
-                         double TYPE_ROTATION_VECTOR_X,
-                         double TYPE_ROTATION_VECTOR_Y,
-                         double TYPE_ROTATION_VECTOR_Z,
-                         double TYPE_LINEAR_ACCELERATION_X,
-                         double TYPE_LINEAR_ACCELERATION_Y,
-                         double TYPE_LINEAR_ACCELERATION_Z,
-                         double TYPE_GRAVITY_X,
-                         double TYPE_GRAVITY_Y,
-                         double TYPE_GRAVITY_Z) {
+    public void replaceAdd(String DIRECTORY,
+                           String TimeStamp,
+                           int SMILE_LEVEL,
+                           double TYPE_ACCELEROMETER_X,
+                           double TYPE_ACCELEROMETER_Y,
+                           double TYPE_ACCELEROMETER_Z,
+                           double TYPE_MAGNETIC_FIELD_X,
+                           double TYPE_MAGNETIC_FIELD_Y,
+                           double TYPE_MAGNETIC_FIELD_Z,
+                           double TYPE_GYROSCOPE_X,
+                           double TYPE_GYROSCOPE_Y,
+                           double TYPE_GYROSCOPE_Z,
+                           double TYPE_ROTATION_VECTOR_X,
+                           double TYPE_ROTATION_VECTOR_Y,
+                           double TYPE_ROTATION_VECTOR_Z,
+                           double TYPE_LINEAR_ACCELERATION_X,
+                           double TYPE_LINEAR_ACCELERATION_Y,
+                           double TYPE_LINEAR_ACCELERATION_Z,
+                           double TYPE_GRAVITY_X,
+                           double TYPE_GRAVITY_Y,
+                           double TYPE_GRAVITY_Z) {
         Grading singleRecord = new Grading();
         singleRecord.setDIRECTORY(DIRECTORY);
         singleRecord.setTimeStamp(TimeStamp);
@@ -98,20 +99,20 @@ public class GradingTable {
         singleRecord.setTYPE_GRAVITY_X(TYPE_GRAVITY_X);
         singleRecord.setTYPE_GRAVITY_Y(TYPE_GRAVITY_Y);
         singleRecord.setTYPE_GRAVITY_Z(TYPE_GRAVITY_Z);
-        override(singleRecord);
+        replaceAdd(singleRecord);
     }
 
-    public void override(Grading singleRecord) {
+    public void replaceAdd(Grading singleRecord) {
         String dir = singleRecord.getDIRECTORY();
         int index = find(dir);
         if (index >= 0 && index < size()) {
-            override(index, singleRecord);
+            replaceAdd(index, singleRecord);
         } else {
             add(singleRecord);
         }
     }
 
-    public void override(int index, Grading singleRecord) {
+    public void replaceAdd(int index, Grading singleRecord) {
         gradings.set(index, singleRecord);
     }
 
@@ -131,6 +132,7 @@ public class GradingTable {
         return -1;
     }
 
+    // add new record, do not replaceAdd the old one
     public void add(String DIRECTORY,
                     Date TimeStamp,
                     int SMILE_LEVEL,
@@ -233,7 +235,8 @@ public class GradingTable {
         Collections.sort(gradings, new timeComparator());
     }
 
-    public void mergeAll() {
+    // merge all deduplicate grades, new record replaceAdd older one
+    public void merge() {
         for (int i = gradings.size() - 1; i >= 0; i--) {
             int result = find(gradings.get(i).getDIRECTORY(), 0, i - 1);
             while (result >= 0 && result <= i - 1) {
@@ -243,6 +246,7 @@ public class GradingTable {
         }
     }
 
+    // may have a better performance
     public void mergeAndSortByDir() {
         TreeMap<String, Grading> temp = new TreeMap<>();
         for (int it = 0; it < gradings.size(); it++) {
@@ -265,14 +269,6 @@ public class GradingTable {
     }
 
     public boolean isEmpty() { return gradings.isEmpty(); }
-
-    public ArrayList<Grading> getAll() {
-        return gradings;
-    }
-
-    public void addAll(ArrayList<Grading> gradings) {
-        this.gradings = gradings;
-    }
 }
 
 class timeComparator implements Comparator<Grading> {
