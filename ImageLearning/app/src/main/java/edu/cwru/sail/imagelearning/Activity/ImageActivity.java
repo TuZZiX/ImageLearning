@@ -26,17 +26,20 @@ import android.widget.Toast;
 import com.opencsv.CSVReader;
 import com.squareup.picasso.Picasso;
 import edu.cwru.sail.imagelearning.DAO.GradingDao;
+import edu.cwru.sail.imagelearning.Entity.Grading;
 import edu.cwru.sail.imagelearning.Entity.GradingTable;
 import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ImageActivity extends Activity implements SensorEventListener{
+public class ImageActivity extends Activity implements SensorEventListener {
 
     private int smile_level = 0;
     private int img_counter = 0;
@@ -76,7 +79,9 @@ public class ImageActivity extends Activity implements SensorEventListener{
     private ArrayList<String> image_list = new ArrayList<>();
 
     protected GradingDao CSV = new GradingDao();
-    protected GradingTable gradings = new GradingTable();
+
+    private Grading grading;
+    protected GradingTable gradingTable = new GradingTable();
 
     FileDialog fileDialog;
 
@@ -112,6 +117,7 @@ public class ImageActivity extends Activity implements SensorEventListener{
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
+        grading = new Grading();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -145,10 +151,18 @@ public class ImageActivity extends Activity implements SensorEventListener{
                     smile_level = 4;
                     break;
             }
-            gradings.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z);        // Data override behavior is inherit from hash map
+            /*
+
+             */
+            DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
+            grading.setDIRECTORY(image_list.get(img_counter));
+            grading.setSMILE_LEVEL(smile_level);
+            grading.setTimeStamp(df.format(new Date()));
+            gradingTable.replaceAdd(grading);
+//            gradingTable.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z);        // Data override behavior is inherit from hash map
             gradeNext();
             // gradings.mergeAndSortByDir();
-            CSV.writeToCSV(gradings, csvDir);
+            CSV.writeToCSV(gradingTable, csvDir);
         }
     };
 
@@ -288,9 +302,9 @@ public class ImageActivity extends Activity implements SensorEventListener{
     }
 
     private int getSmileLevel(String img) {
-        int result = gradings.find(img);
-        if (result >= 0 && result < gradings.size()) {
-            return (gradings.get(result)).getSMILE_LEVEL();
+        int result = gradingTable.find(img);
+        if (result >= 0 && result < gradingTable.size()) {
+            return (gradingTable.get(result)).getSMILE_LEVEL();
         } else {
             return -1;
         }
@@ -434,11 +448,11 @@ public class ImageActivity extends Activity implements SensorEventListener{
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mMagnetometer,SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mGyroscope,SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mRotation,SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mLinearAcc,SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mGravity,SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mLinearAcc, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mGravity, SensorManager.SENSOR_DELAY_NORMAL);
     }
 }

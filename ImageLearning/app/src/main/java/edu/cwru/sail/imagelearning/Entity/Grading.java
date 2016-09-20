@@ -23,6 +23,60 @@ public class Grading {
     private double TYPE_GRAVITY_X;
     private double TYPE_GRAVITY_Y;
     private double TYPE_GRAVITY_Z;
+    private double POSITION_X;
+    private double POSITION_Y;
+    private double VELOCITY_X;
+    private double VELOCITY_Y;
+    private double PRESSURE;
+    private double SIZE;
+
+    public void setPOSITION_X(double POSITION_X) {
+        this.POSITION_X = POSITION_X;
+    }
+
+    public double getPOSITION_X() {
+        return POSITION_X;
+    }
+
+    public void setPOSITION_Y(double POSITION_Y) {
+        this.POSITION_Y = POSITION_Y;
+    }
+
+    public double getPOSITION_Y() {
+        return POSITION_Y;
+    }
+
+    public void setPRESSURE(double PRESSURE) {
+        this.PRESSURE = PRESSURE;
+    }
+
+    public double getPRESSURE() {
+        return PRESSURE;
+    }
+
+    public void setSIZE(double SIZE) {
+        this.SIZE = SIZE;
+    }
+
+    public double getSIZE() {
+        return SIZE;
+    }
+
+    public void setVELOCITY_X(double VELOCITY_X) {
+        this.VELOCITY_X = VELOCITY_X;
+    }
+
+    public double getVELOCITY_X() {
+        return VELOCITY_X;
+    }
+
+    public void setVELOCITY_Y(double VELOCITY_Y) {
+        this.VELOCITY_Y = VELOCITY_Y;
+    }
+
+    public double getVELOCITY_Y() {
+        return VELOCITY_Y;
+    }
 
     public void setDIRECTORY(String DIRECTORY) {
         this.DIRECTORY = DIRECTORY;

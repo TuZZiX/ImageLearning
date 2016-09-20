@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.TreeMap;
 
 public class GradingTable {
-    private ArrayList<Grading> gradings= new ArrayList<>();
+    private ArrayList<Grading> gradingList = new ArrayList<>();
 
     // add new record and replaceAdd exist record (if exist)
     public void replaceAdd(String DIRECTORY,
@@ -32,8 +32,14 @@ public class GradingTable {
                            double TYPE_LINEAR_ACCELERATION_Z,
                            double TYPE_GRAVITY_X,
                            double TYPE_GRAVITY_Y,
-                           double TYPE_GRAVITY_Z) {
-        DateFormat df =  new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
+                           double TYPE_GRAVITY_Z,
+                           double POSITION_X,
+                           double POSITION_Y,
+                           double VELOCITY_X,
+                           double VELOCITY_Y,
+                           double PRESSURE,
+                           double SIZE) {
+        DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
         String date = df.format(TimeStamp);
         replaceAdd(DIRECTORY, date, SMILE_LEVEL,
                 TYPE_ACCELEROMETER_X,
@@ -53,7 +59,13 @@ public class GradingTable {
                 TYPE_LINEAR_ACCELERATION_Z,
                 TYPE_GRAVITY_X,
                 TYPE_GRAVITY_Y,
-                TYPE_GRAVITY_Z);
+                TYPE_GRAVITY_Z,
+                POSITION_X,
+                POSITION_Y,
+                VELOCITY_X,
+                VELOCITY_Y,
+                PRESSURE,
+                SIZE);
     }
 
     public void replaceAdd(String DIRECTORY,
@@ -76,7 +88,13 @@ public class GradingTable {
                            double TYPE_LINEAR_ACCELERATION_Z,
                            double TYPE_GRAVITY_X,
                            double TYPE_GRAVITY_Y,
-                           double TYPE_GRAVITY_Z) {
+                           double TYPE_GRAVITY_Z,
+                           double POSITION_X,
+                           double POSITION_Y,
+                           double VELOCITY_X,
+                           double VELOCITY_Y,
+                           double PRESSURE,
+                           double SIZE) {
         Grading singleRecord = new Grading();
         singleRecord.setDIRECTORY(DIRECTORY);
         singleRecord.setTimeStamp(TimeStamp);
@@ -99,13 +117,19 @@ public class GradingTable {
         singleRecord.setTYPE_GRAVITY_X(TYPE_GRAVITY_X);
         singleRecord.setTYPE_GRAVITY_Y(TYPE_GRAVITY_Y);
         singleRecord.setTYPE_GRAVITY_Z(TYPE_GRAVITY_Z);
+        singleRecord.setPOSITION_X(POSITION_X);
+        singleRecord.setPOSITION_Y(POSITION_Y);
+        singleRecord.setVELOCITY_X(VELOCITY_X);
+        singleRecord.setVELOCITY_Y(VELOCITY_Y);
+        singleRecord.setPRESSURE(PRESSURE);
+        singleRecord.setSIZE(SIZE);
         replaceAdd(singleRecord);
     }
 
     public void replaceAdd(Grading singleRecord) {
         String dir = singleRecord.getDIRECTORY();
         int index = find(dir);
-        if (index >= 0 && index < gradings.size()) {
+        if (index >= 0 && index < gradingList.size()) {
             replaceAdd(index, singleRecord);
         } else {
             add(singleRecord);
@@ -113,19 +137,19 @@ public class GradingTable {
     }
 
     public void replaceAdd(int index, Grading singleRecord) {
-        gradings.set(index, singleRecord);
+        gradingList.set(index, singleRecord);
     }
 
     // only find last index
     public int find(String DIRECTORY) {
-        return find(DIRECTORY, 0, gradings.size() - 1);
+        return find(DIRECTORY, 0, gradingList.size() - 1);
     }
 
     // Note: including start index and end index
     public int find(String DIRECTORY, int start, int end) {
-        if (start >=0 && end >= 0 && start < gradings.size() && end < gradings.size()) {
+        if (start >= 0 && end >= 0 && start < gradingList.size() && end < gradingList.size()) {
             for (int it = end; it >= start; it--) {
-                if (gradings.get(it).getDIRECTORY().compareTo(DIRECTORY) == 0) {
+                if (gradingList.get(it).getDIRECTORY().compareTo(DIRECTORY) == 0) {
                     return it;
                 }
             }
@@ -154,8 +178,14 @@ public class GradingTable {
                     double TYPE_LINEAR_ACCELERATION_Z,
                     double TYPE_GRAVITY_X,
                     double TYPE_GRAVITY_Y,
-                    double TYPE_GRAVITY_Z) {
-        DateFormat df =  new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
+                    double TYPE_GRAVITY_Z,
+                    double POSITION_X,
+                    double POSITION_Y,
+                    double VELOCITY_X,
+                    double VELOCITY_Y,
+                    double PRESSURE,
+                    double SIZE) {
+        DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
         String date = df.format(TimeStamp);
         add(DIRECTORY, date, SMILE_LEVEL,
                 TYPE_ACCELEROMETER_X,
@@ -175,7 +205,13 @@ public class GradingTable {
                 TYPE_LINEAR_ACCELERATION_Z,
                 TYPE_GRAVITY_X,
                 TYPE_GRAVITY_Y,
-                TYPE_GRAVITY_Z);
+                TYPE_GRAVITY_Z,
+                POSITION_X,
+                POSITION_Y,
+                VELOCITY_X,
+                VELOCITY_Y,
+                PRESSURE,
+                SIZE);
     }
 
     public void add(String DIRECTORY,
@@ -198,7 +234,13 @@ public class GradingTable {
                     double TYPE_LINEAR_ACCELERATION_Z,
                     double TYPE_GRAVITY_X,
                     double TYPE_GRAVITY_Y,
-                    double TYPE_GRAVITY_Z) {
+                    double TYPE_GRAVITY_Z,
+                    double POSITION_X,
+                    double POSITION_Y,
+                    double VELOCITY_X,
+                    double VELOCITY_Y,
+                    double PRESSURE,
+                    double SIZE) {
         Grading singleRecord = new Grading();
         singleRecord.setDIRECTORY(DIRECTORY);
         singleRecord.setTimeStamp(TimeStamp);
@@ -221,28 +263,34 @@ public class GradingTable {
         singleRecord.setTYPE_GRAVITY_X(TYPE_GRAVITY_X);
         singleRecord.setTYPE_GRAVITY_Y(TYPE_GRAVITY_Y);
         singleRecord.setTYPE_GRAVITY_Z(TYPE_GRAVITY_Z);
-        gradings.add(singleRecord);
+        singleRecord.setPOSITION_X(POSITION_X);
+        singleRecord.setPOSITION_Y(POSITION_Y);
+        singleRecord.setVELOCITY_X(VELOCITY_X);
+        singleRecord.setVELOCITY_Y(VELOCITY_Y);
+        singleRecord.setPRESSURE(PRESSURE);
+        singleRecord.setSIZE(SIZE);
+        gradingList.add(singleRecord);
     }
 
     public void add(Grading singleRecord) {
-        gradings.add(singleRecord);
+        gradingList.add(singleRecord);
     }
 
     public void sortByDir() {
-        Collections.sort(gradings, new directoryComparator());
+        Collections.sort(gradingList, new directoryComparator());
     }
 
     public void sortByTime() {
-        Collections.sort(gradings, new timeComparator());
+        Collections.sort(gradingList, new timeComparator());
     }
 
     // merge all deduplicate grades, new record replaceAdd older one
     public void merge() {
-        for (int i = gradings.size() - 1; i >= 0; i--) {
-            int result = find(gradings.get(i).getDIRECTORY(), 0, i - 1);
+        for (int i = gradingList.size() - 1; i >= 0; i--) {
+            int result = find(gradingList.get(i).getDIRECTORY(), 0, i - 1);
             while (result >= 0 && result <= i - 1) {
-                gradings.remove(result);
-                result = find(gradings.get(i).getDIRECTORY(), 0, --i);
+                gradingList.remove(result);
+                result = find(gradingList.get(i).getDIRECTORY(), 0, --i);
             }
         }
     }
@@ -250,26 +298,30 @@ public class GradingTable {
     // may have a better performance
     public void mergeAndSortByDir() {
         TreeMap<String, Grading> temp = new TreeMap<>();
-        for (int it = 0; it < gradings.size(); it++) {
-            temp.put(gradings.get(it).getDIRECTORY(), gradings.get(it));
+        for (int it = 0; it < gradingList.size(); it++) {
+            temp.put(gradingList.get(it).getDIRECTORY(), gradingList.get(it));
         }
-        gradings.clear();
+        gradingList.clear();
         for (String key : temp.keySet()) {
-            gradings.add(temp.get(key));
+            gradingList.add(temp.get(key));
         }
     }
 
-    public Grading get(int index) { return gradings.get(index); }
+    public Grading get(int index) {
+        return gradingList.get(index);
+    }
 
     public void clear() {
-        gradings.clear();
+        gradingList.clear();
     }
 
     public int size() {
-        return gradings.size();
+        return gradingList.size();
     }
 
-    public boolean isEmpty() { return gradings.isEmpty(); }
+    public boolean isEmpty() {
+        return gradingList.isEmpty();
+    }
 }
 
 class timeComparator implements Comparator<Grading> {
