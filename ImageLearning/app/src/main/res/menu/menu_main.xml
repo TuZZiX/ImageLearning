@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".ImageActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ImageActivity">
+    <item android:id="@+id/setting_selfie"
+        android:title="@string/setting_selfie"
+        android:orderInCategory="100"
+        android:icon="@drawable/selfie_bk"
+        android:showAsAction="always|withText"/>
     <item android:id="@+id/setting_openImg"
           android:title="@string/setting_openImg"
           android:orderInCategory="100"/>

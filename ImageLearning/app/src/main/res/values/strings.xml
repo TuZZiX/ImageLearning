@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Image Learning</string>
+    <string name="setting_selfie">Grade my selfie</string>
     <string name="setting_openImg">Open Learning Image</string>
     <string name="setting_openResult">Open Result CSV</string>
     <string name="setting_exit">Exit</string>
