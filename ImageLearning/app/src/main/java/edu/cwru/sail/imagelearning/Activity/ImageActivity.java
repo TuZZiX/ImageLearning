@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ImageActivity extends Activity implements SensorEventListener {
+public class ImageActivity extends Activity {
 
     private int smile_level = 0;
     private int img_counter = 0;
@@ -119,16 +119,43 @@ public class ImageActivity extends Activity implements SensorEventListener {
 
         grading = new Grading();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        mLinearAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
+            mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null)
+            mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null)
+            mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) != null)
+            mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null)
+            mLinearAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null)
+            mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         setFinishOnTouchOutside(false);
-        browserFolder();
+        browseFolder();
     }
+
+    SensorEventListener sensorEventListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            Sensor sensor;
+            switch (sensorEvent.sensor) {
+                case Sensor.TYPE_ACCELEROMETER:
+                case Sensor.TYPE_MAGNETIC_FIELD:
+                case Sensor.TYPE_GYROSCOPE:
+                case Sensor.TYPE_ROTATION_VECTOR:
+                case Sensor.TYPE_LINEAR_ACCELERATION:
+                case Sensor.TYPE_GRAVITY:
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
 
     View.OnClickListener smileListener = new View.OnClickListener() {
         @Override
@@ -365,7 +392,7 @@ public class ImageActivity extends Activity implements SensorEventListener {
 
         switch (item.getItemId()) {
             case R.id.setting_openImg:
-                browserFolder();
+                browseFolder();
                 return true;
             case R.id.setting_openResult:
                 File file = new File(csvDir);
@@ -385,7 +412,7 @@ public class ImageActivity extends Activity implements SensorEventListener {
         return super.onOptionsItemSelected(item);
     }
 
-    public void browserFolder() {
+    public void browseFolder() {
         /**
          * Requesting Permissions at Run Time
          */
@@ -428,31 +455,21 @@ public class ImageActivity extends Activity implements SensorEventListener {
         return img_counter;
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        //TODO get sensor data
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        //leave blank
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
+        mSensorManager.unregisterListener(sensorEventListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mLinearAcc, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mGravity, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(sensorEventListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(sensorEventListener, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(sensorEventListener, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(sensorEventListener, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(sensorEventListener, mLinearAcc, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(sensorEventListener, mGravity, SensorManager.SENSOR_DELAY_NORMAL);
     }
 }

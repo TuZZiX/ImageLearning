@@ -61,24 +61,26 @@ public class FileDialog {
         if (selectDirectoryOption) {
             builder.setPositiveButton("Select directory", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    image_list.clear();
-                    Log.d(TAG, currentPath.getPath());
-                    fireDirectorySelectedEvent(currentPath);
-                    for (int i = 0; i < fileList.length; i++) {
-                        if (!fileList[i].contains(".."))
-                            image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
+                    if (currentPath.isFile()) {
+                        image_list.clear();
+                        Log.d(TAG, currentPath.getPath());
+                        fireDirectorySelectedEvent(currentPath);
+                        for (int i = 0; i < fileList.length; i++) {
+                            if (!fileList[i].contains(".."))
+                                image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
+                        }
+                        ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
+                        boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
+                        if (!flag)
+                            Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+                        else {
+                            ((ImageActivity) activity).gradingTable.mergeAndSortByDir();
+                        }
+                        ((ImageActivity) activity).setImg_counter(0);
+                        ((ImageActivity) activity).changeImg();
+                        ((ImageActivity) activity).updateSmileLevel();
+                        ((ImageActivity) activity).updateButtonSelect();
                     }
-                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
-                    boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
-                    if (!flag)
-                        Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-                    else {
-                        ((ImageActivity) activity).gradingTable.mergeAndSortByDir();
-                    }
-                    ((ImageActivity) activity).setImg_counter(0);
-                    ((ImageActivity) activity).changeImg();
-                    ((ImageActivity) activity).updateSmileLevel();
-                    ((ImageActivity) activity).updateButtonSelect();
                 }
             });
         }
