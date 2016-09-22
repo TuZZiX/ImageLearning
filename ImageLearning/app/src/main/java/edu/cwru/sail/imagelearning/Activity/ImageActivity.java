@@ -366,7 +366,7 @@ public class ImageActivity extends Activity implements SensorEventListener {
         switch (item.getItemId()) {
             case R.id.setting_openImg:
                 browserFolder();
-                return true;
+                break;
             case R.id.setting_openResult:
                 File file = new File(csvDir);
                 Uri path = Uri.fromFile(file);
@@ -374,12 +374,15 @@ public class ImageActivity extends Activity implements SensorEventListener {
                 csvOpenIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 csvOpenIntent.setDataAndType(path, "text/csv");
                 startActivity(csvOpenIntent);
-                return true;
+                break;
             case R.id.setting_exit:
                 moveTaskToBack(true);
                 android.os.Process.killProcess(android.os.Process.myPid());
                 System.exit(1);
-                return true;
+                break;
+            case R.id.setting_selfie:
+                // TODO invoke camera
+                break;
         }
 
         return super.onOptionsItemSelected(item);
