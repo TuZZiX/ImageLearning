@@ -140,14 +140,37 @@ public class ImageActivity extends Activity {
     SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            Sensor sensor;
-            switch (sensorEvent.sensor) {
+            switch (sensorEvent.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
+                    grading.setTYPE_ACCELEROMETER_X(sensorEvent.values[0]);
+                    grading.setTYPE_ACCELEROMETER_Y(sensorEvent.values[1]);
+                    grading.setTYPE_ACCELEROMETER_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
+                    grading.setTYPE_MAGNETIC_FIELD_X(sensorEvent.values[0]);
+                    grading.setTYPE_MAGNETIC_FIELD_Y(sensorEvent.values[1]);
+                    grading.setTYPE_MAGNETIC_FIELD_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_GYROSCOPE:
+                    grading.setTYPE_GYROSCOPE_X(sensorEvent.values[0]);
+                    grading.setTYPE_GYROSCOPE_Y(sensorEvent.values[1]);
+                    grading.setTYPE_GYROSCOPE_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_ROTATION_VECTOR:
+                    grading.setTYPE_ROTATION_VECTOR_X(sensorEvent.values[0]);
+                    grading.setTYPE_ROTATION_VECTOR_Y(sensorEvent.values[1]);
+                    grading.setTYPE_ROTATION_VECTOR_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_LINEAR_ACCELERATION:
+                    grading.setTYPE_LINEAR_ACCELERATION_X(sensorEvent.values[0]);
+                    grading.setTYPE_LINEAR_ACCELERATION_Y(sensorEvent.values[1]);
+                    grading.setTYPE_LINEAR_ACCELERATION_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_GRAVITY:
+                    grading.setTYPE_GRAVITY_X(sensorEvent.values[0]);
+                    grading.setTYPE_GRAVITY_Y(sensorEvent.values[1]);
+                    grading.setTYPE_GRAVITY_Z(sensorEvent.values[2]);
+                    break;
             }
         }
 
