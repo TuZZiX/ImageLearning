@@ -120,18 +120,31 @@ public class ImageActivity extends Activity {
         grading = new Grading();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null)
+            mSensorManager.registerListener(sensorEventListener, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null)
+            mSensorManager.registerListener(sensorEventListener, mMagnetometer, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null) {
             mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) != null)
+            mSensorManager.registerListener(sensorEventListener, mGyroscope, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) != null) {
             mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null)
+            mSensorManager.registerListener(sensorEventListener, mRotation, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
             mLinearAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null)
+            mSensorManager.registerListener(sensorEventListener, mLinearAcc, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null) {
             mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+            mSensorManager.registerListener(sensorEventListener, mGravity, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
 
         setFinishOnTouchOutside(false);
         browseFolder();
