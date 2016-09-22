@@ -393,7 +393,7 @@ public class ImageActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.setting_openImg:
                 browseFolder();
-                return true;
+                break;
             case R.id.setting_openResult:
                 File file = new File(csvDir);
                 Uri path = Uri.fromFile(file);
