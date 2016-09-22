@@ -120,18 +120,31 @@ public class ImageActivity extends Activity {
         grading = new Grading();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null)
+            mSensorManager.registerListener(sensorEventListener, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null)
+            mSensorManager.registerListener(sensorEventListener, mMagnetometer, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null) {
             mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) != null)
+            mSensorManager.registerListener(sensorEventListener, mGyroscope, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) != null) {
             mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null)
+            mSensorManager.registerListener(sensorEventListener, mRotation, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
             mLinearAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null)
+            mSensorManager.registerListener(sensorEventListener, mLinearAcc, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null) {
             mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+            mSensorManager.registerListener(sensorEventListener, mGravity, mSensorManager.SENSOR_DELAY_NORMAL);
+        }
 
         setFinishOnTouchOutside(false);
         browseFolder();
@@ -141,13 +154,37 @@ public class ImageActivity extends Activity {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             Sensor sensor;
-            switch (sensorEvent.sensor) {
+            switch (sensorEvent.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
+                    grading.setTYPE_ACCELEROMETER_X(sensorEvent.values[0]);
+                    grading.setTYPE_ACCELEROMETER_Y(sensorEvent.values[1]);
+                    grading.setTYPE_ACCELEROMETER_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
+                    grading.setTYPE_MAGNETIC_FIELD_X(sensorEvent.values[0]);
+                    grading.setTYPE_MAGNETIC_FIELD_Y(sensorEvent.values[1]);
+                    grading.setTYPE_MAGNETIC_FIELD_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_GYROSCOPE:
+                    grading.setTYPE_GYROSCOPE_X(sensorEvent.values[0]);
+                    grading.setTYPE_GYROSCOPE_Y(sensorEvent.values[1]);
+                    grading.setTYPE_GYROSCOPE_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_ROTATION_VECTOR:
+                    grading.setTYPE_ROTATION_VECTOR_X(sensorEvent.values[0]);
+                    grading.setTYPE_ROTATION_VECTOR_Y(sensorEvent.values[1]);
+                    grading.setTYPE_ROTATION_VECTOR_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_LINEAR_ACCELERATION:
+                    grading.setTYPE_LINEAR_ACCELERATION_X(sensorEvent.values[0]);
+                    grading.setTYPE_LINEAR_ACCELERATION_Y(sensorEvent.values[1]);
+                    grading.setTYPE_LINEAR_ACCELERATION_Z(sensorEvent.values[2]);
+                    break;
                 case Sensor.TYPE_GRAVITY:
+                    grading.setTYPE_GRAVITY_X(sensorEvent.values[0]);
+                    grading.setTYPE_GRAVITY_Y(sensorEvent.values[1]);
+                    grading.setTYPE_GRAVITY_Z(sensorEvent.values[2]);
+                    break;
             }
         }
 
