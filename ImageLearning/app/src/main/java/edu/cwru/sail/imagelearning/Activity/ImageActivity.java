@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ImageActivity extends Activity {
 
@@ -97,7 +98,7 @@ public class ImageActivity extends Activity {
 
     private Grading grading;
     protected GradingTable gradingTable = new GradingTable();
-    DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
+    DateFormat df = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.US);
 
     FileDialog fileDialog;
 
@@ -185,7 +186,8 @@ public class ImageActivity extends Activity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mPointId = motionEvent.getPointerId(0);
             if (velocityTracker == null) {
-                registerVelocityTracker(motionEvent);
+                velocityTracker = VelocityTracker.obtain();
+                mPointId = motionEvent.getPointerId(0);
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 if (view.getId() == R.id.btnRate1 || view.getId() == R.id.btnRate2 || view.getId() == R.id.btnRate3 || view.getId() == R.id.btnRate4) {
@@ -195,6 +197,7 @@ public class ImageActivity extends Activity {
                     SIZE = motionEvent.getSize();
                 }
             } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                velocityTracker.addMovement(motionEvent);
                 velocityTracker.computeCurrentVelocity(1000);
                 VELOCITY_X = velocityTracker.getXVelocity(mPointId);
                 VELOCITY_Y = velocityTracker.getYVelocity(mPointId);
@@ -204,11 +207,6 @@ public class ImageActivity extends Activity {
             return false;
         }
     };
-
-    private void registerVelocityTracker(MotionEvent motionEvent) {
-        velocityTracker = VelocityTracker.obtain();
-        velocityTracker.addMovement(motionEvent);
-    }
 
     private void releaseVelocityTracker() {
         velocityTracker.clear();
