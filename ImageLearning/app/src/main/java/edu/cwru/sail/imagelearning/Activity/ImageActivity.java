@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewConfigurationCompat;
@@ -532,11 +533,18 @@ public class ImageActivity extends Activity {
                 System.exit(1);
                 break;
             case R.id.setting_selfie:
-                // TODO invoke camera
+                dispatchTakePictureIntent();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, 1);
+        }
     }
 
     public void browseFolder() {
