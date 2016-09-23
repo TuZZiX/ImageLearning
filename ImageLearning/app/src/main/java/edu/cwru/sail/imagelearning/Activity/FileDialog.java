@@ -69,7 +69,7 @@ public class FileDialog {
                             if ((new File(currentPath.getAbsoluteFile() + "/" + fileList[i])).isFile())
                                 image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
-                    //是否要image_list不为空才能进行一下操作
+                    //是否要image_list不为空才能进行一下操作			re:这里允许image_list为空，因为后面的所有操作都会进行image_list的检查
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
                     boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
                     if (!flag)
