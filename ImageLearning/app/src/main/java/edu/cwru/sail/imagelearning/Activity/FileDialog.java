@@ -72,9 +72,10 @@ public class FileDialog {
                     //是否要image_list不为空才能进行一下操作			re:这里允许image_list为空，因为后面的所有操作都会进行image_list的检查
                     ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
                     boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
-                    if (!flag)
-                        Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-                    else {
+                    if (!flag) {
+                        if (image_list.size() > 0)
+                            Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+                    } else {
                         ((ImageActivity) activity).gradingTable.mergeAndSortByDir();
                     }
                     ((ImageActivity) activity).setImg_counter(0);
