@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Process;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
@@ -101,6 +102,9 @@ public class ImageActivity extends Activity {
     Sensor mRotation;
     Sensor mLinearAcc;
     Sensor mGravity;
+
+    VelocityTracker velocityTracker;
+    private int mPointId;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -173,21 +177,39 @@ public class ImageActivity extends Activity {
     View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (view.getId() == R.id.btnRate1 || view.getId() == R.id.btnRate2 || view.getId() == R.id.btnRate3 || view.getId() == R.id.btnRate4) {
-                VelocityTracker velocityTracker = VelocityTracker.obtain();
-                velocityTracker.addMovement(motionEvent);
+            if (velocityTracker == null) {
+                registerVelocityTracker(motionEvent);
+            }
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (view.getId() == R.id.btnRate1 || view.getId() == R.id.btnRate2 || view.getId() == R.id.btnRate3 || view.getId() == R.id.btnRate4) {
+                    POSITION_X = motionEvent.getX();
+                    POSITION_Y = motionEvent.getY();
+                    mPointId = motionEvent.getPointerId(0);
+
+                    PRESSURE = motionEvent.getPressure();
+                    SIZE = motionEvent.getSize();
+                }
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                 velocityTracker.computeCurrentVelocity(1000);
-                POSITION_X = motionEvent.getX();
-                POSITION_Y = motionEvent.getY();
-                VELOCITY_X = velocityTracker.getXVelocity();
-                VELOCITY_Y = velocityTracker.getYVelocity();
-                PRESSURE = motionEvent.getPressure();
-                SIZE = motionEvent.getSize();
-                return false;
+                VELOCITY_X = velocityTracker.getXVelocity(mPointId);
+                VELOCITY_Y = velocityTracker.getYVelocity(mPointId);
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                releaseVelocityTracker();
             }
             return false;
         }
     };
+
+    private void registerVelocityTracker(MotionEvent motionEvent) {
+        velocityTracker = VelocityTracker.obtain();
+        velocityTracker.addMovement(motionEvent);
+    }
+
+    private void releaseVelocityTracker() {
+        velocityTracker.clear();
+        velocityTracker.recycle();
+        velocityTracker = null;
+    }
 
 
     SensorEventListener sensorEventListener = new SensorEventListener() {
