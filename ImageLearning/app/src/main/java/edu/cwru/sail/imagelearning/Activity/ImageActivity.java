@@ -91,7 +91,7 @@ public class ImageActivity extends Activity {
 
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
     private String selfieDir = Environment.getExternalStorageDirectory() + "/DCIM/Image_Learning/";
-    private String selfie_suffix = "smile_";
+    private String selfie_prefix = "smile_";
     private DateFormat selfieFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
 
     private ArrayList<String> image_list = new ArrayList<>();
@@ -506,21 +506,22 @@ public class ImageActivity extends Activity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (!checkAndCreateFolder(selfieDir)) {
+        if (!checkAndCreateDirectory(selfieDir)) {
             Toast.makeText(getApplicationContext(), getText(R.string.errMsg_createFolderFault), Toast.LENGTH_SHORT).show();
             return;
         }
         String takenTime = selfieFormat.format(new Date());
-        imageUri = Uri.fromFile(new File(selfieDir, selfie_suffix + takenTime + ".jpg"));
+        imageUri = Uri.fromFile(new File(selfieDir, selfie_prefix + takenTime + ".jpg"));
         takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);
         Log.i("photo_dir:", imageUri.toString());
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
-    private boolean checkAndCreateFolder(String Dir) {
+    private boolean checkAndCreateDirectory(String Dir) {
         File imageFolder = new File(Dir);
         return imageFolder.exists() || imageFolder.mkdirs();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
