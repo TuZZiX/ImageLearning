@@ -34,8 +34,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -87,6 +90,9 @@ public class ImageActivity extends Activity {
     private TextView textLast;
 
     private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
+    private String selfieDir = Environment.getExternalStorageDirectory() + "/DCIM/Image_Learning/";
+    private String selfie_suffix = "smile_";
+    private DateFormat selfieFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
 
     private ArrayList<String> image_list = new ArrayList<>();
 
@@ -94,7 +100,7 @@ public class ImageActivity extends Activity {
 
     private Grading grading;
     protected GradingTable gradingTable = new GradingTable();
-    DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT, Locale.US);
+    private DateFormat storageFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.DEFAULT, Locale.US);
 
     FileDialog fileDialog;
 
@@ -108,6 +114,7 @@ public class ImageActivity extends Activity {
 
     VelocityTracker velocityTracker;
     private int mPointId;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -278,7 +285,7 @@ public class ImageActivity extends Activity {
             grading = new Grading();
             grading.setDIRECTORY(image_list.get(img_counter));
             grading.setSMILE_LEVEL(smile_level);
-            grading.setTimeStamp(df.format(new Date()));
+            grading.setTimeStamp(storageFormat.format(new Date()));
             grading.setTYPE_ACCELEROMETER_X(CURRENT_ACCELEROMETER_X);
             grading.setTYPE_ACCELEROMETER_Y(CURRENT_ACCELEROMETER_Y);
             grading.setTYPE_ACCELEROMETER_Z(CURRENT_ACCELEROMETER_Z);
@@ -499,17 +506,55 @@ public class ImageActivity extends Activity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory() +"/DCIM", "fname_" +
-                String.valueOf(System.currentTimeMillis()) + ".jpg"));
+        if (!checkAndCreateFolder(selfieDir)) {
+            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_createFolderFault), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String takenTime = selfieFormat.format(new Date());
+        imageUri = Uri.fromFile(new File(selfieDir, selfie_suffix + takenTime + ".jpg"));
         takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageUri);
-        Log.i("photo_dir", imageUri.toString());
+        Log.i("photo_dir:", imageUri.toString());
         startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
+    private boolean checkAndCreateFolder(String Dir) {
+        File imageFolder = new File(Dir);
+        return imageFolder.exists() || imageFolder.mkdirs();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            //TODO photo has been stored in /storage/emulated/0/DCIM/. Do the rest here.
+            FilenameFilter imgFilter = new FilenameFilter() {
+                public boolean accept(File dir, String filename) {
+                    File sel = new File(dir, filename);
+                    if (!sel.canRead()) return false;
+                    else {
+                        boolean endsWith = filename.toLowerCase().endsWith(".jpg");
+                        return endsWith || sel.isDirectory();
+                    }
+                }
+            };
+            File selfiePath = new File(selfieDir);
+            if (selfiePath.exists()) {
+                File[] fileList = selfiePath.listFiles(imgFilter);
+                if (fileList != null)
+                    for (File file : fileList) {
+                        if (file.isFile())
+                            image_list.add(selfieDir + "/" + file.getName());
+                    }
+            }
+            Collections.sort(image_list);
+            setCsvDir(selfieDir + "/" + Util.truncateFileName(selfieDir + ".csv"));
+            if (!CSV.readCSV(gradingTable, csvDir)) {
+                if (image_list.size() > 0)
+                    Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+            } else {
+                gradingTable.mergeAndSortByDir();
+            }
+            setImg_counter(image_list.size() - 1);  // Jump to last image (the one just taken)
+            changeImg();
+            updateSmileLevel();
+            updateButtonSelect();
         }
     }
 

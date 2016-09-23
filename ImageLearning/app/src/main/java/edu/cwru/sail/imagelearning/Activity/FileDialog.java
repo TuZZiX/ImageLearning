@@ -5,15 +5,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
-import edu.cwru.sail.imagelearning.Util.Util;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import edu.cwru.sail.imagelearning.Util.Util;
 
 public class FileDialog {
     private static final String PARENT_DIR = "..";
@@ -22,11 +22,11 @@ public class FileDialog {
     private File currentPath;
 
 
-    public interface FileSelectedListener {
+    interface FileSelectedListener {
         void fileSelected(File file);
     }
 
-    public interface DirectorySelectedListener {
+    interface DirectorySelectedListener {
         void directorySelected(File directory);
     }
 
@@ -36,25 +36,18 @@ public class FileDialog {
     private boolean selectDirectoryOption = true;
     private String fileEndsWith;
 
-    /**
-     * @param activity
-     * @param initialPath
-     */
-    public FileDialog(Activity activity, File initialPath) {
+    FileDialog(Activity activity, File initialPath) {
         this(activity, initialPath, null);
     }
 
-    public FileDialog(Activity activity, File initialPath, String fileEndsWith) {
+    FileDialog(Activity activity, File initialPath, String fileEndsWith) {
         this.activity = activity;
         setFileEndsWith(fileEndsWith);
         if (!initialPath.exists()) initialPath = Environment.getExternalStorageDirectory();
         loadFileList(initialPath);
     }
 
-    /**
-     * @return file dialog
-     */
-    public Dialog createFileDialog(final ArrayList<String> image_list) {
+    private Dialog createFileDialog(final ArrayList<String> image_list) {
         Dialog dialog;
         final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getText(R.string.title_folderSelect_default) + "\n" + currentPath.getPath());
@@ -162,7 +155,7 @@ public class FileDialog {
                     if (!sel.canRead()) return false;
 //                    if (selectDirectoryOption) return sel.isDirectory();
                     else {
-                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase().endsWith(fileEndsWith) : true;
+                        boolean endsWith = fileEndsWith == null || filename.toLowerCase().endsWith(fileEndsWith);
                         return endsWith || sel.isDirectory();
                     }
                 }
@@ -170,15 +163,13 @@ public class FileDialog {
             File[] fileList1 = path.listFiles(filter);
 //            File[] fileList1 = path.listFiles();
             if (fileList1 != null)
-                for (int i = 0; i < fileList1.length; i++) {
-                    r.add(fileList1[i].getName());
+                for (File aFileList1 : fileList1) {
+                    r.add(aFileList1.getName());
                 }
         }
         String[] temp = r.toArray(new String[]{});
         fileList = new String[temp.length];
-        for (int i = 0; i < fileList.length; i++) {
-            fileList[i] = temp[i];
-        }
+        System.arraycopy(temp, 0, fileList, 0, fileList.length);
         Arrays.sort(fileList);
     }
 
@@ -188,7 +179,7 @@ public class FileDialog {
     }
 
     private void setFileEndsWith(String fileEndsWith) {
-        this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : fileEndsWith;
+        this.fileEndsWith = fileEndsWith != null ? fileEndsWith.toLowerCase() : null;
     }
 
 }

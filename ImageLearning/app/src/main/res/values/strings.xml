@@ -19,6 +19,7 @@
     <string name="errMsg_noPrv">No previous image</string>
     <string name="errMsg_noNext">No next image</string>
     <string name="errMsg_imgNotExist_default">Image not exist:</string>
+    <string name="errMsg_createFolderFault">Fail to create selfie folder</string>
     <string name="title_folderSelect_default">Set Learning Image Directory:</string>
 
 </resources>
