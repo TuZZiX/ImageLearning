@@ -12,17 +12,20 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Process;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.opencsv.CSVReader;
 import com.squareup.picasso.Picasso;
 import edu.cwru.sail.imagelearning.DAO.GradingDao;
@@ -62,6 +65,12 @@ public class ImageActivity extends Activity {
     private double CURRENT_GRAVITY_X;
     private double CURRENT_GRAVITY_Y;
     private double CURRENT_GRAVITY_Z;
+    private double POSITION_X;
+    private double POSITION_Y;
+    private double VELOCITY_X;
+    private double VELOCITY_Y;
+    private double PRESSURE;
+    private double SIZE;
 
     private ImageView photoView;
     private Button btn1;
@@ -92,6 +101,11 @@ public class ImageActivity extends Activity {
     Sensor mRotation;
     Sensor mLinearAcc;
     Sensor mGravity;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
     // Make sure that this part is dynamically defined by the Browse Folder and
     // your CSV file name is "THE_SAME_FOLDER_NAME.csv"
 
@@ -114,10 +128,13 @@ public class ImageActivity extends Activity {
         btn2.setOnClickListener(smileListener);
         btn3.setOnClickListener(smileListener);
         btn4.setOnClickListener(smileListener);
+        btn1.setOnTouchListener(onTouchListener);
+        btn2.setOnTouchListener(onTouchListener);
+        btn3.setOnTouchListener(onTouchListener);
+        btn4.setOnTouchListener(onTouchListener);
         btn_previous.setOnClickListener(scrollListener);
         btn_skip.setOnClickListener(scrollListener);
 
-        grading = new Grading();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
@@ -148,41 +165,64 @@ public class ImageActivity extends Activity {
 
         setFinishOnTouchOutside(false);
         browseFolder();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
+    View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (view.getId() == R.id.btnRate1 || view.getId() == R.id.btnRate2 || view.getId() == R.id.btnRate3 || view.getId() == R.id.btnRate4) {
+                VelocityTracker velocityTracker = VelocityTracker.obtain();
+                velocityTracker.addMovement(motionEvent);
+                velocityTracker.computeCurrentVelocity(1000);
+                POSITION_X = motionEvent.getX();
+                POSITION_Y = motionEvent.getY();
+                VELOCITY_X = velocityTracker.getXVelocity();
+                VELOCITY_Y = velocityTracker.getYVelocity();
+                PRESSURE = motionEvent.getPressure();
+                SIZE = motionEvent.getSize();
+                return false;
+            }
+            return false;
+        }
+    };
+
 
     SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             switch (sensorEvent.sensor.getType()) {
                 case Sensor.TYPE_ACCELEROMETER:
-                    grading.setTYPE_ACCELEROMETER_X(sensorEvent.values[0]);
-                    grading.setTYPE_ACCELEROMETER_Y(sensorEvent.values[1]);
-                    grading.setTYPE_ACCELEROMETER_Z(sensorEvent.values[2]);
+                    CURRENT_ACCELEROMETER_X = sensorEvent.values[0];
+                    CURRENT_ACCELEROMETER_Y = sensorEvent.values[1];
+                    CURRENT_ACCELEROMETER_Z = sensorEvent.values[2];
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
-                    grading.setTYPE_MAGNETIC_FIELD_X(sensorEvent.values[0]);
-                    grading.setTYPE_MAGNETIC_FIELD_Y(sensorEvent.values[1]);
-                    grading.setTYPE_MAGNETIC_FIELD_Z(sensorEvent.values[2]);
+                    CURRENT_MAGNETIC_FIELD_X = sensorEvent.values[0];
+                    CURRENT_MAGNETIC_FIELD_Y = sensorEvent.values[1];
+                    CURRENT_MAGNETIC_FIELD_Z = sensorEvent.values[2];
                     break;
                 case Sensor.TYPE_GYROSCOPE:
-                    grading.setTYPE_GYROSCOPE_X(sensorEvent.values[0]);
-                    grading.setTYPE_GYROSCOPE_Y(sensorEvent.values[1]);
-                    grading.setTYPE_GYROSCOPE_Z(sensorEvent.values[2]);
+                    CURRENT_GYROSCOPE_X = sensorEvent.values[0];
+                    CURRENT_GYROSCOPE_Y = sensorEvent.values[1];
+                    CURRENT_GYROSCOPE_Z = sensorEvent.values[2];
                     break;
                 case Sensor.TYPE_ROTATION_VECTOR:
-                    grading.setTYPE_ROTATION_VECTOR_X(sensorEvent.values[0]);
-                    grading.setTYPE_ROTATION_VECTOR_Y(sensorEvent.values[1]);
-                    grading.setTYPE_ROTATION_VECTOR_Z(sensorEvent.values[2]);
+                    CURRENT_ROTATION_VECTOR_X = sensorEvent.values[0];
+                    CURRENT_ROTATION_VECTOR_Y = sensorEvent.values[1];
+                    CURRENT_ROTATION_VECTOR_Z = sensorEvent.values[2];
                     break;
                 case Sensor.TYPE_LINEAR_ACCELERATION:
-                    grading.setTYPE_LINEAR_ACCELERATION_X(sensorEvent.values[0]);
-                    grading.setTYPE_LINEAR_ACCELERATION_Y(sensorEvent.values[1]);
-                    grading.setTYPE_LINEAR_ACCELERATION_Z(sensorEvent.values[2]);
+                    CURRENT_LINEAR_ACCELERATION_X = sensorEvent.values[0];
+                    CURRENT_LINEAR_ACCELERATION_Y = sensorEvent.values[1];
+                    CURRENT_LINEAR_ACCELERATION_Z = sensorEvent.values[2];
                     break;
                 case Sensor.TYPE_GRAVITY:
-                    grading.setTYPE_GRAVITY_X(sensorEvent.values[0]);
-                    grading.setTYPE_GRAVITY_Y(sensorEvent.values[1]);
-                    grading.setTYPE_GRAVITY_Z(sensorEvent.values[2]);
+                    CURRENT_GRAVITY_X = sensorEvent.values[0];
+                    CURRENT_GRAVITY_Y = sensorEvent.values[1];
+                    CURRENT_GRAVITY_Z = sensorEvent.values[2];
                     break;
             }
         }
@@ -217,11 +257,37 @@ public class ImageActivity extends Activity {
             /*
 
              */
+            grading = new Grading();
             DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
             grading.setDIRECTORY(image_list.get(img_counter));
             grading.setSMILE_LEVEL(smile_level);
             grading.setTimeStamp(df.format(new Date()));
             gradingTable.replaceAdd(grading);
+            grading.setTYPE_ACCELEROMETER_X(CURRENT_ACCELEROMETER_X);
+            grading.setTYPE_ACCELEROMETER_Y(CURRENT_ACCELEROMETER_Y);
+            grading.setTYPE_ACCELEROMETER_Z(CURRENT_ACCELEROMETER_Z);
+            grading.setTYPE_MAGNETIC_FIELD_X(CURRENT_MAGNETIC_FIELD_X);
+            grading.setTYPE_MAGNETIC_FIELD_Y(CURRENT_MAGNETIC_FIELD_Y);
+            grading.setTYPE_MAGNETIC_FIELD_Z(CURRENT_MAGNETIC_FIELD_Z);
+            grading.setTYPE_GYROSCOPE_X(CURRENT_GYROSCOPE_X);
+            grading.setTYPE_GYROSCOPE_Y(CURRENT_GYROSCOPE_Y);
+            grading.setTYPE_GYROSCOPE_Z(CURRENT_GYROSCOPE_Z);
+            grading.setTYPE_ROTATION_VECTOR_X(CURRENT_ROTATION_VECTOR_X);
+            grading.setTYPE_ROTATION_VECTOR_Y(CURRENT_ROTATION_VECTOR_Y);
+            grading.setTYPE_ROTATION_VECTOR_Z(CURRENT_ROTATION_VECTOR_Z);
+            grading.setTYPE_LINEAR_ACCELERATION_X(CURRENT_LINEAR_ACCELERATION_X);
+            grading.setTYPE_LINEAR_ACCELERATION_Y(CURRENT_LINEAR_ACCELERATION_Y);
+            grading.setTYPE_LINEAR_ACCELERATION_Z(CURRENT_LINEAR_ACCELERATION_Z);
+            grading.setTYPE_GRAVITY_X(CURRENT_GRAVITY_X);
+            grading.setTYPE_GRAVITY_Y(CURRENT_GRAVITY_Y);
+            grading.setTYPE_GRAVITY_Z(CURRENT_GRAVITY_Z);
+            grading.setPOSITION_X(POSITION_X);
+            grading.setPOSITION_Y(POSITION_Y);
+            grading.setVELOCITY_X(VELOCITY_X);
+            grading.setVELOCITY_Y(VELOCITY_Y);
+            grading.setPRESSURE(PRESSURE);
+            grading.setSIZE(SIZE);
+
 //            gradingTable.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z);        // Data override behavior is inherit from hash map
             gradeNext();
             // gradings.mergeAndSortByDir();
@@ -440,7 +506,7 @@ public class ImageActivity extends Activity {
                 break;
             case R.id.setting_exit:
                 moveTaskToBack(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
+                Process.killProcess(Process.myPid());
                 System.exit(1);
                 break;
             case R.id.setting_selfie:
@@ -510,5 +576,41 @@ public class ImageActivity extends Activity {
         mSensorManager.registerListener(sensorEventListener, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(sensorEventListener, mLinearAcc, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(sensorEventListener, mGravity, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Image Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
