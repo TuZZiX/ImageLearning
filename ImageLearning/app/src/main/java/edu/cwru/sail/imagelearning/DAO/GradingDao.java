@@ -82,4 +82,44 @@ public class GradingDao {
         }
         return true;
     }
+
+    public int getSmileLevelCSV(String img, String csvDir) {
+        String[] reading;
+        CSVReader reader;
+        try {
+            reader = new CSVReader(new FileReader(csvDir));
+            List csvRead = reader.readAll();
+            for (int it = csvRead.size() - 1; it >= 0; it--) {
+                reading = ((String[]) (csvRead.get(it)));
+                if (reading[0].equals(img)) {
+                    return (Integer.parseInt(reading[1]));
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;     // Return -1 if not found
+    }
+
+    public ArrayList<Integer> getSmileLevelwIndexCSV(String img, String csvDir) {
+        ArrayList<Integer> index_smile = new ArrayList<>();
+        String[] reading;
+        CSVReader reader;
+        try {
+            reader = new CSVReader(new FileReader(csvDir));
+            List csvRead = reader.readAll();
+            for (int it = csvRead.size() - 1; it >= 0; it--) {
+                reading = ((String[]) (csvRead.get(it)));
+                if (reading[0].equals(img)) {
+                    index_smile.add(it);
+                    index_smile.add(Integer.parseInt(reading[1]));
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return index_smile;     // Return empty if not found
+    }
 }
