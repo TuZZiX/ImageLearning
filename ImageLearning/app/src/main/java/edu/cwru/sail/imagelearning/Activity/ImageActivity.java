@@ -16,6 +16,7 @@ import android.os.Process;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.VelocityTrackerCompat;
 import android.support.v4.view.ViewConfigurationCompat;
 import android.util.Log;
 import android.view.*;
@@ -93,6 +94,7 @@ public class ImageActivity extends Activity {
 
     private Grading grading;
     protected GradingTable gradingTable = new GradingTable();
+    DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
 
     FileDialog fileDialog;
 
@@ -180,13 +182,12 @@ public class ImageActivity extends Activity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (velocityTracker == null) {
                 registerVelocityTracker(motionEvent);
+                mPointId = motionEvent.getPointerId(0);
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 if (view.getId() == R.id.btnRate1 || view.getId() == R.id.btnRate2 || view.getId() == R.id.btnRate3 || view.getId() == R.id.btnRate4) {
                     POSITION_X = motionEvent.getX();
                     POSITION_Y = motionEvent.getY();
-                    mPointId = motionEvent.getPointerId(0);
-
                     PRESSURE = motionEvent.getPressure();
                     SIZE = motionEvent.getSize();
                 }
@@ -277,15 +278,10 @@ public class ImageActivity extends Activity {
                     smile_level = 4;
                     break;
             }
-            /*
-
-             */
             grading = new Grading();
-            DateFormat df = new SimpleDateFormat("yyyy.MM.dd E HH:mm:ss a zzz");
             grading.setDIRECTORY(image_list.get(img_counter));
             grading.setSMILE_LEVEL(smile_level);
             grading.setTimeStamp(df.format(new Date()));
-            gradingTable.replaceAdd(grading);
             grading.setTYPE_ACCELEROMETER_X(CURRENT_ACCELEROMETER_X);
             grading.setTYPE_ACCELEROMETER_Y(CURRENT_ACCELEROMETER_Y);
             grading.setTYPE_ACCELEROMETER_Z(CURRENT_ACCELEROMETER_Z);
@@ -310,8 +306,9 @@ public class ImageActivity extends Activity {
             grading.setVELOCITY_Y(VELOCITY_Y);
             grading.setPRESSURE(PRESSURE);
             grading.setSIZE(SIZE);
+            gradingTable.replaceAdd(grading);
 
-//            gradingTable.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z);        // Data override behavior is inherit from hash map
+            // gradingTable.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z, POSITION_X, POSITION_Y, VELOCITY_X, VELOCITY_Y, PRESSURE, SIZE);        // Data override behavior is inherit from hash map
             gradeNext();
             // gradings.mergeAndSortByDir();
             CSV.writeToCSV(gradingTable, csvDir);
@@ -460,46 +457,6 @@ public class ImageActivity extends Activity {
         } else {
             return -1;
         }
-    }
-
-    private int getSmileLevelCSV(String img) {
-        String[] reading;
-        CSVReader reader;
-        try {
-            reader = new CSVReader(new FileReader(csvDir));
-            List csvRead = reader.readAll();
-            for (int it = csvRead.size() - 1; it >= 0; it--) {
-                reading = ((String[]) (csvRead.get(it)));
-                if (reading[0].equals(img)) {
-                    return (Integer.parseInt(reading[1]));
-                }
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;     // Return -1 if not found
-    }
-
-    private ArrayList<Integer> getSmileLevelwIndexCSV(String img) {
-        ArrayList<Integer> index_smile = new ArrayList<>();
-        String[] reading;
-        CSVReader reader;
-        try {
-            reader = new CSVReader(new FileReader(csvDir));
-            List csvRead = reader.readAll();
-            for (int it = csvRead.size() - 1; it >= 0; it--) {
-                reading = ((String[]) (csvRead.get(it)));
-                if (reading[0].equals(img)) {
-                    index_smile.add(it);
-                    index_smile.add(Integer.parseInt(reading[1]));
-                }
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return index_smile;     // Return empty if not found
     }
 
     @Override
