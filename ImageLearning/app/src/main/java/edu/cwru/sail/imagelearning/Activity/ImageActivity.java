@@ -113,7 +113,6 @@ public class ImageActivity extends Activity {
     Sensor mGravity;
 
     VelocityTracker velocityTracker;
-    private int mPointId;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -153,28 +152,28 @@ public class ImageActivity extends Activity {
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            mSensorManager.registerListener(sensorEventListener, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(sensorEventListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
             mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-            mSensorManager.registerListener(sensorEventListener, mMagnetometer, mSensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(sensorEventListener, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null) {
             mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-            mSensorManager.registerListener(sensorEventListener, mGyroscope, mSensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(sensorEventListener, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) != null) {
             mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-            mSensorManager.registerListener(sensorEventListener, mRotation, mSensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(sensorEventListener, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
             mLinearAcc = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-            mSensorManager.registerListener(sensorEventListener, mLinearAcc, mSensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(sensorEventListener, mLinearAcc, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null) {
             mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-            mSensorManager.registerListener(sensorEventListener, mGravity, mSensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(sensorEventListener, mGravity, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         setFinishOnTouchOutside(false);
@@ -187,7 +186,7 @@ public class ImageActivity extends Activity {
     View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            mPointId = motionEvent.getPointerId(0);
+            int mPointId = motionEvent.getPointerId(0);
             if (velocityTracker == null) {
                 velocityTracker = VelocityTracker.obtain();
                 mPointId = motionEvent.getPointerId(0);
@@ -536,6 +535,7 @@ public class ImageActivity extends Activity {
                 }
             };
             File selfiePath = new File(selfieDir);
+            image_list.clear();
             if (selfiePath.exists()) {
                 File[] fileList = selfiePath.listFiles(imgFilter);
                 if (fileList != null)
