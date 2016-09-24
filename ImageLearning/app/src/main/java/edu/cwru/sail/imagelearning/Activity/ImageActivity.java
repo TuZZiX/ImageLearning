@@ -225,11 +225,11 @@ public class ImageActivity extends Activity {
     private long mLastTime;
     private int mShakeCount;
     private long mLastShake;
-    private static final int FORCE_THRESHOLD = 350;
+    private static final int FORCE_THRESHOLD = 500;
     private static final int TIME_THRESHOLD = 100;
     private static final int SHAKE_TIMEOUT = 500;
     private static final int SHAKE_DURATION = 1000;
-    private static final int SHAKE_COUNT = 3;
+    private static final int SHAKE_COUNT = 5;
     private long mLastForce = System.currentTimeMillis();
 
     private void shakeToOpenCamera() {
