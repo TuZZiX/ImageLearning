@@ -35,7 +35,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -312,7 +311,6 @@ public class ImageActivity extends Activity {
             grading.setSIZE(SIZE);
             gradingTable.replaceAdd(grading);
 
-            // gradingTable.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z, POSITION_X, POSITION_Y, VELOCITY_X, VELOCITY_Y, PRESSURE, SIZE);        // Data override behavior is inherit from hash map
             gradeNext();
             // gradings.mergeAndSortByDir();
             CSVDAO.writeToCSV(gradingTable, csvDir);
@@ -389,7 +387,6 @@ public class ImageActivity extends Activity {
                 break;
             case 4:
                 btn4.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.smile_4_sel));
-                // needs break?
                 break;
         }
         String text;
@@ -439,16 +436,6 @@ public class ImageActivity extends Activity {
     private void showImages(File img, int width, int height) {
         Picasso.with(getApplicationContext())
                 .load(img)
-                //.placeholder(R.drawable.placeholder)   // optional
-                .error(R.drawable.smile_fail)
-                .resize(width, height)
-                .into(photoView);
-    }
-
-    private void showImages(String img, int width, int height) {
-        Picasso.with(getApplicationContext())
-                .load(img)
-                //.placeholder(R.drawable.placeholder)   // optional
                 .error(R.drawable.smile_fail)
                 .resize(width, height)
                 .into(photoView);

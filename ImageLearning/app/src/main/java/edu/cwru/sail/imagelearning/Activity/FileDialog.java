@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.media.Image;
 import android.os.Environment;
-import android.widget.Toast;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cwru.sail.imagelearning.Util.Util;
 
 public class FileDialog {
     private static final String PARENT_DIR = "..";
@@ -56,7 +52,6 @@ public class FileDialog {
             builder.setPositiveButton("Select directory", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     image_list.clear();
-                    //Log.d(TAG, currentPath.getPath());
                     fireDirectorySelectedEvent(currentPath);
                     for (int i = 0; i < fileList.length; i++) {
                         if (!fileList[i].contains(".."))
@@ -64,18 +59,6 @@ public class FileDialog {
                                 image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
 
-//                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
-//                    boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
-//                    if (!flag) {
-//                        if (image_list.size() > 0)
-//                            Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        ((ImageActivity) activity).gradingTable.mergeAndSortByDir();
-//                    }
-//                    ((ImageActivity) activity).setImg_counter(0);
-//                    ((ImageActivity) activity).changeImg();
-//                    ((ImageActivity) activity).updateSmileLevel();
-//                    ((ImageActivity) activity).updateButtonSelect();
                     ((ImageActivity) activity).updateUI(currentPath, image_list);
                 }
             });
@@ -163,7 +146,6 @@ public class FileDialog {
                 }
             };
             File[] fileList1 = path.listFiles(filter);
-//            File[] fileList1 = path.listFiles();
             if (fileList1 != null)
                 for (File aFileList1 : fileList1) {
                     r.add(aFileList1.getName());
