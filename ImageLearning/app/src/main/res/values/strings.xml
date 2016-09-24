@@ -21,5 +21,6 @@
     <string name="errMsg_imgNotExist_default">Image not exist:</string>
     <string name="errMsg_createFolderFault">Fail to create selfie folder</string>
     <string name="title_folderSelect_default">Set Learning Image Directory:</string>
+    <string name="msg_open_camera">You can shake to take a selfie too!</string>
 
 </resources>

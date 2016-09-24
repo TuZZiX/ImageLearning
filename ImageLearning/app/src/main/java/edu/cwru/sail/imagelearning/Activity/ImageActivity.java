@@ -53,6 +53,8 @@ public class ImageActivity extends Activity {
     private int img_counter = 0;
     private final int REQUEST_TAKE_PHOTO = 1;
 
+    boolean sensorFlag = false;
+
     private double CURRENT_ACCELEROMETER_X;
     private double CURRENT_ACCELEROMETER_Y;
     private double CURRENT_ACCELEROMETER_Z;
@@ -217,6 +219,45 @@ public class ImageActivity extends Activity {
     }
 
 
+    private double mLastX = 0;
+    private double mLastY = 0;
+    private double mLastZ = 0;
+    private long mLastTime;
+    private int mShakeCount;
+    private long mLastShake;
+    private static final int FORCE_THRESHOLD = 350;
+    private static final int TIME_THRESHOLD = 100;
+    private static final int SHAKE_TIMEOUT = 500;
+    private static final int SHAKE_DURATION = 1000;
+    private static final int SHAKE_COUNT = 3;
+    private long mLastForce = System.currentTimeMillis();
+
+    private void shakeToOpenCamera() {
+        long now = System.currentTimeMillis();
+
+        if ((now - mLastForce) > SHAKE_TIMEOUT) {
+            mShakeCount = 0;
+        }
+
+        if ((now - mLastTime) > TIME_THRESHOLD) {
+            long diff = now - mLastTime;
+            double speed = Math.abs(CURRENT_ACCELEROMETER_X + CURRENT_ACCELEROMETER_Y + CURRENT_ACCELEROMETER_Z - mLastX - mLastY - mLastZ) / diff * 10000;
+            if (speed > FORCE_THRESHOLD) {
+                if ((++mShakeCount >= SHAKE_COUNT) && (now - mLastShake > SHAKE_DURATION)) {
+                    mLastShake = now;
+                    mShakeCount = 0;
+
+                    dispatchTakePictureIntent();
+                }
+                mLastForce = now;
+            }
+            mLastTime = now;
+            mLastX = CURRENT_ACCELEROMETER_X;
+            mLastY = CURRENT_ACCELEROMETER_Y;
+            mLastZ = CURRENT_ACCELEROMETER_Z;
+        }
+    }
+
     SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
@@ -225,6 +266,10 @@ public class ImageActivity extends Activity {
                     CURRENT_ACCELEROMETER_X = sensorEvent.values[0];
                     CURRENT_ACCELEROMETER_Y = sensorEvent.values[1];
                     CURRENT_ACCELEROMETER_Z = sensorEvent.values[2];
+
+                    if (sensorFlag) {
+                        shakeToOpenCamera();
+                    }
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
                     CURRENT_MAGNETIC_FIELD_X = sensorEvent.values[0];
@@ -512,6 +557,7 @@ public class ImageActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Toast.makeText(getApplicationContext(), getText(R.string.msg_open_camera), Toast.LENGTH_SHORT).show();
             FilenameFilter imgFilter = new FilenameFilter() {
                 public boolean accept(File dir, String filename) {
                     File sel = new File(dir, filename);
@@ -569,6 +615,7 @@ public class ImageActivity extends Activity {
         /**
          * Requesting Permissions at Run Time
          */
+        sensorFlag = false;
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -595,12 +642,20 @@ public class ImageActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(sensorEventListener);
+        unregisterAllSensors();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        registerAllSensors();
+    }
+
+    void unregisterAllSensors() {
+        mSensorManager.unregisterListener(sensorEventListener);
+    }
+
+    void registerAllSensors() {
         mSensorManager.registerListener(sensorEventListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(sensorEventListener, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(sensorEventListener, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);

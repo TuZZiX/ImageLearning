@@ -60,6 +60,7 @@ public class FileDialog {
                     }
 
                     ((ImageActivity) activity).updateUI(currentPath, image_list);
+                    ((ImageActivity) activity).sensorFlag = true;
                 }
             });
         }
