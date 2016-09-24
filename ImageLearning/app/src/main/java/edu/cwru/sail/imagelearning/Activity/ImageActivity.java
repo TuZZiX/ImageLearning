@@ -578,22 +578,6 @@ public class ImageActivity extends Activity {
         updateButtonSelect();
     }
 
-    public void setCsvDir(String csvDir) {
-        this.csvDir = csvDir;
-    }
-
-    public String getCsvDir() {
-        return csvDir;
-    }
-
-    public void setImg_counter(int img_counter) {
-        this.img_counter = img_counter;
-    }
-
-    public int getImg_counter() {
-        return img_counter;
-    }
-
     public void browseFolder() {
         /**
          * Requesting Permissions at Run Time
