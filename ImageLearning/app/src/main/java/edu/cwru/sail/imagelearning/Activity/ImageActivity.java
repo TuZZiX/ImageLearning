@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,14 +90,14 @@ public class ImageActivity extends Activity {
     private TextView textCount;
     private TextView textLast;
 
-    private String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
+    protected String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
     private String selfieDir = Environment.getExternalStorageDirectory() + "/DCIM/Image_Learning/";
     private String selfie_prefix = "smile_";
     private DateFormat selfieFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
 
     private ArrayList<String> image_list = new ArrayList<>();
 
-    protected GradingDao CSV = new GradingDao();
+    protected GradingDao CSVDAO = new GradingDao();
 
     private Grading grading;
     protected GradingTable gradingTable = new GradingTable();
@@ -315,7 +316,7 @@ public class ImageActivity extends Activity {
             // gradingTable.replaceAdd(image_list.get(img_counter), new Date(), smile_level, CURRENT_ACCELEROMETER_X, CURRENT_ACCELEROMETER_Y, CURRENT_ACCELEROMETER_Z, CURRENT_MAGNETIC_FIELD_X, CURRENT_MAGNETIC_FIELD_Y, CURRENT_MAGNETIC_FIELD_Z, CURRENT_GYROSCOPE_X, CURRENT_GYROSCOPE_Y, CURRENT_GYROSCOPE_Z, CURRENT_ROTATION_VECTOR_X, CURRENT_ROTATION_VECTOR_Y, CURRENT_ROTATION_VECTOR_Z, CURRENT_LINEAR_ACCELERATION_X, CURRENT_LINEAR_ACCELERATION_Y, CURRENT_LINEAR_ACCELERATION_Z, CURRENT_GRAVITY_X, CURRENT_GRAVITY_Y, CURRENT_GRAVITY_Z, POSITION_X, POSITION_Y, VELOCITY_X, VELOCITY_Y, PRESSURE, SIZE);        // Data override behavior is inherit from hash map
             gradeNext();
             // gradings.mergeAndSortByDir();
-            CSV.writeToCSV(gradingTable, csvDir);
+            CSVDAO.writeToCSV(gradingTable, csvDir);
         }
     };
 
@@ -545,18 +546,52 @@ public class ImageActivity extends Activity {
                     }
             }
             Collections.sort(image_list);
-            setCsvDir(selfieDir + "/" + Util.truncateFileName(selfieDir + ".csv"));
-            if (!CSV.readCSV(gradingTable, csvDir)) {
-                if (image_list.size() > 0)
-                    Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-            } else {
-                gradingTable.mergeAndSortByDir();
-            }
-            setImg_counter(image_list.size() - 1);  // Jump to last image (the one just taken)
-            changeImg();
-            updateSmileLevel();
-            updateButtonSelect();
+            updateUI(selfieDir, image_list);
         }
+    }
+
+    void updateUI(String path, ArrayList<String> image_list) {
+        csvDir = path + "/" + Util.truncateFileName(path + ".csv");
+        if (!CSVDAO.readCSV(gradingTable, csvDir)) {
+            if (image_list.size() > 0)
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+        } else {
+            gradingTable.mergeAndSortByDir();
+        }
+        img_counter = image_list.size() - 1;  // Jump to last image (the one just taken)
+        changeImg();
+        updateSmileLevel();
+        updateButtonSelect();
+    }
+
+    void updateUI(File path, ArrayList<String> image_list) {
+        csvDir = path + "/" + Util.truncateFileName(path + ".csv");
+        if (!CSVDAO.readCSV(gradingTable, csvDir)) {
+            if (image_list.size() > 0)
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+        } else {
+            gradingTable.mergeAndSortByDir();
+        }
+        img_counter = 0;  // Jump to last image (the one just taken)
+        changeImg();
+        updateSmileLevel();
+        updateButtonSelect();
+    }
+
+    public void setCsvDir(String csvDir) {
+        this.csvDir = csvDir;
+    }
+
+    public String getCsvDir() {
+        return csvDir;
+    }
+
+    public void setImg_counter(int img_counter) {
+        this.img_counter = img_counter;
+    }
+
+    public int getImg_counter() {
+        return img_counter;
     }
 
     public void browseFolder() {
@@ -585,23 +620,6 @@ public class ImageActivity extends Activity {
 //        fileDialog.setSelectDirectoryOption(true);
         fileDialog.showDialog(image_list);
     }
-
-    public String getCsvDir() {
-        return csvDir;
-    }
-
-    public void setCsvDir(String csvDir) {
-        this.csvDir = csvDir;
-    }
-
-    public void setImg_counter(int img_counter) {
-        this.img_counter = img_counter;
-    }
-
-    public int getImg_counter() {
-        return img_counter;
-    }
-
 
     @Override
     protected void onPause() {

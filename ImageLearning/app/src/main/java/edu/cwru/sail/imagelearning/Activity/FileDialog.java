@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.media.Image;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -63,18 +64,19 @@ public class FileDialog {
                                 image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
 
-                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
-                    boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
-                    if (!flag) {
-                        if (image_list.size() > 0)
-                            Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
-                    } else {
-                        ((ImageActivity) activity).gradingTable.mergeAndSortByDir();
-                    }
-                    ((ImageActivity) activity).setImg_counter(0);
-                    ((ImageActivity) activity).changeImg();
-                    ((ImageActivity) activity).updateSmileLevel();
-                    ((ImageActivity) activity).updateButtonSelect();
+//                    ((ImageActivity) activity).setCsvDir(currentPath.getAbsolutePath() + "/" + Util.truncateFileName(currentPath.getAbsolutePath()) + ".csv");
+//                    boolean flag = ((ImageActivity) activity).CSV.readCSV(((ImageActivity) activity).gradingTable, ((ImageActivity) activity).getCsvDir());
+//                    if (!flag) {
+//                        if (image_list.size() > 0)
+//                            Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.errMsg_noCSV), Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        ((ImageActivity) activity).gradingTable.mergeAndSortByDir();
+//                    }
+//                    ((ImageActivity) activity).setImg_counter(0);
+//                    ((ImageActivity) activity).changeImg();
+//                    ((ImageActivity) activity).updateSmileLevel();
+//                    ((ImageActivity) activity).updateButtonSelect();
+                    ((ImageActivity) activity).updateUI(currentPath, image_list);
                 }
             });
         }
