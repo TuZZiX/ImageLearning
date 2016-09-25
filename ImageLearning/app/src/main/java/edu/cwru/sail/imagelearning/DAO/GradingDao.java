@@ -21,10 +21,10 @@ public class GradingDao {
         if (gradingTable.isEmpty()) {
             return false;
         }
-        List<String[]> formatted = new ArrayList<>();
-        String[] nextLine;
+        List<String[]> formatted = new ArrayList<>();   // CSV writer only accept this type, so we have to do conversion
+        String[] nextLine;          // Each row in CSV
         for (int it = 0; it < gradingTable.size(); it++) {
-            Grading record = gradingTable.get(it);
+            Grading record = gradingTable.get(it);      // Get every record from grading table
             nextLine = (record.getTimeStamp() + "," +
                     record.getTYPE_ACCELEROMETER_X() + "," + record.getTYPE_ACCELEROMETER_Y() + "," + record.getTYPE_ACCELEROMETER_Z() + "," +
                     record.getTYPE_MAGNETIC_FIELD_X() + "," + record.getTYPE_MAGNETIC_FIELD_Y() + "," + record.getTYPE_MAGNETIC_FIELD_Z() + "," +
@@ -34,13 +34,12 @@ public class GradingDao {
                     record.getTYPE_GRAVITY_X() + "," + record.getTYPE_GRAVITY_Y() + "," + record.getTYPE_GRAVITY_Z() + "," +
                     record.getPOSITION_X() + "," + record.getPOSITION_Y() + "," + record.getVELOCITY_X() + "," + record.getVELOCITY_Y() + "," +
                     record.getPRESSURE() + "," + record.getSIZE() + "," +
-                    Util.truncateFileName(record.getDIRECTORY()) + "," + record.getSMILE_LEVEL()).split(",");
+                    Util.truncateFileName(record.getDIRECTORY()) + "," + record.getSMILE_LEVEL()).split(",");   // format each record
             formatted.add(nextLine);
         }
-
         try {
             CSVWriter writer = new CSVWriter(new FileWriter(csvDir));
-            writer.writeAll(formatted, false);
+            writer.writeAll(formatted, false);          // Write all records in to CSV
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,9 +55,9 @@ public class GradingDao {
         if (csv.exists()) {
             try {
                 gradingTable.clear();
-                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contain this csv file
+                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contains this csv file
                 reader = new CSVReader(new FileReader(csvDir));
-                List<String[]> csvRead = reader.readAll();
+                List<String[]> csvRead = reader.readAll();                          // read all records from this csv file
                 for (int it = csvRead.size() - 1; it >= 0; it--) {
                     reading = csvRead.get(it);
                     gradingTable.add(suffix + "/" + reading[25], reading[0], Integer.parseInt(reading[26]), Double.parseDouble(reading[1]),
