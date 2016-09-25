@@ -178,7 +178,6 @@ public class ImageActivity extends Activity {
             mSensorManager.registerListener(sensorEventListener, mGravity, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        setFinishOnTouchOutside(false);
         browseFolder();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
