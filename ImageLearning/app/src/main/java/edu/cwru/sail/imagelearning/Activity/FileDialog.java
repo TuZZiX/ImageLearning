@@ -59,7 +59,7 @@ public class FileDialog {
                                 image_list.add(currentPath.getAbsoluteFile() + "/" + fileList[i]);
                     }
 
-                    ((ImageActivity) activity).updateUI(currentPath, image_list);
+                    ((ImageActivity) activity).updateImages(currentPath, image_list);
                     ((ImageActivity) activity).sensorFlag = true;
                 }
             });

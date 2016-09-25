@@ -578,11 +578,11 @@ public class ImageActivity extends Activity {
                     }
             }
             Collections.sort(image_list);
-            updateUI(selfieDir, image_list);
+            updateImages(selfieDir, image_list);
         }
     }
 
-    void updateUI(String path, ArrayList<String> image_list) {
+    void updateImages(String path, ArrayList<String> image_list) {
         csvDir = path + "/" + Util.truncateFileName(path + ".csv");
         if (!CSVDAO.readCSV(gradingTable, csvDir)) {
             if (image_list.size() > 0)
@@ -596,7 +596,7 @@ public class ImageActivity extends Activity {
         updateButtonSelect();
     }
 
-    void updateUI(File path, ArrayList<String> image_list) {
+    void updateImages(File path, ArrayList<String> image_list) {
         csvDir = path + "/" + Util.truncateFileName(path + ".csv");
         if (!CSVDAO.readCSV(gradingTable, csvDir)) {
             if (image_list.size() > 0)
@@ -615,8 +615,7 @@ public class ImageActivity extends Activity {
          * Requesting Permissions at Run Time
          */
         sensorFlag = false;
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
