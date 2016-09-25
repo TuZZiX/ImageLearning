@@ -284,7 +284,7 @@ public class GradingTable {
         Collections.sort(gradingList, new timeComparator());
     }
 
-    // merge all deduplicate grades, new record replaceAdd older one
+    // merge all deduplicate grades, new record replace older one
     public void merge() {
         for (int i = gradingList.size() - 1; i >= 0; i--) {
             int result = find(gradingList.get(i).getDIRECTORY(), 0, i - 1);

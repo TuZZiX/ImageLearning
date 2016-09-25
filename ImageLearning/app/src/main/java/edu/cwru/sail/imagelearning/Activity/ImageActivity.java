@@ -92,7 +92,7 @@ public class ImageActivity extends Activity {
     private TextView textLast;
 
     protected String csvDir = Environment.getExternalStorageDirectory().toString() + File.separator + "lab01" + File.separator + "result.csv";
-    private String selfieDir = Environment.getExternalStorageDirectory() + "/DCIM/Image_Learning/";
+    private String selfieDir = Environment.getExternalStorageDirectory() + "/DCIM/Image_Learning";
     private String selfie_prefix = "smile_";
     private DateFormat selfieFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
 
