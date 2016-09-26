@@ -434,6 +434,8 @@ public class ImageActivity extends Activity {
                 break;
         }
         String text;
+        String text1;
+        String text2;
         if (1 <= smile_level && smile_level <= 4) {
             switch (smile_level) {
                 case 1:
@@ -451,28 +453,33 @@ public class ImageActivity extends Activity {
                 default:
                     text = getText(R.string.textLastGrad_suffix) + " " + String.valueOf(smile_level);
                     break;
+
             }
+            text1 = getText(R.string.textNowGrad_default) + " " + Util.truncateFileName(image_list.get(img_counter));
+            text2 = String.valueOf(img_counter + 1) + "/" + String.valueOf(image_list.size());
         } else {
             text = getText(R.string.textLastGrad_default).toString();
+            text1 = String.valueOf(getText(R.string.textNowGrad_default));
+            text2 = "0/0";
         }
+        textInd.setText(text1);
+        textCount.setText(text2);
         textLast.setText(text);
     }
 
     public boolean changeImg() {
         if (image_list.size() == 0 || image_list.size() - 1 < img_counter || img_counter < 0) {
+            showImages(R.drawable.smile_fail, 1000, 1000);
             return false;
-        }
-        File img = new File(image_list.get(img_counter));
-        if (img.exists()) {
-            //Loading Image from list
-            showImages(img, 1000, 1000);
-            String text1 = getText(R.string.textNowGrad_default) + " " + Util.truncateFileName(image_list.get(img_counter));
-            textInd.setText(text1);
-            String text2 = String.valueOf(img_counter + 1) + "/" + String.valueOf(image_list.size());
-            textCount.setText(text2);
         } else {
-            Toast.makeText(getApplicationContext(), getText(R.string.errMsg_imgNotExist_default) + image_list.get(img_counter), Toast.LENGTH_SHORT).show();
-            return false;
+            File img = new File(image_list.get(img_counter));
+            if (img.exists()) {
+                //Loading Image from list
+                showImages(img, 1000, 1000);
+            } else {
+                Toast.makeText(getApplicationContext(), getText(R.string.errMsg_imgNotExist_default) + image_list.get(img_counter), Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         return true;
     }
@@ -480,6 +487,14 @@ public class ImageActivity extends Activity {
     private void showImages(File img, int width, int height) {
         Picasso.with(getApplicationContext())
                 .load(img)
+                .error(R.drawable.smile_fail)
+                .resize(width, height)
+                .into(photoView);
+    }
+
+    private void showImages(int resImg, int width, int height) {
+        Picasso.with(getApplicationContext())
+                .load(resImg)
                 .error(R.drawable.smile_fail)
                 .resize(width, height)
                 .into(photoView);
