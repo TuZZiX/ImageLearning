@@ -64,6 +64,16 @@ public class FileDialog {
                 }
             });
         }
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener()
+        {
+            @Override
+            public void onCancel(DialogInterface dialog)
+            {
+                ((ImageActivity) activity).sensorFlag = true;
+                ((ImageActivity) activity).finish();
+            }
+        });
+
 
         builder.setItems(fileList, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -84,7 +94,6 @@ public class FileDialog {
         dialog = builder.show();
         return dialog;
     }
-
 
     public void addFileListener(FileSelectedListener listener) {
         fileListenerList.add(listener);

@@ -54,7 +54,6 @@ public class GradingDao {
         File csv = new File(csvDir);
         if (csv.exists()) {
             try {
-                gradingTable.clear();
                 String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contains this csv file
                 reader = new CSVReader(new FileReader(csvDir));
                 List<String[]> csvRead = reader.readAll();                          // read all records from this csv file
