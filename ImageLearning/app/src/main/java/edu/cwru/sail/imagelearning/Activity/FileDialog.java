@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Environment;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -64,13 +65,10 @@ public class FileDialog {
                 }
             });
         }
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener()
-        {
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onCancel(DialogInterface dialog)
-            {
+            public void onCancel(DialogInterface dialog) {
                 ((ImageActivity) activity).sensorFlag = true;
-                ((ImageActivity) activity).finish();
             }
         });
 
