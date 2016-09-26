@@ -61,14 +61,14 @@ public class FileDialog {
                     }
 
                     ((ImageActivity) activity).updateImages(currentPath, image_list);
-                    ((ImageActivity) activity).sensorFlag = true;
+                    ((ImageActivity) activity).shakingOpenCameraFlag = true;
                 }
             });
         }
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                ((ImageActivity) activity).sensorFlag = true;
+                ((ImageActivity) activity).shakingOpenCameraFlag = true;
             }
         });
 

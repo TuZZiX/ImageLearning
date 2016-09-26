@@ -53,7 +53,7 @@ public class ImageActivity extends Activity {
     private int img_counter = 0;
     private final int REQUEST_TAKE_PHOTO = 1;
 
-    boolean sensorFlag = false;
+    boolean shakingOpenCameraFlag = false;
 
     private double CURRENT_ACCELEROMETER_X;
     private double CURRENT_ACCELEROMETER_Y;
@@ -266,7 +266,7 @@ public class ImageActivity extends Activity {
                     CURRENT_ACCELEROMETER_Y = sensorEvent.values[1];
                     CURRENT_ACCELEROMETER_Z = sensorEvent.values[2];
 
-                    if (sensorFlag) {
+                    if (shakingOpenCameraFlag) {
                         shakeToOpenCamera();
                     }
                     break;
@@ -629,7 +629,7 @@ public class ImageActivity extends Activity {
         /**
          * Requesting Permissions at Run Time
          */
-        sensorFlag = false;
+        shakingOpenCameraFlag = false;
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
