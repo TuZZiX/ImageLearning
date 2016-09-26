@@ -10,7 +10,7 @@ The result will be log into a CSV file under the image folder with the name of t
 
 1. build and run **ImageLearning**.
 
-2. When first running, it will ask permission for read SD card (for Android 6.0 and higher).
+2. When first running, it will ask permission for read SD card (for Android 6.0 and higher).
 
 3. When App starts, it will lets you select a folder that contains images you want to grade.
 
