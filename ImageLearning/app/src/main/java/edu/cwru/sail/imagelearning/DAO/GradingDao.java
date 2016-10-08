@@ -17,7 +17,7 @@ import edu.cwru.sail.imagelearning.Util.Util;
 
 public class GradingDao {
 
-    static private String[] string_smile_level = {"zero","one","two","three","four"};
+    static private String[] string_smile_level = {"not_graded","not_smile","slightly_smile","smile","big_smile"};
 
     private int toSmileLevel(String level) {
         for (int i = 0; i < string_smile_level.length; i++) {
