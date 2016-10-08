@@ -19,15 +19,6 @@ public class GradingDao {
 
     static private String[] string_smile_level = {"not_graded","not_smile","slightly_smile","smile","big_smile"};
 
-    private int toSmileLevel(String level) {
-        for (int i = 0; i < string_smile_level.length; i++) {
-            if (string_smile_level[i].compareTo(level) == 0) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
     public boolean writeToCSV(GradingTable gradingTable, String csvDir) {
 
         if (gradingTable.isEmpty()) {
@@ -68,6 +59,39 @@ public class GradingDao {
         return true;
     }
 
+//    public boolean readCSV(GradingTable gradingTable, String csvDir) {    // old method
+//        CSVReader reader;
+//        String[] reading;
+//        File csv = new File(csvDir);
+//        if (csv.exists()) {
+//            try {
+//                String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contains this csv file
+//                reader = new CSVReader(new FileReader(csvDir));
+//                List<String[]> csvRead = reader.readAll();                          // read all records from this csv file
+//                for (int it = csvRead.size() - 1; it >= 0; it--) {
+//                    reading = csvRead.get(it);
+//                    gradingTable.add(suffix + "/" + reading[25], reading[0], Integer.parseInt(reading[26]), Double.parseDouble(reading[1]),
+//                            Double.parseDouble(reading[2]), Double.parseDouble(reading[3]), Double.parseDouble(reading[4]),
+//                            Double.parseDouble(reading[5]), Double.parseDouble(reading[6]), Double.parseDouble(reading[7]),
+//                            Double.parseDouble(reading[8]), Double.parseDouble(reading[9]), Double.parseDouble(reading[10]),
+//                            Double.parseDouble(reading[11]), Double.parseDouble(reading[12]), Double.parseDouble(reading[13]),
+//                            Double.parseDouble(reading[14]), Double.parseDouble(reading[15]), Double.parseDouble(reading[16]),
+//                            Double.parseDouble(reading[17]), Double.parseDouble(reading[18]),
+//                            Double.parseDouble(reading[19]), Double.parseDouble(reading[20]), Double.parseDouble(reading[21]),
+//                            Double.parseDouble(reading[22]), Double.parseDouble(reading[23]), Double.parseDouble(reading[24])
+//                    );     // Restore image file list and smile levels
+//                }
+//                reader.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
+//        return true;
+//    }
+
     public boolean readCSV(GradingTable gradingTable, String csvDir) {
         CSVReader reader;
         String[] reading;
@@ -99,6 +123,15 @@ public class GradingDao {
             return false;
         }
         return true;
+    }
+
+    private int toSmileLevel(String level) {
+        for (int i = 0; i < string_smile_level.length; i++) {
+            if (string_smile_level[i].compareTo(level) == 0) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     public int getSmileLevelCSV(String img, String csvDir) {
