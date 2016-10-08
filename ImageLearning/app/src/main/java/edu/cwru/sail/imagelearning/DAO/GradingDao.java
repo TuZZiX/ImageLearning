@@ -9,12 +9,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import edu.cwru.sail.imagelearning.Entity.Grading;
 import edu.cwru.sail.imagelearning.Entity.GradingTable;
 import edu.cwru.sail.imagelearning.Util.Util;
 
 public class GradingDao {
+
+    static private String[] string_smile_level = {"zero","one","two","three","four"};
+
+    private int toSmileLevel(String level) {
+        for (int i = 0; i < string_smile_level.length; i++) {
+            if (string_smile_level[i].compareTo(level) == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
 
     public boolean writeToCSV(GradingTable gradingTable, String csvDir) {
 
@@ -23,6 +35,14 @@ public class GradingDao {
         }
         List<String[]> formatted = new ArrayList<>();   // CSV writer only accept this type, so we have to do conversion
         String[] nextLine;          // Each row in CSV
+        nextLine = ("TimeStamp"+","+"ACCELEROMETER_X"+","+"ACCELEROMETER_Y"+","+"ACCELEROMETER_Z"+","
+                +"MAGNETIC_FIELD_X"+","+"TYPE_MAGNETIC_FIELD_Y"+","+"MAGNETIC_FIELD_Z"+","
+                +"GYROSCOPE_X"+","+"GYROSCOPE_Y"+","+"GYROSCOPE_Z"+","
+                +"ROTATION_VECTOR_X"+","+"ROTATION_VECTOR_Y"+","+"ROTATION_VECTOR_Z"+","
+                +"LINEAR_ACCELERATION_X"+","+"LINEAR_ACCELERATION_Y"+","+"LINEAR_ACCELERATION_Z"+","
+                +"GRAVITY_X"+","+"GRAVITY_Y"+","+"GRAVITY_Z"+","+"POSITION_X"+","+"POSITION_Y"+","
+                +"VELOCITY_X"+","+"VELOCITY_Y"+","+"PRESSURE"+","+"SIZE"+","+"PICTURE"+","+"SMILE_LEVEL").split(",");
+        formatted.add(nextLine);
         for (int it = 0; it < gradingTable.size(); it++) {
             Grading record = gradingTable.get(it);      // Get every record from grading table
             nextLine = (record.getTimeStamp() + "," +
@@ -34,7 +54,7 @@ public class GradingDao {
                     record.getTYPE_GRAVITY_X() + "," + record.getTYPE_GRAVITY_Y() + "," + record.getTYPE_GRAVITY_Z() + "," +
                     record.getPOSITION_X() + "," + record.getPOSITION_Y() + "," + record.getVELOCITY_X() + "," + record.getVELOCITY_Y() + "," +
                     record.getPRESSURE() + "," + record.getSIZE() + "," +
-                    Util.truncateFileName(record.getDIRECTORY()) + "," + record.getSMILE_LEVEL()).split(",");   // format each record
+                    Util.truncateFileName(record.getDIRECTORY()) + "," + string_smile_level[record.getSMILE_LEVEL()]).split(",");   // format each record
             formatted.add(nextLine);
         }
         try {
@@ -57,9 +77,9 @@ public class GradingDao {
                 String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contains this csv file
                 reader = new CSVReader(new FileReader(csvDir));
                 List<String[]> csvRead = reader.readAll();                          // read all records from this csv file
-                for (int it = csvRead.size() - 1; it >= 0; it--) {
+                for (int it = 1; it >= csvRead.size(); it--) {
                     reading = csvRead.get(it);
-                    gradingTable.add(suffix + "/" + reading[25], reading[0], Integer.parseInt(reading[26]), Double.parseDouble(reading[1]),
+                    gradingTable.add(suffix + "/" + reading[25], reading[0], toSmileLevel(reading[26]), Double.parseDouble(reading[1]),
                             Double.parseDouble(reading[2]), Double.parseDouble(reading[3]), Double.parseDouble(reading[4]),
                             Double.parseDouble(reading[5]), Double.parseDouble(reading[6]), Double.parseDouble(reading[7]),
                             Double.parseDouble(reading[8]), Double.parseDouble(reading[9]), Double.parseDouble(reading[10]),
