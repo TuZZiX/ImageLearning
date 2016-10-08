@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@drawable/desk2">
+<TextView 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center"
+	android:layout_marginTop="50px"
+	android:text="@string/app_name"
+	android:textSize="30px"
+	android:textStyle="bold"/>
+<Button 
+	android:layout_marginTop="40px"
+	android:id="@+id/classifier_button"
+	android:layout_width="200px"
+	android:layout_height="wrap_content"
+	android:text="@string/classifier_text"
+	android:layout_gravity="center"/>   
+<Button 
+	android:layout_marginTop="30px"
+	android:id="@+id/clusterer_button"
+	android:layout_width="200px"
+	android:layout_height="wrap_content"
+	android:text="@string/clusterer_text"
+	android:layout_gravity="center"/>   
+<Button 
+	android:layout_marginTop="30px"
+	android:id="@+id/associate_button"
+	android:layout_width="200px"
+	android:layout_height="wrap_content"
+	android:text="Assoicate"
+	android:layout_gravity="center"/>
+
+	//CB A2 new linear layout so that buttons have ability to be side by side
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_marginTop="30px"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<Button
+			android:id="@+id/csv2arff_button_ex1"
+			android:layout_width="195dp"
+			android:layout_height="wrap_content"
+			android:text="Quick CSV 2 ARFF     Ex 1"
+			android:layout_weight="0.74"/> //CB A2 adjusted width and weight so the buttons are side by side
+
+		//CB A2 Button to convert for experiment 2
+		<Button
+			android:id="@+id/csv2arff_button_ex2"
+			android:layout_width="195dp"
+			android:layout_height="wrap_content"
+			android:text="Quick CSV 2 ARFF     Ex 2"
+			android:layout_weight="0.74"/> // CB A2 adjusted width and height so buttons are side b
+	</LinearLayout>
+
+<Button
+	android:layout_marginTop="30px"
+	android:id="@+id/exit_button"
+	android:layout_width="200px"
+	android:layout_height="wrap_content"
+	android:text="@string/exit"
+	android:layout_gravity="center"/>   
+</LinearLayout>
