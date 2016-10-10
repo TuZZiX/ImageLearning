@@ -101,7 +101,7 @@ public class GradingDao {
                 String suffix = csvDir.substring(0, csvDir.lastIndexOf("/"));       // Get path of the folder that contains this csv file
                 reader = new CSVReader(new FileReader(csvDir));
                 List<String[]> csvRead = reader.readAll();                          // read all records from this csv file
-                for (int it = 1; it >= csvRead.size(); it--) {
+                for (int it = 1; it < csvRead.size(); it++) {
                     reading = csvRead.get(it);
                     gradingTable.add(suffix + "/" + reading[25], reading[0], toSmileLevel(reading[26]), Double.parseDouble(reading[1]),
                             Double.parseDouble(reading[2]), Double.parseDouble(reading[3]), Double.parseDouble(reading[4]),
