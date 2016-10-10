@@ -27,7 +27,7 @@ public class GradingDao {
         List<String[]> formatted = new ArrayList<>();   // CSV writer only accept this type, so we have to do conversion
         String[] nextLine;          // Each row in CSV
         nextLine = ("TimeStamp"+","+"ACCELEROMETER_X"+","+"ACCELEROMETER_Y"+","+"ACCELEROMETER_Z"+","
-                +"MAGNETIC_FIELD_X"+","+"TYPE_MAGNETIC_FIELD_Y"+","+"MAGNETIC_FIELD_Z"+","
+                +"MAGNETIC_FIELD_X"+","+"MAGNETIC_FIELD_Y"+","+"MAGNETIC_FIELD_Z"+","
                 +"GYROSCOPE_X"+","+"GYROSCOPE_Y"+","+"GYROSCOPE_Z"+","
                 +"ROTATION_VECTOR_X"+","+"ROTATION_VECTOR_Y"+","+"ROTATION_VECTOR_Z"+","
                 +"LINEAR_ACCELERATION_X"+","+"LINEAR_ACCELERATION_Y"+","+"LINEAR_ACCELERATION_Z"+","
