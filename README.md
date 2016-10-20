@@ -1,10 +1,10 @@
-# EECS410 Mobile Health -- Lab 01A
+# EECS410 Mobile Health
 
 ## A Smile-Level Indicator App
 
-Load and display image from a folder and grade smile level based on the images.
+A App that lets user grades the smile levels of a series of images. The result can be used for data analysis purpose (data mining & machine learning)
 
-The result will be log into a CSV file under the image folder with the name of the image folder.
+The output will be log into a CSV file under the image folder with the name of the image folder.
 
 ## Usage
 
@@ -22,7 +22,61 @@ The result will be log into a CSV file under the image folder with the name of t
 
 7. If the folder you open contains such a CSV file, it will load the old grade from that CSV file.
 
+8. User can take a picture by their own and grade that picture by click on the camera button on the right upper corner.
 
+## Sensor data
+
+Data from sensors that are available on the smartphone will be record for further data analysis, including:
+
+```
+    ACCELEROMETER_X
+    
+    ACCELEROMETER_Y
+    
+    ACCELEROMETER_Z
+    
+    MAGNETIC_FIELD_X
+    
+    MAGNETIC_FIELD_Y
+    
+    MAGNETIC_FIELD_Z
+    
+    GYROSCOPE_X
+    
+    GYROSCOPE_Y
+    
+    GYROSCOPE_Z
+    
+    ROTATION_VECTOR_X
+    
+    ROTATION_VECTOR_Y
+    
+    ROTATION_VECTOR_Z
+    
+    LINEAR_ACCELERATION_X
+    
+    LINEAR_ACCELERATION_Y
+    
+    LINEAR_ACCELERATION_Z
+    
+    GRAVITY_X
+    
+    GRAVITY_Y
+    
+    GRAVITY_Z
+    
+    POSITION_X
+    
+    POSITION_Y
+    
+    VELOCITY_X
+    
+    VELOCITY_Y
+    
+    PRESSURE
+    
+    SIZE
+```
 ## Collaborators
 
 (In alphabet order)
