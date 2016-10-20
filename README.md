@@ -26,8 +26,7 @@ The output will be log into a CSV file under the image folder with the name of t
 ## Sensor data
 Data from sensors that are available on the smartphone will be record for further data analysis, including:
 
-``
-
+```
     ACCELEROMETER_X
     
     ACCELEROMETER_Y
@@ -75,7 +74,7 @@ Data from sensors that are available on the smartphone will be record for furthe
     PRESSURE
     
     SIZE
-``
+```
 ## Collaborators
 
 (In alphabet order)
