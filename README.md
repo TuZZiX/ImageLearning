@@ -23,7 +23,9 @@ The output will be log into a CSV file under the image folder with the name of t
 7. If the folder you open contains such a CSV file, it will load the old grade from that CSV file.
 
 8. User can take a picture by their own and grade that picture by click on the camera button on the right upper corner.
+
 ## Sensor data
+
 Data from sensors that are available on the smartphone will be record for further data analysis, including:
 
 ```
